@@ -16,11 +16,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <StackProvider app={stackServerApp}>
-          <StackTheme>
+        {stackServerApp ? (
+          <StackProvider app={stackServerApp}>
+            <StackTheme>
+              {children}
+            </StackTheme>
+          </StackProvider>
+        ) : (
+          // Fallback when Stack Auth is not available
+          <div>
             {children}
-          </StackTheme>
-        </StackProvider>
+          </div>
+        )}
       </body>
     </html>
   )

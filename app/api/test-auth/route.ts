@@ -4,13 +4,17 @@ import { validateEnvironment } from '@/lib/config';
 
 export async function GET() {
   try {
-    // Validate environment
-    const envCheck = validateEnvironment();
-    if (!envCheck.isValid) {
+    // Check if Stack Auth is available
+    if (!stackServerApp) {
       return NextResponse.json({
         success: false,
         service: 'neon-auth',
-        message: `Missing environment variables: ${envCheck.missing.join(', ')}`,
+        message: 'Stack Auth not initialized - missing required environment variables',
+        data: {
+          stackAuthConfigured: false,
+          missingVars: validateEnvironment().missing.filter(v => v.includes('STACK')),
+          projectId: process.env.NEXT_PUBLIC_STACK_PROJECT_ID || 'not-set'
+        },
         timestamp: new Date().toISOString()
       }, { status: 500 });
     }

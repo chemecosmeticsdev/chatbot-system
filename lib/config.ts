@@ -74,18 +74,11 @@ export function getConfig(): Config {
   };
 }
 
-export function getClientConfig() {
-  return {
-    NEXT_PUBLIC_STACK_PROJECT_ID: process.env.NEXT_PUBLIC_STACK_PROJECT_ID,
-    NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY,
-  };
-}
+export function getConfigSafe(): Partial<Config> {
+  // Non-blocking version that never throws - safe for SSR
+  const { missing } = validateEnvironment();
 
-export function getSafeConfig(): Partial<Config> {
-  // Safe version that doesn't throw errors - for use in SSR components
-  const { isValid, missing } = validateEnvironment();
-
-  if (!isValid) {
+  if (missing.length > 0) {
     console.warn(`⚠️ Some environment variables are missing: ${missing.join(', ')}`);
     console.warn('Application will continue with limited functionality');
   }
@@ -103,3 +96,11 @@ export function getSafeConfig(): Partial<Config> {
     LLAMAINDEX_API_KEY: process.env.LLAMAINDEX_API_KEY || undefined,
   };
 }
+
+export function getClientConfig() {
+  return {
+    NEXT_PUBLIC_STACK_PROJECT_ID: process.env.NEXT_PUBLIC_STACK_PROJECT_ID,
+    NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY,
+  };
+}
+

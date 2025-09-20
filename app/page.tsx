@@ -13,6 +13,7 @@ function LoadingFallback() {
 }
 
 export default function Home() {
+  // No server-side environment checks - let client components handle it
   return (
     <main className="min-h-screen bg-gray-50">
       <Suspense fallback={<LoadingFallback />}>
