@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {stackServerApp ? (
-          <StackProvider app={stackServerApp}>
+          <StackProvider app={stackServerApp as any}>
             <StackTheme>
               {children}
             </StackTheme>
