@@ -25,7 +25,15 @@
       "@/lib/*": ["./lib/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/types/*": ["./types/*"],
-      "@/api/*": ["./app/api/*"]
+      "@/api/*": ["./app/api/*"],
+      "@/models/*": ["./lib/models/*"],
+      "@/services/*": ["./lib/services/*"],
+      "@/vector/*": ["./lib/vector/*"],
+      "@/chatbot/*": ["./lib/chatbot/*"],
+      "@/aws/*": ["./lib/aws/*"],
+      "@/integrations/*": ["./lib/integrations/*"],
+      "@/monitoring/*": ["./lib/monitoring/*"],
+      "@/realtime/*": ["./lib/realtime/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
