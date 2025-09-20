@@ -27,7 +27,9 @@
       "mcp__sentry__find_organizations",
       "mcp__sentry__find_projects",
       "mcp__sentry__search_events",
-      "mcp__sentry__search_issues"
+      "mcp__sentry__search_issues",
+      "Bash(npm run test:api:*)",
+      "mcp__context7__get-library-docs"
     ],
     "deny": [],
     "ask": []
