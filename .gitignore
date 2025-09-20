@@ -54,3 +54,5 @@ docs/api-test-results.md
 # Credential files (never commit these)
 credentials.txt
 documentations.txt
+# Sentry Config File
+.env.sentry-build-plugin
