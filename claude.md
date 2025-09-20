@@ -9,6 +9,7 @@ Knowledge base and chatbot management system starter project for Thai/English ma
 - **context7**: Library documentation and examples
 - **shadcn**: UI component management (for future development)
 - **neon**: Database operations and auth
+- **sentry**: Error monitoring and debugging integration
 - **puppeteer-mcp-claude**: Browser automation for testing
 - **playwright**: Visual testing and layout validation
 - **aws-powertools**: Serverless best practices
