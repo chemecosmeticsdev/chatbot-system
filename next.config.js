@@ -3,23 +3,11 @@ const nextConfig = {
   serverExternalPackages: ['pg']
 };
 
-// Wrap with Sentry if available
-let config = nextConfig;
-try {
-  const { withSentry } = require("@sentry/nextjs");
-  config = withSentry(nextConfig);
-} catch (error) {
-  console.log("Sentry integration skipped:", error.message);
-}
-
-module.exports = config;
-
 // Injected content via Sentry wizard below
-
 const { withSentryConfig } = require("@sentry/nextjs");
 
 module.exports = withSentryConfig(
-  module.exports,
+  nextConfig,
   {
     // For all available options, see:
     // https://www.npmjs.com/package/@sentry/webpack-plugin#options
