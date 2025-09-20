@@ -35,7 +35,9 @@
       "Bash(node:*)",
       "Bash(chmod:*)",
       "Bash(powershell.exe:*)",
-      "Bash(.specify/scripts/powershell/check-task-prerequisites.ps1 -Json)"
+      "Bash(.specify/scripts/powershell/check-task-prerequisites.ps1 -Json)",
+      "Bash(npx:*)",
+      "Bash(npm run test:e2e:*)"
     ],
     "deny": [],
     "ask": []
