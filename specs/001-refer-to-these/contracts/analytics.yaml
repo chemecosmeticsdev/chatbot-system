@@ -1,0 +1,1018 @@
+openapi: 3.0.3
+info:
+  title: Analytics and Reporting API
+  version: 1.0.0
+  description: API for analytics, performance monitoring, and reporting across the chatbot system
+
+servers:
+  - url: /api/v1
+
+paths:
+  # Chatbot Analytics
+  /chatbots/{chatbotId}/analytics:
+    get:
+      summary: Get chatbot performance analytics
+      tags: [Chatbot Analytics]
+      parameters:
+        - name: chatbotId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: granularity
+          in: query
+          schema:
+            type: string
+            enum: [hour, day, week, month]
+            default: day
+        - name: metrics
+          in: query
+          schema:
+            type: string
+            description: Comma-separated list of metrics to include
+      responses:
+        '200':
+          description: Chatbot analytics data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ChatbotAnalytics'
+
+  /chatbots/{chatbotId}/performance:
+    get:
+      summary: Get real-time performance metrics
+      tags: [Performance]
+      parameters:
+        - name: chatbotId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Real-time performance data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/PerformanceMetrics'
+
+  # System-wide Analytics
+  /analytics/overview:
+    get:
+      summary: Get system-wide analytics overview
+      tags: [System Analytics]
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: System overview analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/SystemOverview'
+
+  /analytics/usage:
+    get:
+      summary: Get usage statistics and trends
+      tags: [Usage Analytics]
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [24h, 7d, 30d, 90d]
+            default: 7d
+        - name: group_by
+          in: query
+          schema:
+            type: string
+            enum: [chatbot, platform, hour, day]
+            default: day
+      responses:
+        '200':
+          description: Usage analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/UsageAnalytics'
+
+  # Cost Analytics
+  /analytics/costs:
+    get:
+      summary: Get cost analytics and optimization insights
+      tags: [Cost Analytics]
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: breakdown_by
+          in: query
+          schema:
+            type: string
+            enum: [chatbot, model, day, week]
+            default: chatbot
+      responses:
+        '200':
+          description: Cost analytics data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/CostAnalytics'
+
+  # User Engagement Analytics
+  /analytics/engagement:
+    get:
+      summary: Get user engagement analytics
+      tags: [Engagement Analytics]
+      parameters:
+        - name: chatbot_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: platform
+          in: query
+          schema:
+            type: string
+            enum: [web, line, api, playground, widget]
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [24h, 7d, 30d]
+            default: 7d
+      responses:
+        '200':
+          description: Engagement analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/EngagementAnalytics'
+
+  # Reports Generation
+  /reports/generate:
+    post:
+      summary: Generate custom analytics report
+      tags: [Reports]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateReportRequest'
+      responses:
+        '202':
+          description: Report generation started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      report_id:
+                        type: string
+                        format: uuid
+                      status:
+                        type: string
+                        enum: [pending, generating, completed, failed]
+                      estimated_completion:
+                        type: string
+                        format: date-time
+
+  /reports/{reportId}:
+    get:
+      summary: Get report status and download link
+      tags: [Reports]
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Report status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ReportStatus'
+
+  # Query Analytics
+  /analytics/queries:
+    get:
+      summary: Get query pattern analytics
+      tags: [Query Analytics]
+      parameters:
+        - name: chatbot_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [24h, 7d, 30d]
+            default: 7d
+        - name: language
+          in: query
+          schema:
+            type: string
+            enum: [en, th, all]
+            default: all
+      responses:
+        '200':
+          description: Query analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/QueryAnalytics'
+
+  # Error Analytics
+  /analytics/errors:
+    get:
+      summary: Get error analytics and failure patterns
+      tags: [Error Analytics]
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [24h, 7d, 30d]
+            default: 7d
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [low, medium, high, critical]
+        - name: error_type
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Error analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ErrorAnalytics'
+
+  # Real-time Monitoring
+  /monitoring/health:
+    get:
+      summary: Get system health status
+      tags: [Monitoring]
+      responses:
+        '200':
+          description: System health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/SystemHealth'
+
+  /monitoring/alerts:
+    get:
+      summary: Get active alerts and notifications
+      tags: [Monitoring]
+      parameters:
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [info, warning, critical]
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, acknowledged, resolved]
+            default: active
+      responses:
+        '200':
+          description: Active alerts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Alert'
+
+components:
+  schemas:
+    ChatbotAnalytics:
+      type: object
+      properties:
+        chatbot_id:
+          type: string
+          format: uuid
+        period:
+          type: object
+          properties:
+            start_date:
+              type: string
+              format: date
+            end_date:
+              type: string
+              format: date
+            granularity:
+              type: string
+        metrics:
+          type: object
+          properties:
+            total_sessions:
+              type: integer
+            total_messages:
+              type: integer
+            unique_users:
+              type: integer
+            average_session_duration:
+              type: number
+              description: In minutes
+            average_messages_per_session:
+              type: number
+            user_satisfaction_score:
+              type: number
+              minimum: 1
+              maximum: 5
+            response_accuracy_score:
+              type: number
+            average_response_time:
+              type: number
+              description: In milliseconds
+        time_series:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              sessions:
+                type: integer
+              messages:
+                type: integer
+              users:
+                type: integer
+              avg_response_time:
+                type: number
+        top_queries:
+          type: array
+          items:
+            type: object
+            properties:
+              query:
+                type: string
+              count:
+                type: integer
+              success_rate:
+                type: number
+
+    PerformanceMetrics:
+      type: object
+      properties:
+        chatbot_id:
+          type: string
+          format: uuid
+        current_status:
+          type: string
+          enum: [healthy, degraded, error]
+        real_time_metrics:
+          type: object
+          properties:
+            active_sessions:
+              type: integer
+            messages_per_minute:
+              type: number
+            average_response_time_1h:
+              type: number
+            error_rate_1h:
+              type: number
+            queue_depth:
+              type: integer
+        resource_usage:
+          type: object
+          properties:
+            cpu_usage:
+              type: number
+            memory_usage:
+              type: number
+            token_usage_rate:
+              type: number
+        recent_errors:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              error_type:
+                type: string
+              message:
+                type: string
+
+    SystemOverview:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start_date:
+              type: string
+              format: date
+            end_date:
+              type: string
+              format: date
+        summary:
+          type: object
+          properties:
+            total_instances:
+              type: integer
+            active_instances:
+              type: integer
+            total_products:
+              type: integer
+            total_documents:
+              type: integer
+            total_sessions:
+              type: integer
+            total_messages:
+              type: integer
+        performance:
+          type: object
+          properties:
+            average_response_time:
+              type: number
+            system_uptime:
+              type: number
+            error_rate:
+              type: number
+            user_satisfaction:
+              type: number
+        usage_trends:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              sessions:
+                type: integer
+              messages:
+                type: integer
+              response_time:
+                type: number
+        instance_performance:
+          type: array
+          items:
+            type: object
+            properties:
+              instance_id:
+                type: string
+                format: uuid
+              name:
+                type: string
+              sessions:
+                type: integer
+              avg_response_time:
+                type: number
+              satisfaction_score:
+                type: number
+
+    UsageAnalytics:
+      type: object
+      properties:
+        period:
+          type: string
+        total_usage:
+          type: object
+          properties:
+            sessions:
+              type: integer
+            messages:
+              type: integer
+            unique_users:
+              type: integer
+        platform_breakdown:
+          type: object
+          properties:
+            web:
+              type: integer
+            line:
+              type: integer
+            api:
+              type: integer
+            playground:
+              type: integer
+            widget:
+              type: integer
+        usage_trends:
+          type: array
+          items:
+            type: object
+            properties:
+              period:
+                type: string
+              sessions:
+                type: integer
+              messages:
+                type: integer
+              growth_rate:
+                type: number
+        peak_usage_times:
+          type: array
+          items:
+            type: object
+            properties:
+              hour:
+                type: integer
+              average_sessions:
+                type: number
+
+    CostAnalytics:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start_date:
+              type: string
+              format: date
+            end_date:
+              type: string
+              format: date
+        total_costs:
+          type: object
+          properties:
+            total_usd:
+              type: number
+            llm_costs:
+              type: number
+            embedding_costs:
+              type: number
+            storage_costs:
+              type: number
+            compute_costs:
+              type: number
+        cost_breakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+              amount_usd:
+                type: number
+              percentage:
+                type: number
+        model_costs:
+          type: array
+          items:
+            type: object
+            properties:
+              model_id:
+                type: string
+              tokens_used:
+                type: integer
+              cost_usd:
+                type: number
+              usage_percentage:
+                type: number
+        optimization_opportunities:
+          type: array
+          items:
+            type: object
+            properties:
+              opportunity:
+                type: string
+              potential_savings_usd:
+                type: number
+              effort_required:
+                type: string
+                enum: [low, medium, high]
+
+    EngagementAnalytics:
+      type: object
+      properties:
+        period:
+          type: string
+        engagement_metrics:
+          type: object
+          properties:
+            session_completion_rate:
+              type: number
+            average_conversation_length:
+              type: number
+            user_return_rate:
+              type: number
+            satisfaction_distribution:
+              type: object
+              properties:
+                very_satisfied:
+                  type: integer
+                satisfied:
+                  type: integer
+                neutral:
+                  type: integer
+                dissatisfied:
+                  type: integer
+                very_dissatisfied:
+                  type: integer
+        user_journey_analytics:
+          type: object
+          properties:
+            common_entry_points:
+              type: array
+              items:
+                type: object
+                properties:
+                  entry_point:
+                    type: string
+                  count:
+                    type: integer
+            drop_off_points:
+              type: array
+              items:
+                type: object
+                properties:
+                  step:
+                    type: string
+                  drop_off_rate:
+                    type: number
+        feedback_analytics:
+          type: object
+          properties:
+            total_feedback_received:
+              type: integer
+            positive_feedback_ratio:
+              type: number
+            common_feedback_themes:
+              type: array
+              items:
+                type: object
+                properties:
+                  theme:
+                    type: string
+                  count:
+                    type: integer
+
+    QueryAnalytics:
+      type: object
+      properties:
+        period:
+          type: string
+        total_queries:
+          type: integer
+        language_distribution:
+          type: object
+          properties:
+            english:
+              type: integer
+            thai:
+              type: integer
+            other:
+              type: integer
+        query_categories:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+              count:
+                type: integer
+              success_rate:
+                type: number
+        popular_queries:
+          type: array
+          items:
+            type: object
+            properties:
+              query:
+                type: string
+              count:
+                type: integer
+              average_response_time:
+                type: number
+              satisfaction_score:
+                type: number
+        unanswered_queries:
+          type: array
+          items:
+            type: object
+            properties:
+              query:
+                type: string
+              count:
+                type: integer
+              first_seen:
+                type: string
+                format: date-time
+
+    ErrorAnalytics:
+      type: object
+      properties:
+        period:
+          type: string
+        error_summary:
+          type: object
+          properties:
+            total_errors:
+              type: integer
+            error_rate:
+              type: number
+            critical_errors:
+              type: integer
+            resolved_errors:
+              type: integer
+        error_categories:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+              count:
+                type: integer
+              trend:
+                type: string
+                enum: [increasing, decreasing, stable]
+        common_errors:
+          type: array
+          items:
+            type: object
+            properties:
+              error_type:
+                type: string
+              count:
+                type: integer
+              first_occurrence:
+                type: string
+                format: date-time
+              last_occurrence:
+                type: string
+                format: date-time
+              status:
+                type: string
+                enum: [active, resolved, ignored]
+        impact_analysis:
+          type: object
+          properties:
+            affected_users:
+              type: integer
+            affected_sessions:
+              type: integer
+            downtime_minutes:
+              type: number
+
+    SystemHealth:
+      type: object
+      properties:
+        overall_status:
+          type: string
+          enum: [healthy, degraded, critical]
+        services:
+          type: array
+          items:
+            type: object
+            properties:
+              service_name:
+                type: string
+              status:
+                type: string
+                enum: [operational, degraded, outage]
+              response_time:
+                type: number
+              uptime_percentage:
+                type: number
+              last_check:
+                type: string
+                format: date-time
+        resource_usage:
+          type: object
+          properties:
+            database_connections:
+              type: object
+              properties:
+                used:
+                  type: integer
+                available:
+                  type: integer
+                percentage:
+                  type: number
+            storage_usage:
+              type: object
+              properties:
+                used_gb:
+                  type: number
+                total_gb:
+                  type: number
+                percentage:
+                  type: number
+        performance_indicators:
+          type: object
+          properties:
+            average_api_response_time:
+              type: number
+            vector_search_performance:
+              type: number
+            document_processing_queue:
+              type: integer
+
+    Alert:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        severity:
+          type: string
+          enum: [info, warning, critical]
+        title:
+          type: string
+        description:
+          type: string
+        service:
+          type: string
+        status:
+          type: string
+          enum: [active, acknowledged, resolved]
+        created_at:
+          type: string
+          format: date-time
+        acknowledged_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+
+    GenerateReportRequest:
+      type: object
+      required: [report_type, start_date, end_date]
+      properties:
+        report_type:
+          type: string
+          enum: [performance, usage, cost, engagement, error_analysis, custom]
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        filters:
+          type: object
+          properties:
+            chatbot_ids:
+              type: array
+              items:
+                type: string
+                format: uuid
+            platforms:
+              type: array
+              items:
+                type: string
+            user_segments:
+              type: array
+              items:
+                type: string
+        format:
+          type: string
+          enum: [pdf, xlsx, csv, json]
+          default: pdf
+        include_charts:
+          type: boolean
+          default: true
+        email_delivery:
+          type: boolean
+          default: false
+
+    ReportStatus:
+      type: object
+      properties:
+        report_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, generating, completed, failed]
+        progress_percentage:
+          type: integer
+          minimum: 0
+          maximum: 100
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        download_url:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+        error_message:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

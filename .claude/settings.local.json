@@ -33,7 +33,9 @@
       "Bash(npx tsc:*)",
       "Bash(ls:*)",
       "Bash(node:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(.specify/scripts/powershell/check-task-prerequisites.ps1 -Json)"
     ],
     "deny": [],
     "ask": []

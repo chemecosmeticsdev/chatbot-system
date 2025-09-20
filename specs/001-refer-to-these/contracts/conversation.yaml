@@ -1,0 +1,758 @@
+openapi: 3.0.3
+info:
+  title: Conversation Management API
+  version: 1.0.0
+  description: API for managing conversations, sessions, and real-time chatbot interactions
+
+servers:
+  - url: /api/v1
+
+paths:
+  # Conversation Session Management
+  /chatbots/{chatbotId}/conversations:
+    post:
+      summary: Start new conversation session
+      tags: [Conversations]
+      parameters:
+        - name: chatbotId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartConversationRequest'
+      responses:
+        '201':
+          description: Conversation session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ConversationSession'
+
+    get:
+      summary: List conversation sessions for chatbot
+      tags: [Conversations]
+      parameters:
+        - name: chatbotId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: platform
+          in: query
+          schema:
+            type: string
+            enum: [web, line, api, playground, widget]
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, inactive, expired, terminated]
+        - name: user_identifier
+          in: query
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of conversation sessions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      sessions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ConversationSessionSummary'
+                      pagination:
+                        $ref: '#/components/schemas/Pagination'
+
+  /conversations/{sessionId}:
+    get:
+      summary: Get conversation session details
+      tags: [Conversations]
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Conversation session details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ConversationSessionDetails'
+
+    put:
+      summary: Update conversation session
+      tags: [Conversations]
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateConversationRequest'
+      responses:
+        '200':
+          description: Conversation session updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ConversationSession'
+
+    delete:
+      summary: End conversation session
+      tags: [Conversations]
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Conversation session ended
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+  # Message Management
+  /conversations/{sessionId}/messages:
+    post:
+      summary: Send message in conversation
+      tags: [Messages]
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+      responses:
+        '200':
+          description: Message processed and response generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/MessageExchange'
+
+    get:
+      summary: Get conversation message history
+      tags: [Messages]
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: message_type
+          in: query
+          schema:
+            type: string
+            enum: [user_message, bot_response, system_message]
+        - name: since
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Message history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      session_id:
+                        type: string
+                        format: uuid
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      pagination:
+                        $ref: '#/components/schemas/Pagination'
+
+  /messages/{messageId}:
+    get:
+      summary: Get message details
+      tags: [Messages]
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Message details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/MessageDetails'
+
+    patch:
+      summary: Update message (add feedback)
+      tags: [Messages]
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMessageRequest'
+      responses:
+        '200':
+          description: Message updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/Message'
+
+  # Real-time Communication
+  /conversations/{sessionId}/stream:
+    get:
+      summary: Real-time message stream (Server-Sent Events)
+      tags: [Real-time]
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: SSE stream of conversation events
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  # Search and Analytics
+  /conversations/search:
+    post:
+      summary: Search conversation history
+      tags: [Search]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversationSearchRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/ConversationSearchResponse'
+
+  /conversations/export:
+    post:
+      summary: Export conversation data
+      tags: [Export]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportConversationsRequest'
+      responses:
+        '200':
+          description: Export file generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      export_url:
+                        type: string
+                      expires_at:
+                        type: string
+                        format: date-time
+
+components:
+  schemas:
+    ConversationSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        chatbot_id:
+          type: string
+          format: uuid
+        user_identifier:
+          type: string
+        platform:
+          type: string
+          enum: [web, line, api, playground, widget]
+        session_context:
+          type: object
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        last_activity:
+          type: string
+          format: date-time
+        session_duration_seconds:
+          type: integer
+        message_count:
+          type: integer
+        user_satisfaction_score:
+          type: integer
+          minimum: 1
+          maximum: 5
+        session_metadata:
+          type: object
+        status:
+          type: string
+          enum: [active, inactive, expired, terminated]
+
+    ConversationSessionSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_identifier:
+          type: string
+        platform:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        session_duration_seconds:
+          type: integer
+        message_count:
+          type: integer
+        user_satisfaction_score:
+          type: integer
+        status:
+          type: string
+
+    ConversationSessionDetails:
+      allOf:
+        - $ref: '#/components/schemas/ConversationSession'
+        - type: object
+          properties:
+            chatbot_name:
+              type: string
+            recent_messages:
+              type: array
+              items:
+                $ref: '#/components/schemas/Message'
+            performance_summary:
+              type: object
+              properties:
+                avg_response_time_ms:
+                  type: number
+                total_tokens_used:
+                  type: integer
+                error_count:
+                  type: integer
+
+    StartConversationRequest:
+      type: object
+      required: [platform]
+      properties:
+        user_identifier:
+          type: string
+        platform:
+          type: string
+          enum: [web, line, api, playground, widget]
+        initial_context:
+          type: object
+        session_metadata:
+          type: object
+
+    UpdateConversationRequest:
+      type: object
+      properties:
+        session_context:
+          type: object
+        user_satisfaction_score:
+          type: integer
+          minimum: 1
+          maximum: 5
+        session_metadata:
+          type: object
+        status:
+          type: string
+          enum: [active, inactive, expired, terminated]
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        message_type:
+          type: string
+          enum: [user_message, bot_response, system_message]
+        content:
+          type: string
+        content_type:
+          type: string
+          enum: [text, html, markdown, json]
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageAttachment'
+        timestamp:
+          type: string
+          format: date-time
+        sequence_number:
+          type: integer
+        response_metadata:
+          type: object
+        token_usage:
+          type: object
+        processing_time_ms:
+          type: integer
+        model_used:
+          type: string
+        user_feedback:
+          type: object
+        error_info:
+          type: object
+
+    MessageDetails:
+      allOf:
+        - $ref: '#/components/schemas/Message'
+        - type: object
+          properties:
+            sources:
+              type: array
+              items:
+                $ref: '#/components/schemas/MessageSource'
+            debug_info:
+              type: object
+            conversation_context:
+              type: array
+              items:
+                type: object
+                properties:
+                  role:
+                    type: string
+                  content:
+                    type: string
+
+    MessageExchange:
+      type: object
+      properties:
+        user_message:
+          $ref: '#/components/schemas/Message'
+        bot_response:
+          $ref: '#/components/schemas/Message'
+        processing_summary:
+          type: object
+          properties:
+            total_processing_time_ms:
+              type: integer
+            retrieval_time_ms:
+              type: integer
+            generation_time_ms:
+              type: integer
+            sources_found:
+              type: integer
+
+    SendMessageRequest:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+        content_type:
+          type: string
+          enum: [text, html, markdown]
+          default: text
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageAttachment'
+        user_metadata:
+          type: object
+
+    UpdateMessageRequest:
+      type: object
+      properties:
+        user_feedback:
+          type: object
+          properties:
+            rating:
+              type: integer
+              minimum: 1
+              maximum: 5
+            feedback_text:
+              type: string
+            helpful:
+              type: boolean
+            corrections:
+              type: string
+
+    MessageAttachment:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [image, file, link, location]
+        url:
+          type: string
+        filename:
+          type: string
+        size:
+          type: integer
+        mime_type:
+          type: string
+        metadata:
+          type: object
+
+    MessageSource:
+      type: object
+      properties:
+        document_id:
+          type: string
+          format: uuid
+        document_title:
+          type: string
+        chunk_id:
+          type: string
+          format: uuid
+        content_snippet:
+          type: string
+        relevance_score:
+          type: number
+        chunk_type:
+          type: string
+
+    ConversationSearchRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+        chatbot_id:
+          type: string
+          format: uuid
+        platform:
+          type: string
+        user_identifier:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        message_type:
+          type: string
+          enum: [user_message, bot_response, system_message]
+        has_feedback:
+          type: boolean
+        limit:
+          type: integer
+          default: 20
+
+    ConversationSearchResponse:
+      type: object
+      properties:
+        query:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConversationSearchResult'
+        total_results:
+          type: integer
+
+    ConversationSearchResult:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        message_id:
+          type: string
+          format: uuid
+        chatbot_name:
+          type: string
+        content:
+          type: string
+        message_type:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        platform:
+          type: string
+        relevance_score:
+          type: number
+
+    ExportConversationsRequest:
+      type: object
+      properties:
+        chatbot_id:
+          type: string
+          format: uuid
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        format:
+          type: string
+          enum: [csv, json, xlsx]
+          default: csv
+        include_metadata:
+          type: boolean
+          default: false
+        include_sources:
+          type: boolean
+          default: false
+
+    Pagination:
+      type: object
+      properties:
+        current_page:
+          type: integer
+        total_pages:
+          type: integer
+        total_items:
+          type: integer
+        items_per_page:
+          type: integer
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

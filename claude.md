@@ -1,18 +1,26 @@
 # Claude Code Configuration
 
 ## Project Overview
-Knowledge base and chatbot management system starter project for Thai/English markets. This configuration provides comprehensive guidance for Claude Code to efficiently develop, test, and deploy the system.
+**UPDATED**: Comprehensive knowledge base and chatbot management system for Thai/English markets. Evolved from starter project to full-featured platform with document processing, vector search, multi-instance chatbot management, Line OA integration, and advanced analytics. This configuration provides comprehensive guidance for Claude Code to efficiently develop, test, and deploy the complete system.
+
+### New System Capabilities
+- **Knowledge Base Management**: Document upload, OCR processing, vector embeddings, hierarchical product-document relationships
+- **Multi-Instance Chatbot Management**: Create, configure, and deploy multiple chatbot instances with different LLM models and knowledge scopes
+- **Admin Feedback System**: Natural language feedback processing with automated system prompt improvements
+- **Integration Platform**: Line OA Message API, iframe embeds, JavaScript widgets
+- **Analytics Dashboard**: Conversation tracking, performance monitoring, cost analysis, user engagement metrics
+- **Professional UI**: Shadcn/ui components with Thai/English internationalization
 
 ## MCP Server Configuration
 
 ### Required MCP Servers
 - **context7**: Library documentation and examples
-- **shadcn**: UI component management (for future development)
-- **neon**: Database operations and auth
-- **sentry**: Error monitoring and debugging integration
+- **shadcn**: UI component management (ACTIVE - for dashboard components)
+- **neon**: Database operations and auth (EXTENDED - vector operations, chatbot management)
+- **sentry**: Error monitoring and debugging integration (ENHANCED - chatbot-specific tracking)
 - **puppeteer-mcp-claude**: Browser automation for testing
-- **playwright**: Visual testing and layout validation
-- **aws-powertools**: Serverless best practices
+- **playwright**: Visual testing and layout validation (EXTENDED - dashboard testing)
+- **aws-powertools**: Serverless best practices (EXTENDED - LLM integration)
 
 ## Subagents Configuration
 
@@ -167,6 +175,56 @@ Benchmark RAG performance with test queries and generate reports
 - Compares different models
 - Generates performance benchmarks
 - **Example**: `/benchmark-rag "auth,database,setup"`
+
+### NEW: Chatbot Management Commands
+
+#### /create-chatbot [name] [model] [purpose]
+Create new chatbot instance with optimized configuration
+- Sets up database entry with proper schema
+- Configures LLM model and parameters
+- Creates default system prompt based on purpose
+- Assigns knowledge base filters
+- **Example**: `/create-chatbot "Customer Support" claude-3-haiku "customer service"`
+
+#### /assign-knowledge [chatbot_id] [product_categories]
+Assign knowledge base content to specific chatbot instance
+- Links products and documents to chatbot
+- Updates vector search filters
+- Tests retrieval effectiveness
+- Validates knowledge scope
+- **Example**: `/assign-knowledge "uuid-123" "electronics,software"`
+
+#### /process-feedback [chatbot_id] [feedback_text]
+Process admin feedback and generate system prompt improvements
+- Analyzes feedback using LLM
+- Generates prompt modification suggestions
+- A/B tests proposed changes
+- Tracks improvement impact
+- **Example**: `/process-feedback "uuid-123" "Responses are too technical for customers"`
+
+#### /test-integration [chatbot_id] [platform]
+Test chatbot integration with external platforms
+- Validates API credentials and connectivity
+- Tests message flow (send/receive)
+- Verifies webhook functionality
+- Checks error handling
+- **Example**: `/test-integration "uuid-123" "line-oa"`
+
+#### /generate-embed [chatbot_id] [type]
+Generate integration embed codes for websites
+- Creates iframe or JavaScript widget code
+- Configures appearance and behavior
+- Sets security restrictions
+- Provides installation documentation
+- **Example**: `/generate-embed "uuid-123" "widget"`
+
+#### /analyze-conversations [chatbot_id] [period]
+Analyze conversation patterns and performance metrics
+- Extracts common query patterns
+- Measures response effectiveness
+- Identifies improvement opportunities
+- Generates insights reports
+- **Example**: `/analyze-conversations "uuid-123" "7d"`
 
 ### Quality Assurance Commands
 
