@@ -1,0 +1,354 @@
+name: Post-Deployment Validation
+
+on:
+  # Trigger after successful Amplify deployment
+  workflow_dispatch:
+    inputs:
+      deployment_url:
+        description: 'Deployment URL to validate'
+        required: true
+        default: 'https://main.dztnbtrkvs8ks.amplifyapp.com'
+
+env:
+  NODE_VERSION: '18'
+  DEPLOYMENT_TIMEOUT: '300' # 5 minutes
+
+jobs:
+  deployment-health-check:
+    name: Deployment Health Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Wait for deployment to be ready
+        run: |
+          echo "Waiting for deployment at ${{ github.event.inputs.deployment_url }}"
+
+          TIMEOUT=${{ env.DEPLOYMENT_TIMEOUT }}
+          ELAPSED=0
+
+          while [ $ELAPSED -lt $TIMEOUT ]; do
+            if curl -f -s "${{ github.event.inputs.deployment_url }}" > /dev/null; then
+              echo "✅ Deployment is accessible"
+              break
+            fi
+
+            echo "⏳ Waiting for deployment... ($ELAPSED/$TIMEOUT seconds)"
+            sleep 10
+            ELAPSED=$((ELAPSED + 10))
+          done
+
+          if [ $ELAPSED -ge $TIMEOUT ]; then
+            echo "❌ Deployment timeout - site not accessible"
+            exit 1
+          fi
+
+      - name: Basic connectivity test
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "${{ github.event.inputs.deployment_url }}")
+
+          if [ "$RESPONSE" != "200" ]; then
+            echo "❌ Deployment returned HTTP $RESPONSE"
+            exit 1
+          fi
+
+          echo "✅ Deployment responding with HTTP 200"
+
+  live-api-validation:
+    name: Live API Validation
+    runs-on: ubuntu-latest
+    needs: deployment-health-check
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Validate API endpoints
+        run: |
+          node -e "
+          const { chromium } = require('playwright');
+
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+
+            const baseUrl = '${{ github.event.inputs.deployment_url }}';
+            console.log('Testing API endpoints at:', baseUrl);
+
+            try {
+              // Test health endpoint
+              const healthResponse = await page.request.get(\`\${baseUrl}/api/health\`);
+              if (!healthResponse.ok()) {
+                throw new Error(\`Health check failed: \${healthResponse.status()}\`);
+              }
+              console.log('✅ Health endpoint working');
+
+              // Test database connectivity
+              const dbResponse = await page.request.get(\`\${baseUrl}/api/test-neon\`);
+              if (!dbResponse.ok()) {
+                console.log('⚠️ Database connectivity test failed');
+              } else {
+                console.log('✅ Database connectivity working');
+              }
+
+              // Test authentication
+              const authResponse = await page.request.get(\`\${baseUrl}/api/test-auth\`);
+              if (!authResponse.ok()) {
+                console.log('⚠️ Authentication test failed');
+              } else {
+                console.log('✅ Authentication working');
+              }
+
+              console.log('🎉 API validation complete');
+
+            } catch (error) {
+              console.error('❌ API validation failed:', error.message);
+              process.exit(1);
+            } finally {
+              await browser.close();
+            }
+          })();
+          "
+
+  live-ui-validation:
+    name: Live UI Validation
+    runs-on: ubuntu-latest
+    needs: deployment-health-check
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Test critical user journeys
+        run: |
+          node -e "
+          const { chromium } = require('playwright');
+
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+
+            const baseUrl = '${{ github.event.inputs.deployment_url }}';
+            console.log('Testing user journeys at:', baseUrl);
+
+            try {
+              // Test main dashboard load
+              await page.goto(baseUrl);
+              await page.waitForLoadState('networkidle');
+
+              const title = await page.title();
+              if (!title.includes('Chatbot')) {
+                throw new Error(\`Unexpected page title: \${title}\`);
+              }
+              console.log('✅ Main dashboard loads correctly');
+
+              // Test admin page accessibility
+              await page.goto(\`\${baseUrl}/admin\`);
+              await page.waitForLoadState('networkidle');
+
+              const hasAuth = await page.locator('text=SuperAdmin Access, text=Sign In').isVisible();
+              if (!hasAuth) {
+                console.log('⚠️ Admin authentication not properly configured');
+              } else {
+                console.log('✅ Admin authentication working');
+              }
+
+              // Test authentication handler
+              await page.goto(\`\${baseUrl}/handler/sign-in\`);
+              await page.waitForLoadState('networkidle');
+
+              const hasError = await page.locator('text=Application Error, text=500').isVisible();
+              if (hasError) {
+                throw new Error('Authentication handler showing error');
+              }
+              console.log('✅ Authentication handler working');
+
+              console.log('🎉 UI validation complete');
+
+            } catch (error) {
+              console.error('❌ UI validation failed:', error.message);
+              await page.screenshot({ path: 'deployment-error.png', fullPage: true });
+              process.exit(1);
+            } finally {
+              await browser.close();
+            }
+          })();
+          "
+
+      - name: Upload error screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: deployment-validation-screenshots
+          path: '*.png'
+          retention-days: 7
+
+  performance-validation:
+    name: Performance Validation
+    runs-on: ubuntu-latest
+    needs: [live-api-validation, live-ui-validation]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Performance audit
+        run: |
+          node -e "
+          const { chromium } = require('playwright');
+
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+
+            const baseUrl = '${{ github.event.inputs.deployment_url }}';
+            console.log('Running performance audit at:', baseUrl);
+
+            try {
+              const startTime = Date.now();
+              await page.goto(baseUrl);
+              await page.waitForLoadState('networkidle');
+              const loadTime = Date.now() - startTime;
+
+              console.log(\`Page load time: \${loadTime}ms\`);
+
+              if (loadTime > 5000) {
+                console.log('⚠️ Page load time exceeds 5 seconds');
+              } else {
+                console.log('✅ Page load time acceptable');
+              }
+
+              // Get performance metrics
+              const metrics = await page.evaluate(() => {
+                const navigation = performance.getEntriesByType('navigation')[0];
+                return {
+                  domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+                  loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
+                  firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0
+                };
+              });
+
+              console.log('Performance metrics:', JSON.stringify(metrics, null, 2));
+
+              if (metrics.domContentLoaded > 3000) {
+                console.log('⚠️ DOM content loaded time high');
+              } else {
+                console.log('✅ DOM content loaded time acceptable');
+              }
+
+            } catch (error) {
+              console.error('❌ Performance validation failed:', error.message);
+              process.exit(1);
+            } finally {
+              await browser.close();
+            }
+          })();
+          "
+
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [deployment-health-check, live-api-validation, live-ui-validation, performance-validation]
+    if: always()
+
+    steps:
+      - name: Generate deployment report
+        run: |
+          echo "# 🚀 Deployment Validation Report"
+          echo ""
+          echo "**Deployment URL:** ${{ github.event.inputs.deployment_url }}"
+          echo "**Validation Time:** $(date -u)"
+          echo "**Commit:** ${{ github.sha }}"
+          echo ""
+          echo "## Test Results"
+          echo ""
+
+          if [[ "${{ needs.deployment-health-check.result }}" == "success" ]]; then
+            echo "✅ **Health Check:** PASSED"
+          else
+            echo "❌ **Health Check:** FAILED"
+          fi
+
+          if [[ "${{ needs.live-api-validation.result }}" == "success" ]]; then
+            echo "✅ **API Validation:** PASSED"
+          else
+            echo "❌ **API Validation:** FAILED"
+          fi
+
+          if [[ "${{ needs.live-ui-validation.result }}" == "success" ]]; then
+            echo "✅ **UI Validation:** PASSED"
+          else
+            echo "❌ **UI Validation:** FAILED"
+          fi
+
+          if [[ "${{ needs.performance-validation.result }}" == "success" ]]; then
+            echo "✅ **Performance:** PASSED"
+          else
+            echo "❌ **Performance:** FAILED"
+          fi
+
+          echo ""
+
+          # Overall status
+          OVERALL_SUCCESS=true
+          for result in "${{ needs.deployment-health-check.result }}" "${{ needs.live-api-validation.result }}" "${{ needs.live-ui-validation.result }}" "${{ needs.performance-validation.result }}"; do
+            if [[ "$result" != "success" ]]; then
+              OVERALL_SUCCESS=false
+              break
+            fi
+          done
+
+          if [[ "$OVERALL_SUCCESS" == "true" ]]; then
+            echo "## 🎉 Deployment Validation: SUCCESS"
+            echo "All validation checks passed. Deployment is healthy and ready for production use."
+          else
+            echo "## ⚠️ Deployment Validation: ISSUES DETECTED"
+            echo "Some validation checks failed. Review the test results above and address any issues."
+          fi

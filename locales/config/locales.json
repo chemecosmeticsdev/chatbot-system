@@ -1,0 +1,117 @@
+{
+  "supported_locales": ["en", "th"],
+  "default_locale": "en",
+  "fallback_locale": "en",
+  "locales": {
+    "en": {
+      "name": "English",
+      "native_name": "English",
+      "code": "en",
+      "iso_code": "en-US",
+      "direction": "ltr",
+      "region": "US",
+      "currency": "USD",
+      "flag": "🇺🇸",
+      "font_family": "Inter, system-ui, sans-serif",
+      "line_height": 1.5,
+      "letter_spacing": "normal",
+      "text_align": "left",
+      "reading_direction": "ltr",
+      "pluralization_rules": {
+        "zero": false,
+        "one": true,
+        "two": false,
+        "few": false,
+        "many": false,
+        "other": true
+      }
+    },
+    "th": {
+      "name": "Thai",
+      "native_name": "ไทย",
+      "code": "th",
+      "iso_code": "th-TH",
+      "direction": "ltr",
+      "region": "TH",
+      "currency": "THB",
+      "flag": "🇹🇭",
+      "font_family": "Noto Sans Thai, Sarabun, Prompt, system-ui, sans-serif",
+      "line_height": 1.7,
+      "letter_spacing": "0.025em",
+      "text_align": "left",
+      "reading_direction": "ltr",
+      "pluralization_rules": {
+        "zero": false,
+        "one": false,
+        "two": false,
+        "few": false,
+        "many": false,
+        "other": true
+      },
+      "typography": {
+        "base_font_size": "16px",
+        "heading_line_height": 1.6,
+        "body_line_height": 1.7,
+        "character_spacing": "0.025em",
+        "word_spacing": "normal",
+        "recommended_fonts": [
+          "Noto Sans Thai",
+          "Sarabun",
+          "Prompt",
+          "Kanit",
+          "Mitr"
+        ],
+        "font_weights": {
+          "light": 300,
+          "regular": 400,
+          "medium": 500,
+          "semibold": 600,
+          "bold": 700
+        }
+      },
+      "cultural_notes": {
+        "formal_tone": "Use formal language for business contexts",
+        "hierarchical_respect": "Consider age and position in language",
+        "buddhist_calendar": "Use Buddhist Era (B.E.) for official dates",
+        "color_meanings": {
+          "yellow": "Royal color, use carefully",
+          "orange": "Buddhist monks, spiritual",
+          "red": "Auspicious, celebration",
+          "white": "Purity, mourning",
+          "black": "Elegance, but avoid for celebrations"
+        },
+        "numbers": {
+          "lucky": [3, 7, 9],
+          "unlucky": [4],
+          "royal_numerals": "Use Thai numerals for royal context"
+        }
+      }
+    }
+  },
+  "routing": {
+    "strategy": "subdirectory",
+    "patterns": {
+      "subdirectory": "/{locale}/path",
+      "subdomain": "{locale}.domain.com/path",
+      "query": "/path?lang={locale}"
+    },
+    "locale_detection": {
+      "cookie": true,
+      "header": true,
+      "query": true,
+      "path": true,
+      "cookie_name": "locale",
+      "header_name": "Accept-Language"
+    }
+  },
+  "features": {
+    "lazy_loading": true,
+    "namespace_splitting": true,
+    "pluralization": true,
+    "interpolation": true,
+    "context": true,
+    "fallback_chain": true,
+    "cache": true,
+    "dev_tools": true
+  }
+}

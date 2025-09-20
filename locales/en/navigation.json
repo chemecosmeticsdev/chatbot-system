@@ -1,0 +1,40 @@
+{
+  "header": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "chatbot": "Chatbot",
+    "admin": "Admin",
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "logout": "Logout"
+  },
+  "sidebar": {
+    "overview": "Overview",
+    "conversations": "Conversations",
+    "knowledge_base": "Knowledge Base",
+    "analytics": "Analytics",
+    "users": "Users",
+    "teams": "Teams",
+    "integrations": "Integrations",
+    "api": "API",
+    "documentation": "Documentation"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "back_to": "Back to {{page}}"
+  },
+  "footer": {
+    "copyright": "© {{year}} Chatbot Management System. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "support": "Support",
+    "contact": "Contact Us"
+  },
+  "menu": {
+    "main_menu": "Main Menu",
+    "user_menu": "User Menu",
+    "toggle_menu": "Toggle Menu",
+    "close_menu": "Close Menu"
+  }
+}

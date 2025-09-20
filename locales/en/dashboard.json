@@ -1,0 +1,56 @@
+{
+  "title": "Dashboard",
+  "welcome": {
+    "title": "Welcome to Chatbot Management",
+    "subtitle": "Monitor and manage your intelligent conversation systems",
+    "get_started": "Get Started"
+  },
+  "metrics": {
+    "title": "Performance Metrics",
+    "total_conversations": "Total Conversations",
+    "active_users": "Active Users",
+    "response_time": "Avg Response Time",
+    "satisfaction_rate": "Satisfaction Rate",
+    "today": "Today",
+    "this_week": "This Week",
+    "this_month": "This Month",
+    "last_7_days": "Last 7 Days",
+    "last_30_days": "Last 30 Days"
+  },
+  "charts": {
+    "conversations_over_time": "Conversations Over Time",
+    "user_engagement": "User Engagement",
+    "response_accuracy": "Response Accuracy",
+    "popular_topics": "Popular Topics",
+    "error_rates": "Error Rates",
+    "loading": "Loading chart data...",
+    "no_data": "No data available for this period"
+  },
+  "recent_activity": {
+    "title": "Recent Activity",
+    "view_all": "View All",
+    "no_activity": "No recent activity",
+    "conversation_started": "New conversation started",
+    "user_registered": "New user registered",
+    "error_occurred": "System error occurred",
+    "integration_updated": "Integration updated",
+    "time_ago": "{{time}} ago"
+  },
+  "quick_actions": {
+    "title": "Quick Actions",
+    "create_chatbot": "Create New Chatbot",
+    "view_conversations": "View Conversations",
+    "manage_users": "Manage Users",
+    "check_analytics": "Check Analytics",
+    "update_knowledge": "Update Knowledge Base",
+    "system_settings": "System Settings"
+  },
+  "status": {
+    "system_health": "System Health",
+    "all_services_operational": "All services operational",
+    "some_issues_detected": "Some issues detected",
+    "major_outage": "Major outage",
+    "under_maintenance": "Under maintenance",
+    "last_updated": "Last updated: {{time}}"
+  }
+}

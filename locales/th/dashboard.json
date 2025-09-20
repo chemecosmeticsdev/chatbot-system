@@ -1,0 +1,56 @@
+{
+  "title": "แดชบอร์ด",
+  "welcome": {
+    "title": "ยินดีต้อนรับสู่การจัดการแชทบอท",
+    "subtitle": "ติดตามและจัดการระบบการสนทนาอัจฉริยะของคุณ",
+    "get_started": "เริ่มต้นใช้งาน"
+  },
+  "metrics": {
+    "title": "ตัวชี้วัดประสิทธิภาพ",
+    "total_conversations": "การสนทนาทั้งหมด",
+    "active_users": "ผู้ใช้ที่ใช้งาน",
+    "response_time": "เวลาตอบสนองเฉลี่ย",
+    "satisfaction_rate": "อัตราความพึงพอใจ",
+    "today": "วันนี้",
+    "this_week": "สัปดาห์นี้",
+    "this_month": "เดือนนี้",
+    "last_7_days": "7 วันที่ผ่านมา",
+    "last_30_days": "30 วันที่ผ่านมา"
+  },
+  "charts": {
+    "conversations_over_time": "การสนทนาตามช่วงเวลา",
+    "user_engagement": "การมีส่วนร่วมของผู้ใช้",
+    "response_accuracy": "ความแม่นยำในการตอบ",
+    "popular_topics": "หัวข้อยอดนิยม",
+    "error_rates": "อัตราข้อผิดพลาด",
+    "loading": "กำลังโหลดข้อมูลแผนภูมิ...",
+    "no_data": "ไม่มีข้อมูลสำหรับช่วงเวลานี้"
+  },
+  "recent_activity": {
+    "title": "กิจกรรมล่าสุด",
+    "view_all": "ดูทั้งหมด",
+    "no_activity": "ไม่มีกิจกรรมล่าสุด",
+    "conversation_started": "เริ่มการสนทนาใหม่",
+    "user_registered": "ผู้ใช้ใหม่ลงทะเบียน",
+    "error_occurred": "เกิดข้อผิดพลาดระบบ",
+    "integration_updated": "อัปเดตการเชื่อมต่อ",
+    "time_ago": "{{time}} ที่แล้ว"
+  },
+  "quick_actions": {
+    "title": "การดำเนินการด่วน",
+    "create_chatbot": "สร้างแชทบอทใหม่",
+    "view_conversations": "ดูการสนทนา",
+    "manage_users": "จัดการผู้ใช้",
+    "check_analytics": "ตรวจสอบการวิเคราะห์",
+    "update_knowledge": "อัปเดตฐานความรู้",
+    "system_settings": "การตั้งค่าระบบ"
+  },
+  "status": {
+    "system_health": "สถานะความแข็งแรงของระบบ",
+    "all_services_operational": "บริการทั้งหมดทำงานปกติ",
+    "some_issues_detected": "ตรวจพบปัญหาบางอย่าง",
+    "major_outage": "ระบบล่มใหญ่",
+    "under_maintenance": "อยู่ระหว่างการบำรุงรักษา",
+    "last_updated": "อัปเดตล่าสุด: {{time}}"
+  }
+}

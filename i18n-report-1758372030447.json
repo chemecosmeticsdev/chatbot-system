@@ -1,0 +1,92 @@
+{
+  "timestamp": "2025-09-20T12:40:30.435Z",
+  "locales": {
+    "en": {
+      "namespaces": {
+        "auth": {
+          "keys": 71,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 0,
+          "missingKeys": []
+        },
+        "common": {
+          "keys": 94,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 0,
+          "missingKeys": []
+        },
+        "dashboard": {
+          "keys": 42,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 0,
+          "missingKeys": []
+        },
+        "forms": {
+          "keys": 109,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 0,
+          "missingKeys": []
+        },
+        "navigation": {
+          "keys": 28,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 0,
+          "missingKeys": []
+        }
+      },
+      "totalKeys": 344,
+      "coverage": 100
+    },
+    "th": {
+      "namespaces": {
+        "auth": {
+          "keys": 71,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 5,
+          "missingKeys": []
+        },
+        "common": {
+          "keys": 94,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 1,
+          "missingKeys": []
+        },
+        "dashboard": {
+          "keys": 42,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 0,
+          "missingKeys": []
+        },
+        "forms": {
+          "keys": 109,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 8,
+          "missingKeys": []
+        },
+        "navigation": {
+          "keys": 28,
+          "coverage": 100,
+          "errors": 0,
+          "warnings": 0,
+          "missingKeys": []
+        }
+      },
+      "totalKeys": 344,
+      "coverage": 100
+    }
+  },
+  "summary": {
+    "totalNamespaces": 10,
+    "totalKeys": 344,
+    "averageCoverage": 100
+  }
+}

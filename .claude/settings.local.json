@@ -29,9 +29,65 @@
       "mcp__sentry__search_events",
       "mcp__sentry__search_issues",
       "Bash(npm run test:api:*)",
-      "mcp__context7__get-library-docs"
+      "mcp__context7__get-library-docs",
+      "Bash(npx tsc:*)",
+      "Bash(ls:*)",
+      "Bash(node:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/pre-tool-validation.sh \"$TOOL_NAME\" \"$TOOL_ARGS\""
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/build-validation.sh \"$TOOL_NAME\" \"$TOOL_ARGS\""
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/security-monitor.sh \"$TOOL_NAME\" \"$TOOL_ARGS\""
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/security-monitor.sh \"$TOOL_NAME\" \"$TOOL_ARGS\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/post-tool-logging.sh \"$TOOL_NAME\" \"$TOOL_ARGS\" \"$TOOL_RESULT\" \"$EXIT_CODE\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/user-prompt-validator.sh \"$USER_PROMPT\""
+          }
+        ]
+      }
+    ]
   }
 }

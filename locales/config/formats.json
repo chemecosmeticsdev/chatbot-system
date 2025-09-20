@@ -1,0 +1,96 @@
+{
+  "en": {
+    "date": {
+      "short": "MM/dd/yyyy",
+      "medium": "MMM d, yyyy",
+      "long": "MMMM d, yyyy",
+      "full": "EEEE, MMMM d, yyyy"
+    },
+    "time": {
+      "short": "h:mm a",
+      "medium": "h:mm:ss a",
+      "long": "h:mm:ss a z"
+    },
+    "datetime": {
+      "short": "MM/dd/yyyy h:mm a",
+      "medium": "MMM d, yyyy h:mm:ss a",
+      "long": "MMMM d, yyyy h:mm:ss a z"
+    },
+    "number": {
+      "decimal": ".",
+      "thousands": ",",
+      "precision": 2,
+      "format": "#,##0.##"
+    },
+    "currency": {
+      "symbol": "$",
+      "code": "USD",
+      "position": "before",
+      "decimals": 2,
+      "format": "$#,##0.00"
+    },
+    "percentage": {
+      "symbol": "%",
+      "position": "after",
+      "decimals": 1,
+      "format": "#0.0%"
+    }
+  },
+  "th": {
+    "date": {
+      "short": "d/M/yyyy",
+      "medium": "d MMM yyyy",
+      "long": "d MMMM yyyy",
+      "full": "EEEE d MMMM yyyy"
+    },
+    "time": {
+      "short": "HH:mm",
+      "medium": "HH:mm:ss",
+      "long": "HH:mm:ss z"
+    },
+    "datetime": {
+      "short": "d/M/yyyy HH:mm",
+      "medium": "d MMM yyyy HH:mm:ss",
+      "long": "d MMMM yyyy HH:mm:ss z"
+    },
+    "number": {
+      "decimal": ".",
+      "thousands": ",",
+      "precision": 2,
+      "format": "#,##0.##"
+    },
+    "currency": {
+      "symbol": "฿",
+      "code": "THB",
+      "position": "before",
+      "decimals": 2,
+      "format": "฿#,##0.00"
+    },
+    "percentage": {
+      "symbol": "%",
+      "position": "after",
+      "decimals": 1,
+      "format": "#0.0%"
+    },
+    "buddhist_era": {
+      "enabled": true,
+      "offset": 543,
+      "format": "d MMMM พ.ศ. yyyy"
+    },
+    "thai_numerals": {
+      "enabled": false,
+      "mapping": {
+        "0": "๐",
+        "1": "๑",
+        "2": "๒",
+        "3": "๓",
+        "4": "๔",
+        "5": "๕",
+        "6": "๖",
+        "7": "๗",
+        "8": "๘",
+        "9": "๙"
+      }
+    }
+  }
+}

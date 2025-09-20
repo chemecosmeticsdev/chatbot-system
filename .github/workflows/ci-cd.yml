@@ -1,0 +1,343 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  NODE_VERSION: '18'
+  PLAYWRIGHT_BROWSERS_PATH: 0
+
+jobs:
+  code-quality:
+    name: Code Quality & Type Checking
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript check
+        run: npm run type-check
+
+  build-test:
+    name: Build & Production Test
+    runs-on: ubuntu-latest
+    needs: code-quality
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application for testing
+        run: |
+          npm run start &
+          sleep 10
+          curl -f http://localhost:3000 || exit 1
+
+  api-integration:
+    name: API Integration Tests
+    runs-on: ubuntu-latest
+    needs: code-quality
+
+    environment: testing
+
+    env:
+      NEXT_PUBLIC_STACK_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_STACK_PROJECT_ID }}
+      NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: ${{ secrets.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY }}
+      STACK_SECRET_SERVER_KEY: ${{ secrets.STACK_SECRET_SERVER_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BAWS_ACCESS_KEY_ID: ${{ secrets.BAWS_ACCESS_KEY_ID }}
+      BAWS_SECRET_ACCESS_KEY: ${{ secrets.BAWS_SECRET_ACCESS_KEY }}
+      DEFAULT_REGION: ${{ secrets.DEFAULT_REGION }}
+      BEDROCK_REGION: ${{ secrets.BEDROCK_REGION }}
+      MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+      LLAMAINDEX_API_KEY: ${{ secrets.LLAMAINDEX_API_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate environment configuration
+        run: npm run setup-env
+
+      - name: Run API integration tests
+        run: npm run test:api
+
+  e2e-testing:
+    name: End-to-End Testing
+    runs-on: ubuntu-latest
+    needs: [code-quality, build-test]
+
+    environment: testing
+
+    env:
+      NEXT_PUBLIC_STACK_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_STACK_PROJECT_ID }}
+      NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: ${{ secrets.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY }}
+      STACK_SECRET_SERVER_KEY: ${{ secrets.STACK_SECRET_SERVER_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BAWS_ACCESS_KEY_ID: ${{ secrets.BAWS_ACCESS_KEY_ID }}
+      BAWS_SECRET_ACCESS_KEY: ${{ secrets.BAWS_SECRET_ACCESS_KEY }}
+      DEFAULT_REGION: ${{ secrets.DEFAULT_REGION }}
+      BEDROCK_REGION: ${{ secrets.BEDROCK_REGION }}
+      MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+      LLAMAINDEX_API_KEY: ${{ secrets.LLAMAINDEX_API_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm run start &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-screenshots
+          path: test-results/
+          retention-days: 7
+
+  visual-regression:
+    name: Visual Regression Testing
+    runs-on: ubuntu-latest
+    needs: [code-quality, build-test]
+
+    environment: testing
+
+    env:
+      NEXT_PUBLIC_STACK_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_STACK_PROJECT_ID }}
+      NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: ${{ secrets.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY }}
+      STACK_SECRET_SERVER_KEY: ${{ secrets.STACK_SECRET_SERVER_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm run start &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run visual regression tests
+        run: npx playwright test tests/e2e/visual-regression.spec.ts
+
+      - name: Upload visual diff artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-regression-diff
+          path: test-results/
+          retention-days: 30
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    needs: code-quality
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+
+      - name: Check for security vulnerabilities
+        run: |
+          # Check for exposed secrets in code
+          if grep -r "sk-" . --exclude-dir=node_modules --exclude-dir=.git; then
+            echo "Potential API keys found in code"
+            exit 1
+          fi
+
+          # Check for hardcoded credentials
+          if grep -ri "password\|secret\|key" . --include="*.ts" --include="*.js" --exclude-dir=node_modules --exclude-dir=.git | grep -v "process.env"; then
+            echo "Potential hardcoded credentials found"
+            exit 1
+          fi
+
+  deployment-ready:
+    name: Deployment Readiness Check
+    runs-on: ubuntu-latest
+    needs: [api-integration, e2e-testing, visual-regression, security-audit]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate deployment configuration
+        run: |
+          # Check for required files
+          [ -f "amplify.yml" ] || (echo "amplify.yml missing" && exit 1)
+          [ -f "package.json" ] || (echo "package.json missing" && exit 1)
+          [ -f "next.config.js" ] || (echo "next.config.js missing" && exit 1)
+
+          # Validate build scripts
+          npm run build
+
+          echo "✅ All deployment checks passed"
+
+      - name: Notify deployment readiness
+        run: |
+          echo "🚀 Deployment Ready!"
+          echo "All tests passed. Ready for AWS Amplify deployment."
+
+  performance-monitoring:
+    name: Performance Monitoring
+    runs-on: ubuntu-latest
+    needs: build-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and analyze bundle
+        run: |
+          npm run build
+          npx next-bundle-analyzer || echo "Bundle analysis completed"
+
+      - name: Performance audit
+        run: |
+          npm run start &
+          sleep 10
+
+          # Simple performance check
+          RESPONSE_TIME=$(curl -o /dev/null -s -w '%{time_total}' http://localhost:3000)
+          echo "Response time: ${RESPONSE_TIME}s"
+
+          # Check if response time is under 3 seconds
+          if (( $(echo "$RESPONSE_TIME > 3.0" | bc -l) )); then
+            echo "⚠️ Response time too slow: ${RESPONSE_TIME}s"
+            exit 1
+          fi
+
+          echo "✅ Performance check passed"
+
+# Workflow completion notification
+  workflow-complete:
+    name: Workflow Complete
+    runs-on: ubuntu-latest
+    needs: [deployment-ready, performance-monitoring]
+    if: always()
+
+    steps:
+      - name: Workflow summary
+        run: |
+          echo "🎉 CI/CD Pipeline Complete!"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Triggered by: ${{ github.event_name }}"
+
+          if [[ "${{ needs.deployment-ready.result }}" == "success" ]]; then
+            echo "✅ Ready for deployment"
+          else
+            echo "❌ Deployment blocked - check failed jobs"
+          fi

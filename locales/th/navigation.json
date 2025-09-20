@@ -1,0 +1,40 @@
+{
+  "header": {
+    "home": "หน้าแรก",
+    "dashboard": "แดชบอร์ด",
+    "chatbot": "แชทบอท",
+    "admin": "ผู้ดูแลระบบ",
+    "profile": "โปรไฟล์",
+    "settings": "การตั้งค่า",
+    "help": "ช่วยเหลือ",
+    "logout": "ออกจากระบบ"
+  },
+  "sidebar": {
+    "overview": "ภาพรวม",
+    "conversations": "การสนทนา",
+    "knowledge_base": "ฐานความรู้",
+    "analytics": "การวิเคราะห์",
+    "users": "ผู้ใช้",
+    "teams": "ทีม",
+    "integrations": "การเชื่อมต่อ",
+    "api": "API",
+    "documentation": "เอกสาร"
+  },
+  "breadcrumb": {
+    "home": "หน้าแรก",
+    "back_to": "กลับไป {{page}}"
+  },
+  "footer": {
+    "copyright": "© {{year}} ระบบจัดการแชทบอท สงวนลิขสิทธิ์",
+    "privacy": "นโยบายความเป็นส่วนตัว",
+    "terms": "ข้อกำหนดการใช้งาน",
+    "support": "ช่วยเหลือ",
+    "contact": "ติดต่อเรา"
+  },
+  "menu": {
+    "main_menu": "เมนูหลัก",
+    "user_menu": "เมนูผู้ใช้",
+    "toggle_menu": "เปิด/ปิดเมนู",
+    "close_menu": "ปิดเมนู"
+  }
+}
