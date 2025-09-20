@@ -1,0 +1,77 @@
+// Environment configuration and validation
+interface Config {
+  // Neon Auth
+  NEXT_PUBLIC_STACK_PROJECT_ID: string;
+  NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: string;
+  STACK_SECRET_SERVER_KEY: string;
+
+  // Database
+  DATABASE_URL: string;
+
+  // AWS (using BAWS prefix for Amplify)
+  BAWS_ACCESS_KEY_ID: string;
+  BAWS_SECRET_ACCESS_KEY: string;
+  DEFAULT_REGION: string;
+  BEDROCK_REGION: string;
+
+  // Third-party APIs
+  MISTRAL_API_KEY: string;
+  LLAMAINDEX_API_KEY: string;
+}
+
+const requiredEnvVars: (keyof Config)[] = [
+  'NEXT_PUBLIC_STACK_PROJECT_ID',
+  'NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY',
+  'STACK_SECRET_SERVER_KEY',
+  'DATABASE_URL',
+  'BAWS_ACCESS_KEY_ID',
+  'BAWS_SECRET_ACCESS_KEY',
+  'DEFAULT_REGION',
+  'BEDROCK_REGION',
+  'MISTRAL_API_KEY',
+  'LLAMAINDEX_API_KEY'
+];
+
+export function validateEnvironment(): { isValid: boolean; missing: string[] } {
+  const missing: string[] = [];
+
+  for (const envVar of requiredEnvVars) {
+    const value = process.env[envVar];
+    if (!value || value.trim() === '') {
+      missing.push(envVar);
+    }
+  }
+
+  return {
+    isValid: missing.length === 0,
+    missing
+  };
+}
+
+export function getConfig(): Config {
+  const { isValid, missing } = validateEnvironment();
+
+  if (!isValid) {
+    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+  }
+
+  return {
+    NEXT_PUBLIC_STACK_PROJECT_ID: process.env.NEXT_PUBLIC_STACK_PROJECT_ID!,
+    NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY!,
+    STACK_SECRET_SERVER_KEY: process.env.STACK_SECRET_SERVER_KEY!,
+    DATABASE_URL: process.env.DATABASE_URL!,
+    BAWS_ACCESS_KEY_ID: process.env.BAWS_ACCESS_KEY_ID!,
+    BAWS_SECRET_ACCESS_KEY: process.env.BAWS_SECRET_ACCESS_KEY!,
+    DEFAULT_REGION: process.env.DEFAULT_REGION!,
+    BEDROCK_REGION: process.env.BEDROCK_REGION!,
+    MISTRAL_API_KEY: process.env.MISTRAL_API_KEY!,
+    LLAMAINDEX_API_KEY: process.env.LLAMAINDEX_API_KEY!,
+  };
+}
+
+export function getClientConfig() {
+  return {
+    NEXT_PUBLIC_STACK_PROJECT_ID: process.env.NEXT_PUBLIC_STACK_PROJECT_ID,
+    NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY,
+  };
+}
