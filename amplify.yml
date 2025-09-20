@@ -4,6 +4,9 @@ frontend:
     preBuild:
       commands:
         - npm ci
+        - echo "Environment variables check:"
+        - echo "DATABASE_URL exists:" $([[ -n "$DATABASE_URL" ]] && echo "true" || echo "false")
+        - echo "STACK_SECRET_SERVER_KEY exists:" $([[ -n "$STACK_SECRET_SERVER_KEY" ]] && echo "true" || echo "false")
         - node scripts/setup-env.js
     build:
       commands:
@@ -16,15 +19,3 @@ frontend:
     paths:
       - node_modules/**/*
       - .next/cache/**/*
-  env:
-    variables:
-      NEXT_PUBLIC_STACK_PROJECT_ID: $NEXT_PUBLIC_STACK_PROJECT_ID
-      NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: $NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY
-      STACK_SECRET_SERVER_KEY: $STACK_SECRET_SERVER_KEY
-      DATABASE_URL: $DATABASE_URL
-      BAWS_ACCESS_KEY_ID: $BAWS_ACCESS_KEY_ID
-      BAWS_SECRET_ACCESS_KEY: $BAWS_SECRET_ACCESS_KEY
-      DEFAULT_REGION: $DEFAULT_REGION
-      BEDROCK_REGION: $BEDROCK_REGION
-      MISTRAL_API_KEY: $MISTRAL_API_KEY
-      LLAMAINDEX_API_KEY: $LLAMAINDEX_API_KEY
