@@ -10,6 +10,19 @@ frontend:
         - node scripts/setup-env.js
     build:
       commands:
+        # Write environment variables to .env.production for Next.js runtime access
+        - echo "Writing environment variables to .env.production..."
+        - echo "NEXT_PUBLIC_STACK_PROJECT_ID=$NEXT_PUBLIC_STACK_PROJECT_ID" >> .env.production
+        - echo "NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=$NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY" >> .env.production
+        - echo "STACK_SECRET_SERVER_KEY=$STACK_SECRET_SERVER_KEY" >> .env.production
+        - echo "DATABASE_URL=$DATABASE_URL" >> .env.production
+        - echo "BAWS_ACCESS_KEY_ID=$BAWS_ACCESS_KEY_ID" >> .env.production
+        - echo "BAWS_SECRET_ACCESS_KEY=$BAWS_SECRET_ACCESS_KEY" >> .env.production
+        - echo "DEFAULT_REGION=$DEFAULT_REGION" >> .env.production
+        - echo "BEDROCK_REGION=$BEDROCK_REGION" >> .env.production
+        - echo "MISTRAL_API_KEY=$MISTRAL_API_KEY" >> .env.production
+        - echo "LLAMAINDEX_API_KEY=$LLAMAINDEX_API_KEY" >> .env.production
+        - echo "Environment variables written to .env.production"
         - npm run build
   artifacts:
     baseDirectory: .next
