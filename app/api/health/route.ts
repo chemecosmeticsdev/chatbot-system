@@ -17,9 +17,9 @@ export async function GET() {
       'LLAMAINDEX_API_KEY'
     ];
 
-    const envStatus = {};
-    const missingVars = [];
-    const presentVars = [];
+    const envStatus: Record<string, boolean> = {};
+    const missingVars: string[] = [];
+    const presentVars: string[] = [];
 
     requiredVars.forEach(varName => {
       const value = process.env[varName];
