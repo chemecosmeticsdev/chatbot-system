@@ -1,5 +1,6 @@
 import { StackHandler } from "@stackframe/stack";
 import { stackServerApp } from "@/stack";
+import Link from "next/link";
 
 export default function Handler(props: { params: any, searchParams: any }) {
   // Handle case where Stack Auth is not properly initialized
@@ -12,12 +13,12 @@ export default function Handler(props: { params: any, searchParams: any }) {
             Stack Auth is not properly configured. Please check environment variables and try again.
           </p>
           <div className="text-center">
-            <a
+            <Link
               href="/"
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg inline-block"
             >
               Return to Dashboard
-            </a>
+            </Link>
           </div>
         </div>
       </div>
