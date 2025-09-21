@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'pg';
 import { ConversationService } from '@/lib/services/conversation-service';
+import { ConversationPlatform, ConversationStatus } from '@/lib/models/conversation';
 import { getConfig } from '@/lib/config';
 import { withChatbotMonitoring } from '@/lib/monitoring/api-wrapper';
 
@@ -92,7 +93,12 @@ async function handleGET(request: NextRequest) {
       }
     }
 
-    const filters = { chatbot_id, platform, status, user_id };
+    const filters = {
+      chatbot_instance_id: chatbot_id,
+      platform: platform as ConversationPlatform,
+      status: status as ConversationStatus,
+      user_identifier: user_id
+    };
     const result = await conversationService.list(organizationId, filters, page, limit);
 
     return successResponse(result);

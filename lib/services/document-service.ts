@@ -8,19 +8,52 @@
 import { Client } from 'pg';
 import {
   Document,
-  CreateDocument,
-  UpdateDocument,
   DocumentWithChunks,
   DocumentListFilters,
   DocumentListResponse,
-  DocumentSchema,
-  CreateDocumentSchema,
-  UpdateDocumentSchema,
-  DocumentModel,
-  DOCUMENT_PROCESSING_STAGES,
-  DOCUMENT_SUPPORTED_TYPES
+  CreateDocumentRequest,
+  DocumentProcessingStatus,
+  ProcessingStatus,
+  DocumentType,
+  DocumentUtils,
+  DocumentValidation
 } from '@/lib/models/document';
 import { withDatabaseMonitoring, withExternalApiMonitoring } from '@/lib/monitoring/api-wrapper';
+
+// Service-specific types that complement the model
+interface CreateDocument {
+  product_id: string;
+  name: string;
+  type: DocumentType;
+  file_path: string;
+  content_type: string;
+  file_size: number;
+}
+
+interface UpdateDocument {
+  name?: string;
+  type?: DocumentType;
+  processing_status?: ProcessingStatus;
+  metadata?: Record<string, any>;
+}
+
+// Constants
+const DOCUMENT_PROCESSING_STAGES = {
+  UPLOAD: 'upload',
+  OCR: 'ocr',
+  CHUNKING: 'chunking',
+  EMBEDDING: 'embedding',
+  INDEXING: 'indexing'
+} as const;
+
+const DOCUMENT_SUPPORTED_TYPES = [
+  'application/pdf',
+  'text/plain',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'image/jpeg',
+  'image/png'
+] as const;
 import { SentryUtils, DocumentProcessingError } from '@/lib/monitoring/sentry-utils';
 
 export class DocumentService {
