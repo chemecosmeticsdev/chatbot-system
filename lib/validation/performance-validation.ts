@@ -542,8 +542,10 @@ export class PerformanceValidationService {
 
     } catch (error) {
       SentryUtils.captureError(error as Error, {
-        optimization_check: true,
-        trigger_conditions: triggerConditions
+        additionalData: {
+          optimization_check: true,
+          trigger_conditions: triggerConditions
+        }
       });
 
       throw new VectorSearchError(
@@ -903,12 +905,14 @@ export class PerformanceValidationService {
 
     // Send to Sentry
     SentryUtils.captureError(new Error(fullAlert.message), {
-      alert_id: fullAlert.alert_id,
-      severity: fullAlert.severity,
-      type: fullAlert.type,
-      current_value: fullAlert.current_value,
-      threshold_value: fullAlert.threshold_value,
-      metadata: fullAlert.metadata
+      additionalData: {
+        alert_id: fullAlert.alert_id,
+        severity: fullAlert.severity,
+        type: fullAlert.type,
+        current_value: fullAlert.current_value,
+        threshold_value: fullAlert.threshold_value,
+        metadata: fullAlert.metadata
+      }
     });
   }
 

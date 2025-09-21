@@ -26,8 +26,9 @@ test.describe('System Performance Tests', () => {
 
           entries.forEach((entry) => {
             if (entry.entryType === 'navigation') {
-              metrics.domContentLoaded = entry.domContentLoadedEventEnd - entry.domContentLoadedEventStart
-              metrics.loadComplete = entry.loadEventEnd - entry.loadEventStart
+              const navEntry = entry as PerformanceNavigationTiming;
+              metrics.domContentLoaded = navEntry.domContentLoadedEventEnd - navEntry.domContentLoadedEventStart
+              metrics.loadComplete = navEntry.loadEventEnd - navEntry.loadEventStart
             }
           })
 

@@ -43,15 +43,15 @@ describe('PerformanceValidationService', () => {
     } as any;
 
     mockOptimizationService = {
-      analyzeIndexPerformance: jest.fn().mockResolvedValue([]),
-      optimizeVectorIndexes: jest.fn().mockResolvedValue([]),
-      runMaintenanceRoutines: jest.fn().mockResolvedValue({ success: true }),
-      getHealthCheck: jest.fn().mockResolvedValue({ status: 'healthy' }),
-      startPerformanceMonitoring: jest.fn(),
-      stopPerformanceMonitoring: jest.fn(),
-      getPerformanceHistory: jest.fn().mockReturnValue([]),
-      optimizeQuery: jest.fn().mockResolvedValue(''),
-      batchOptimization: jest.fn().mockResolvedValue([])
+      analyzeIndexPerformance: jest.fn(() => Promise.resolve([])),
+      optimizeVectorIndexes: jest.fn(() => Promise.resolve([])),
+      runMaintenanceRoutines: jest.fn(() => Promise.resolve({ success: true })),
+      getHealthCheck: jest.fn(() => Promise.resolve({ status: 'healthy' })),
+      startPerformanceMonitoring: jest.fn(() => {}),
+      stopPerformanceMonitoring: jest.fn(() => {}),
+      getPerformanceHistory: jest.fn(() => []),
+      optimizeQuery: jest.fn(() => Promise.resolve('')),
+      batchOptimization: jest.fn(() => Promise.resolve([]))
     };
 
     // Create service instance
