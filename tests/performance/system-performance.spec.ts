@@ -22,7 +22,7 @@ test.describe('System Performance Tests', () => {
       return new Promise((resolve) => {
         new PerformanceObserver((list) => {
           const entries = list.getEntries()
-          const metrics = {}
+          const metrics: any = {}
 
           entries.forEach((entry) => {
             if (entry.entryType === 'navigation') {
@@ -176,7 +176,7 @@ test.describe('System Performance Tests', () => {
       const entries = performance.getEntriesByType('resource')
       return entries.map(entry => ({
         name: entry.name,
-        size: entry.transferSize || 0,
+        size: (entry as PerformanceResourceTiming).transferSize || 0,
         type: entry.name.includes('.css') ? 'css' :
               entry.name.includes('.js') ? 'js' : 'other'
       })).filter(r => r.type !== 'other')

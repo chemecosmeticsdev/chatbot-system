@@ -801,7 +801,7 @@ test.describe('Thai Language Support Integration', () => {
       await submitButton.click();
 
       // Check for Thai validation messages
-      const validationMessage = await emailInput.evaluate(el => el.validationMessage);
+      const validationMessage = await emailInput.evaluate(el => (el as HTMLInputElement).validationMessage);
 
       // Note: Browser validation messages may be in system language
       // Custom validation should be in Thai
