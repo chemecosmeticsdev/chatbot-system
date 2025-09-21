@@ -29,9 +29,13 @@ export async function POST(request: NextRequest) {
   return withDatabaseMonitoring(
     async () => {
       const startTime = Date.now();
+      let body: MonitoringRequest | undefined;
 
       try {
-        const body: MonitoringRequest = await request.json();
+        body = await request.json();
+        if (!body) {
+          throw new Error('Request body is required');
+        }
         const { action, interval_seconds = 60, optimization_config } = body;
 
         // Initialize monitoring service if not exists
@@ -126,9 +130,12 @@ export async function POST(request: NextRequest) {
 
         // Log monitoring failure
         SentryUtils.captureError(error as Error, {
-          endpoint: '/api/v1/performance/monitor',
-          action: body.action,
-          duration_ms: duration
+          operation: 'performance_monitoring',
+          additionalData: {
+            endpoint: '/api/v1/performance/monitor',
+            action: body?.action || 'parsing_failed',
+            duration_ms: duration
+          }
         });
 
         return NextResponse.json({
@@ -144,7 +151,9 @@ export async function POST(request: NextRequest) {
     },
     {
       operation: 'performance_monitoring_api',
-      endpoint: '/api/v1/performance/monitor'
+      additionalData: {
+        endpoint: '/api/v1/performance/monitor'
+      }
     }
   );
 }
@@ -197,8 +206,11 @@ export async function GET(request: NextRequest) {
 
       } catch (error) {
         SentryUtils.captureError(error as Error, {
-          endpoint: '/api/v1/performance/monitor',
-          method: 'GET'
+          operation: 'performance_monitoring_get',
+          additionalData: {
+            endpoint: '/api/v1/performance/monitor',
+            method: 'GET'
+          }
         });
 
         return NextResponse.json({
@@ -213,7 +225,9 @@ export async function GET(request: NextRequest) {
     },
     {
       operation: 'performance_monitoring_status_api',
-      endpoint: '/api/v1/performance/monitor'
+      additionalData: {
+        endpoint: '/api/v1/performance/monitor'
+      }
     }
   );
 }

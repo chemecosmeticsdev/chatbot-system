@@ -33,9 +33,13 @@ export async function POST(request: NextRequest) {
   return withDatabaseMonitoring(
     async () => {
       const startTime = Date.now();
+      let body: ValidationRequest | undefined;
 
       try {
-        const body: ValidationRequest = await request.json();
+        body = await request.json();
+        if (!body) {
+          throw new Error('Request body is required');
+        }
         const {
           test_type,
           queries = [
@@ -147,9 +151,12 @@ export async function POST(request: NextRequest) {
 
         // Log validation failure
         SentryUtils.captureError(error as Error, {
-          endpoint: '/api/v1/performance/validate',
-          duration_ms: duration,
-          request_body: body
+          operation: 'performance_validation',
+          additionalData: {
+            endpoint: '/api/v1/performance/validate',
+            duration_ms: duration,
+            request_body: body
+          }
         });
 
         return NextResponse.json({
@@ -165,7 +172,9 @@ export async function POST(request: NextRequest) {
     },
     {
       operation: 'performance_validation_api',
-      endpoint: '/api/v1/performance/validate'
+      additionalData: {
+        endpoint: '/api/v1/performance/validate'
+      }
     }
   );
 }
@@ -202,8 +211,11 @@ export async function GET(request: NextRequest) {
 
       } catch (error) {
         SentryUtils.captureError(error as Error, {
-          endpoint: '/api/v1/performance/validate',
-          method: 'GET'
+          operation: 'performance_validation_get',
+          additionalData: {
+            endpoint: '/api/v1/performance/validate',
+            method: 'GET'
+          }
         });
 
         return NextResponse.json({
@@ -218,7 +230,9 @@ export async function GET(request: NextRequest) {
     },
     {
       operation: 'performance_report_api',
-      endpoint: '/api/v1/performance/validate'
+      additionalData: {
+        endpoint: '/api/v1/performance/validate'
+      }
     }
   );
 }

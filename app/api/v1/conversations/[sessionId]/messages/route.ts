@@ -122,23 +122,20 @@ async function handlePOST(
     const result = await conversationService.addMessage(
       sessionId,
       {
-        role: requestData.role,
+        session_id: sessionId,
+        message_type: requestData.role === 'user' ? 'user_message' :
+                     requestData.role === 'assistant' ? 'bot_response' : 'system_message',
         content: requestData.content,
-        attachments: requestData.attachments || [],
-        metadata: requestData.metadata || {}
+        content_type: 'text',
+        attachments: requestData.attachments || []
       },
-      organizationId,
-      options
+      organizationId
     );
 
     return successResponse({
       message: result.message,
-      response: result.response || null,
-      vector_search_results: result.vector_search_results || [],
-      conversation_status: result.conversation_status,
-      cost_info: result.cost_info || null,
-      response_time: result.response_time || null,
-      search_analytics: result.search_analytics || null
+      suggested_followups: result.suggested_followups || [],
+      context_sources: result.context_sources || []
     }, 201);
 
   } catch (error: any) {

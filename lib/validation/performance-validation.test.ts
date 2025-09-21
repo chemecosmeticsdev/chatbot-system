@@ -73,6 +73,7 @@ describe('PerformanceValidationService', () => {
             chunk_index: 0,
             content: 'test content',
             similarity: 0.9,
+            similarity_score: 0.9,
             metadata: {}
           }
         ];
@@ -249,6 +250,7 @@ describe('PerformanceValidationService', () => {
           chunk_index: 0,
           content: 'load test content',
           similarity: 0.8,
+          similarity_score: 0.8,
           metadata: {}
         }];
       });
@@ -299,6 +301,7 @@ describe('PerformanceValidationService', () => {
           chunk_index: 0,
           content: 'slow content',
           similarity: 0.8,
+          similarity_score: 0.8,
           metadata: {}
         }];
       });

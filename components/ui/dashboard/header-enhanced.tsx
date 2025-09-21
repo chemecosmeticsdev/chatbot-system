@@ -4,7 +4,20 @@ import { useState } from 'react';
 
 // Temporary stub for Stack Auth useUser hook
 // TODO: Replace with real useUser when @stackframe/stack is installed
-const useUserStub = () => null;
+interface UserStub {
+  displayName?: string;
+  primaryEmail?: string;
+  profileImageUrl?: string;
+}
+
+const useUserStub = (): UserStub | null => {
+  // Temporary mock user for development
+  return {
+    displayName: 'John Doe',
+    primaryEmail: 'john@example.com',
+    profileImageUrl: undefined
+  };
+};
 import { cn } from '@/lib/utils';
 import {
   Bars3Icon,

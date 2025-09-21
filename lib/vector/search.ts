@@ -15,6 +15,7 @@ export interface VectorSearchResult {
   chunk_index: number;
   content: string;
   similarity: number;
+  similarity_score: number;
   metadata: Record<string, any>;
   document_name?: string;
   product_id?: string;
@@ -26,6 +27,8 @@ export interface SearchFilters {
   content_types?: string[];
   min_similarity?: number;
   max_results?: number;
+  limit?: number;
+  similarity_threshold?: number;
 }
 
 export interface EmbeddingResult {
@@ -306,6 +309,7 @@ export class VectorSearchService {
           chunk_index: row.chunk_index,
           content: row.content,
           similarity: parseFloat(row.similarity),
+          similarity_score: parseFloat(row.similarity), // Same as similarity
           metadata: row.metadata || {},
           document_name: row.document_name,
           product_id: row.product_id
@@ -444,6 +448,7 @@ export class VectorSearchService {
           chunk_index: row.chunk_index,
           content: row.content,
           similarity: parseFloat(row.similarity),
+          similarity_score: parseFloat(row.similarity), // Same as similarity
           metadata: row.metadata || {},
           document_name: row.document_name,
           product_id: row.product_id
@@ -642,6 +647,43 @@ export class VectorSearchService {
     }
 
     return chunks;
+  }
+
+  /**
+   * Get search analytics (placeholder implementation)
+   */
+  async getSearchAnalytics(sessionId: string, chatbotId?: string, includeDetails?: boolean): Promise<any> {
+    // TODO: Implement actual analytics
+    return {
+      total_searches: 0,
+      unique_queries: 0,
+      avg_response_time: 0,
+      success_rate: 1.0,
+      popular_queries: []
+    };
+  }
+
+  /**
+   * Get chatbot-specific search analytics (placeholder implementation)
+   */
+  async getChatbotSearchAnalytics(chatbotId: string, organizationId: string, timeRange?: string, includeDetails?: boolean): Promise<any> {
+    // TODO: Implement actual chatbot analytics
+    return {
+      chatbot_id: chatbotId,
+      total_searches: 0,
+      unique_queries: 0,
+      avg_response_time: 0,
+      success_rate: 1.0,
+      popular_queries: []
+    };
+  }
+
+  /**
+   * Get search suggestions (placeholder implementation)
+   */
+  async getSearchSuggestions(query: string, organizationId: string, options?: any): Promise<string[]> {
+    // TODO: Implement actual search suggestions
+    return [];
   }
 }
 

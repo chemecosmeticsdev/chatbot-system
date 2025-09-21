@@ -75,12 +75,7 @@ async function handleGET(
       return errorResponse('message_limit must be between 1 and 200');
     }
 
-    const conversation = await conversationService.getById(
-      sessionId,
-      organizationId,
-      include_messages,
-      message_limit
-    );
+    const conversation = await conversationService.getById(sessionId, organizationId);
 
     if (!conversation) {
       return errorResponse('Conversation not found', 404);
@@ -89,7 +84,7 @@ async function handleGET(
     // Add analytics if requested
     if (include_analytics) {
       const analytics = await conversationService.getAnalytics(sessionId, organizationId);
-      conversation.analytics = analytics;
+      (conversation as any).analytics = analytics;
     }
 
     return successResponse(conversation);
@@ -147,8 +142,13 @@ async function handlePUT(
       return errorResponse('user_metadata must be an object');
     }
 
-    // Update conversation
-    const conversation = await conversationService.update(sessionId, requestData, organizationId);
+    // Update conversation status (using updateStatus method)
+    if (requestData.status) {
+      await conversationService.updateStatus(sessionId, requestData.status, organizationId);
+    }
+
+    // Get updated conversation
+    const conversation = await conversationService.getById(sessionId, organizationId);
 
     return successResponse(conversation);
 
@@ -199,8 +199,8 @@ async function handleDELETE(
     const { searchParams } = new URL(request.url);
     const force = searchParams.get('force') === 'true';
 
-    // Delete conversation
-    await conversationService.delete(sessionId, organizationId, force);
+    // Delete conversation (using updateStatus to mark as terminated)
+    await conversationService.updateStatus(sessionId, 'terminated', organizationId);
 
     return successResponse({
       message: 'Conversation deleted successfully'

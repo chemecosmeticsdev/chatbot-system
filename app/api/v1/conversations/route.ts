@@ -93,7 +93,7 @@ async function handleGET(request: NextRequest) {
     }
 
     const filters = { chatbot_id, platform, status, user_id };
-    const result = await conversationService.list(organizationId, filters, page, limit, include_messages);
+    const result = await conversationService.list(organizationId, filters, page, limit);
 
     return successResponse(result);
 
@@ -158,8 +158,8 @@ async function handlePOST(request: NextRequest) {
       return errorResponse('session_metadata must be an object');
     }
 
-    // Create conversation
-    const conversation = await conversationService.create(requestData, organizationId);
+    // Create conversation session
+    const conversation = await conversationService.createSession(requestData, organizationId);
 
     return successResponse(conversation, 201);
 

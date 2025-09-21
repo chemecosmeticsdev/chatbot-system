@@ -37,7 +37,7 @@ async function getAuthenticatedContext(request: NextRequest): Promise<{
   }
 
   // Extract organization ID from user context or default
-  const organizationId = user.organizationId || 'bf5e7b6e-f44c-4393-9fc4-8be04af5be45';
+  const organizationId = (user as any).organizationId || 'bf5e7b6e-f44c-4393-9fc4-8be04af5be45';
 
   return {
     user,
@@ -112,7 +112,7 @@ async function handlePOST(
         processing_time: 'varies' // Could be enhanced to return actual time
       });
     } else {
-      return errorResponse(result.error || 'OCR processing failed', 422);
+      return errorResponse((result as any).error || 'OCR processing failed', 422);
     }
 
   } catch (error: any) {

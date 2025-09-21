@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'pg';
 import { ProductService } from '@/lib/services/product-service';
+import { ProductStatus } from '@/lib/models/product';
 import { getConfig } from '@/lib/config';
 
 /**
@@ -76,7 +77,11 @@ export async function GET(request: NextRequest) {
       return errorResponse('Invalid status. Must be one of: active, inactive, draft, archived');
     }
 
-    const filters = { category, status, search };
+    const filters = {
+      category,
+      status: status as ProductStatus | undefined,
+      search
+    };
     const result = await productService.list(organizationId, filters, page, limit);
 
     return successResponse(result);

@@ -509,7 +509,10 @@ export default function VectorSearchPage() {
                         {/* Content */}
                         <div className="text-sm text-gray-700 leading-relaxed">
                           {isVectorMode
-                            ? (result as VectorSearchResult).content.slice(0, 300) + (result.content.length > 300 ? '...' : '')
+                            ? (() => {
+                                const vectorResult = result as VectorSearchResult;
+                                return vectorResult.content.slice(0, 300) + (vectorResult.content.length > 300 ? '...' : '');
+                              })()
                             : (result as FullTextSearchResult).content_snippet
                           }
                         </div>
@@ -518,7 +521,7 @@ export default function VectorSearchPage() {
                         {isVectorMode && (result as VectorSearchResult).metadata && (
                           <div className="flex items-center space-x-4 text-xs text-muted-foreground pt-2 border-t">
                             <span>Document ID: {(result as VectorSearchResult).document_id}</span>
-                            <span>Chunk: {(result as VectorSearchResult).chunk_id}</span>
+                            <span>Chunk: {(result as VectorSearchResult).chunk_index}</span>
                             {(result as VectorSearchResult).metadata?.page_number && (
                               <span>Page: {(result as VectorSearchResult).metadata.page_number}</span>
                             )}

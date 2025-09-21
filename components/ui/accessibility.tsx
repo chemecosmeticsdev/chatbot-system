@@ -73,7 +73,7 @@ export function LiveRegion({
   children,
   politeness = 'polite',
   atomic = false,
-  relevant = 'additions text',
+  relevant = 'additions',
   className
 }: LiveRegionProps) {
   return (
@@ -257,7 +257,7 @@ export function AccessibleButton({
       {loading && (
         <>
           <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-          <ScreenReaderOnly id={`${props.id}-loading`}>
+          <ScreenReaderOnly>
             {loadingText}
           </ScreenReaderOnly>
         </>
