@@ -1,0 +1,42 @@
+{
+  "general": {
+    "title": "Something went wrong",
+    "subtitle": "We encountered an unexpected error. Please try again.",
+    "retry": "Try Again",
+    "contact": "Contact Support"
+  },
+  "api": {
+    "network": "Network connection error. Please check your internet connection.",
+    "server": "Server error. Please try again later.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "forbidden": "Access denied. You don't have permission to access this resource.",
+    "notFound": "The requested resource was not found.",
+    "timeout": "Request timed out. Please try again.",
+    "rateLimited": "Too many requests. Please wait a moment before trying again."
+  },
+  "form": {
+    "validation": "Please fix the errors in the form before submitting.",
+    "submission": "Failed to submit form. Please try again.",
+    "upload": "File upload failed. Please try again.",
+    "processing": "Processing failed. Please check your input and try again."
+  },
+  "auth": {
+    "login": "Login failed. Please check your credentials.",
+    "logout": "Logout failed. Please try again.",
+    "session": "Your session has expired. Please log in again.",
+    "permissions": "You don't have permission to access this feature."
+  },
+  "database": {
+    "connection": "Database connection error. Please try again later.",
+    "query": "Database query failed. Please contact support if this persists.",
+    "transaction": "Transaction failed. Changes have been rolled back.",
+    "migration": "Database migration failed. Please contact support."
+  },
+  "file": {
+    "upload": "File upload failed. Please check file size and format.",
+    "processing": "File processing failed. Please try uploading again.",
+    "size": "File is too large. Maximum size is {{maxSize}}.",
+    "type": "Unsupported file type. Supported types: {{supportedTypes}}.",
+    "corrupt": "File appears to be corrupted. Please try a different file."
+  }
+}

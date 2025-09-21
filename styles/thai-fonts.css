@@ -1,0 +1,660 @@
+/**
+ * Thai Font Configuration
+ * Comprehensive Thai/English typography system
+ *
+ * Features:
+ * - Optimized Thai font stack with web font loading
+ * - Responsive typography scales
+ * - Cultural adaptations for Thai language
+ * - Component-specific styling
+ * - Performance optimization
+ * - Cross-browser compatibility
+ */
+
+/* ========================================
+   1. FONT IMPORTS & DECLARATIONS
+   ======================================== */
+
+/* Import Thai-optimized font families with strategic loading */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Noto+Sans+Thai:wght@100;200;300;400;500;600;700;800;900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* Preload critical Thai fonts for performance */
+@font-face {
+  font-family: 'Sarabun';
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  src: url('https://fonts.gstatic.com/s/sarabun/v13/DtVhJx26TKEqsc3O9uIRCxvYl35NZj2iyErVL-OGO5z2Qg.woff2') format('woff2');
+  unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: 'Noto Sans Thai';
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  src: url('https://fonts.gstatic.com/s/notosansthai/v20/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MQ.woff2') format('woff2');
+  unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+}
+
+/* ========================================
+   2. CSS CUSTOM PROPERTIES
+   ======================================== */
+
+:root {
+  /* Thai Font Stack Variables */
+  --font-thai-primary: 'Sarabun', 'Noto Sans Thai', 'Prompt', 'Arial Unicode MS', sans-serif;
+  --font-thai-secondary: 'Noto Sans Thai', 'Sarabun', 'Prompt', 'Arial Unicode MS', sans-serif;
+  --font-thai-display: 'Prompt', 'Sarabun', 'Noto Sans Thai', 'Arial Unicode MS', sans-serif;
+  --font-thai-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+
+  /* English Font Stack Variables */
+  --font-english-primary: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  --font-english-secondary: 'System UI', '-apple-system', 'BlinkMacSystemFont', sans-serif;
+  --font-english-display: 'Inter', 'Segoe UI', sans-serif;
+
+  /* Thai Typography Spacing */
+  --thai-line-height-tight: 1.5;
+  --thai-line-height-normal: 1.6;
+  --thai-line-height-relaxed: 1.7;
+  --thai-line-height-loose: 1.8;
+
+  /* Character Spacing for Thai */
+  --thai-letter-spacing-tight: -0.01em;
+  --thai-letter-spacing-normal: 0;
+  --thai-letter-spacing-wide: 0.025em;
+  --thai-letter-spacing-wider: 0.05em;
+
+  /* Word Spacing Optimization */
+  --thai-word-spacing-normal: 0.1em;
+  --thai-word-spacing-wide: 0.15em;
+
+  /* Font Weight Mapping for Thai */
+  --thai-weight-thin: 100;
+  --thai-weight-light: 300;
+  --thai-weight-normal: 400;
+  --thai-weight-medium: 500;
+  --thai-weight-semibold: 600;
+  --thai-weight-bold: 700;
+  --thai-weight-extrabold: 800;
+
+  /* Responsive Font Sizes (Thai optimized) */
+  --thai-text-xs: 0.75rem;     /* 12px */
+  --thai-text-sm: 0.875rem;    /* 14px */
+  --thai-text-base: 1rem;      /* 16px */
+  --thai-text-lg: 1.125rem;    /* 18px */
+  --thai-text-xl: 1.25rem;     /* 20px */
+  --thai-text-2xl: 1.5rem;     /* 24px */
+  --thai-text-3xl: 1.875rem;   /* 30px */
+  --thai-text-4xl: 2.25rem;    /* 36px */
+  --thai-text-5xl: 3rem;       /* 48px */
+  --thai-text-6xl: 3.75rem;    /* 60px */
+  --thai-text-7xl: 4.5rem;     /* 72px */
+  --thai-text-8xl: 6rem;       /* 96px */
+  --thai-text-9xl: 8rem;       /* 128px */
+}
+
+/* Dark theme adjustments */
+.dark {
+  /* Enhanced contrast for Thai characters in dark mode */
+  --thai-text-contrast: 1.1;
+  --thai-shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ========================================
+   3. BASE THAI TYPOGRAPHY CLASSES
+   ======================================== */
+
+/* Primary Thai text styling */
+.thai-text {
+  font-family: var(--font-thai-primary);
+  line-height: var(--thai-line-height-normal);
+  letter-spacing: var(--thai-letter-spacing-normal);
+  word-spacing: var(--thai-word-spacing-normal);
+
+  /* Thai-specific text rendering optimizations */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+
+  /* Improved word breaking for Thai */
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+
+  /* Support for Thai diacritics */
+  font-variant-ligatures: common-ligatures contextual;
+  font-synthesis: weight style;
+}
+
+/* Secondary Thai font for variety */
+.thai-text-secondary {
+  font-family: var(--font-thai-secondary);
+  line-height: var(--thai-line-height-relaxed);
+  letter-spacing: var(--thai-letter-spacing-wide);
+}
+
+/* Display Thai text for headers */
+.thai-text-display {
+  font-family: var(--font-thai-display);
+  line-height: var(--thai-line-height-tight);
+  letter-spacing: var(--thai-letter-spacing-tight);
+  font-weight: var(--thai-weight-bold);
+}
+
+/* Thai monospace for code/data */
+.thai-text-mono {
+  font-family: var(--font-thai-mono);
+  line-height: var(--thai-line-height-normal);
+  letter-spacing: var(--thai-letter-spacing-normal);
+  font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
+/* Mixed language text handling */
+.mixed-language {
+  font-family: var(--font-thai-primary), var(--font-english-primary);
+  line-height: var(--thai-line-height-relaxed);
+  letter-spacing: var(--thai-letter-spacing-normal);
+}
+
+/* ========================================
+   4. RESPONSIVE TYPOGRAPHY SCALES
+   ======================================== */
+
+/* Mobile-first responsive Thai typography */
+.thai-responsive-text {
+  font-size: var(--thai-text-sm);
+  line-height: var(--thai-line-height-relaxed);
+}
+
+@media (min-width: 640px) {
+  .thai-responsive-text {
+    font-size: var(--thai-text-base);
+    line-height: var(--thai-line-height-normal);
+  }
+}
+
+@media (min-width: 768px) {
+  .thai-responsive-text {
+    font-size: var(--thai-text-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .thai-responsive-text {
+    font-size: var(--thai-text-xl);
+  }
+}
+
+/* Responsive Thai headings */
+.thai-responsive-heading {
+  font-size: var(--thai-text-lg);
+  line-height: var(--thai-line-height-tight);
+  font-weight: var(--thai-weight-semibold);
+}
+
+@media (min-width: 640px) {
+  .thai-responsive-heading {
+    font-size: var(--thai-text-xl);
+  }
+}
+
+@media (min-width: 768px) {
+  .thai-responsive-heading {
+    font-size: var(--thai-text-2xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .thai-responsive-heading {
+    font-size: var(--thai-text-3xl);
+  }
+}
+
+/* Responsive Thai display text */
+.thai-responsive-display {
+  font-size: var(--thai-text-2xl);
+  line-height: var(--thai-line-height-tight);
+  font-weight: var(--thai-weight-bold);
+}
+
+@media (min-width: 640px) {
+  .thai-responsive-display {
+    font-size: var(--thai-text-3xl);
+  }
+}
+
+@media (min-width: 768px) {
+  .thai-responsive-display {
+    font-size: var(--thai-text-4xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .thai-responsive-display {
+    font-size: var(--thai-text-5xl);
+  }
+}
+
+@media (min-width: 1280px) {
+  .thai-responsive-display {
+    font-size: var(--thai-text-6xl);
+  }
+}
+
+/* ========================================
+   5. COMPONENT-SPECIFIC STYLING
+   ======================================== */
+
+/* Form inputs optimized for Thai text */
+.thai-form-input {
+  font-family: var(--font-thai-primary);
+  font-size: var(--thai-text-base);
+  line-height: var(--thai-line-height-normal);
+  letter-spacing: var(--thai-letter-spacing-normal);
+
+  /* Input method editor support */
+  ime-mode: active;
+
+  /* Enhanced padding for Thai characters */
+  padding: 0.75rem 1rem;
+
+  /* Improved focus state for Thai text */
+  &:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
+  }
+}
+
+/* Thai text in buttons */
+.thai-button-text {
+  font-family: var(--font-thai-primary);
+  font-weight: var(--thai-weight-medium);
+  letter-spacing: var(--thai-letter-spacing-wide);
+  line-height: 1.2;
+
+  /* Center alignment for Thai text */
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Table cells with Thai content */
+.thai-table-cell {
+  font-family: var(--font-thai-primary);
+  font-size: var(--thai-text-sm);
+  line-height: var(--thai-line-height-normal);
+
+  /* Proper cell padding for Thai text */
+  padding: 0.75rem 1rem;
+
+  /* Text alignment for Thai */
+  text-align: left;
+  vertical-align: top;
+}
+
+/* Navigation items with Thai text */
+.thai-nav-item {
+  font-family: var(--font-thai-primary);
+  font-weight: var(--thai-weight-medium);
+  font-size: var(--thai-text-sm);
+  line-height: var(--thai-line-height-normal);
+  letter-spacing: var(--thai-letter-spacing-wide);
+
+  /* Enhanced hover states */
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    font-weight: var(--thai-weight-semibold);
+  }
+}
+
+/* Card content with Thai text */
+.thai-card-content {
+  font-family: var(--font-thai-primary);
+  line-height: var(--thai-line-height-relaxed);
+
+  /* Proper spacing for Thai content */
+  & > * + * {
+    margin-top: 1rem;
+  }
+
+  /* Enhanced readability */
+  color: hsl(var(--foreground) / 0.9);
+}
+
+/* Badge and tag components */
+.thai-badge {
+  font-family: var(--font-thai-primary);
+  font-size: var(--thai-text-xs);
+  font-weight: var(--thai-weight-medium);
+  letter-spacing: var(--thai-letter-spacing-wide);
+  line-height: 1.2;
+
+  /* Compact padding for Thai text */
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+}
+
+/* ========================================
+   6. CULTURAL ADAPTATIONS
+   ======================================== */
+
+/* Buddhist Era (B.E.) date formatting */
+.thai-date {
+  font-family: var(--font-thai-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--thai-letter-spacing-normal);
+}
+
+/* Thai number formatting */
+.thai-number {
+  font-family: var(--font-thai-primary);
+  font-variant-numeric: tabular-nums proportional-nums;
+  letter-spacing: var(--thai-letter-spacing-normal);
+  text-align: right;
+}
+
+/* Currency formatting for Thai Baht */
+.thai-currency {
+  font-family: var(--font-thai-primary);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--thai-weight-medium);
+
+  &::before {
+    content: '฿';
+    margin-right: 0.1em;
+  }
+}
+
+/* Formal Thai text styling */
+.thai-formal {
+  font-family: var(--font-thai-secondary);
+  font-weight: var(--thai-weight-normal);
+  line-height: var(--thai-line-height-loose);
+  letter-spacing: var(--thai-letter-spacing-wide);
+}
+
+/* Informal/casual Thai text */
+.thai-casual {
+  font-family: var(--font-thai-primary);
+  font-weight: var(--thai-weight-normal);
+  line-height: var(--thai-line-height-normal);
+  letter-spacing: var(--thai-letter-spacing-normal);
+}
+
+/* ========================================
+   7. PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Critical CSS for above-fold Thai content */
+.thai-critical {
+  font-family: var(--font-thai-primary);
+  font-display: swap;
+  contain: layout style paint;
+}
+
+/* Lazy-loaded Thai content */
+.thai-lazy {
+  font-family: var(--font-thai-primary);
+  content-visibility: auto;
+  contain-intrinsic-size: 0 200px;
+}
+
+/* Reduced motion support for Thai text */
+@media (prefers-reduced-motion: reduce) {
+  .thai-text,
+  .thai-text-secondary,
+  .thai-text-display {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .thai-text {
+    font-weight: var(--thai-weight-medium);
+    text-shadow: none;
+  }
+
+  .thai-text-display {
+    font-weight: var(--thai-weight-bold);
+  }
+}
+
+/* ========================================
+   8. BROWSER COMPATIBILITY
+   ======================================== */
+
+/* Legacy browser fallbacks */
+@supports not (font-feature-settings: 'kern' 1) {
+  .thai-text {
+    text-rendering: auto;
+  }
+}
+
+/* Safari-specific optimizations */
+@supports (-webkit-touch-callout: none) {
+  .thai-text {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+}
+
+/* Firefox-specific optimizations */
+@-moz-document url-prefix() {
+  .thai-text {
+    -moz-osx-font-smoothing: auto;
+  }
+}
+
+/* ========================================
+   9. PRINT MEDIA STYLES
+   ======================================== */
+
+@media print {
+  .thai-text,
+  .thai-text-secondary,
+  .thai-text-display {
+    font-family: 'Sarabun', 'Arial Unicode MS', serif;
+    color: black !important;
+    background: white !important;
+    text-shadow: none !important;
+
+    /* Optimize line heights for print */
+    line-height: 1.4;
+
+    /* Prevent text breaking */
+    orphans: 3;
+    widows: 3;
+  }
+
+  .thai-responsive-heading {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  .thai-card-content {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+
+/* ========================================
+   10. ACCESSIBILITY ENHANCEMENTS
+   ======================================== */
+
+/* Screen reader optimizations */
+.thai-sr-only {
+  font-family: var(--font-thai-primary);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus visible enhancements for Thai text */
+.thai-text:focus-visible,
+.thai-form-input:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 3px hsl(var(--ring) / 0.1),
+    inset 0 0 0 1px hsl(var(--ring) / 0.2);
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   11. UTILITY CLASSES
+   ======================================== */
+
+/* Font weight utilities for Thai */
+.thai-thin { font-weight: var(--thai-weight-thin); }
+.thai-light { font-weight: var(--thai-weight-light); }
+.thai-normal { font-weight: var(--thai-weight-normal); }
+.thai-medium { font-weight: var(--thai-weight-medium); }
+.thai-semibold { font-weight: var(--thai-weight-semibold); }
+.thai-bold { font-weight: var(--thai-weight-bold); }
+.thai-extrabold { font-weight: var(--thai-weight-extrabold); }
+
+/* Line height utilities for Thai */
+.thai-leading-tight { line-height: var(--thai-line-height-tight); }
+.thai-leading-normal { line-height: var(--thai-line-height-normal); }
+.thai-leading-relaxed { line-height: var(--thai-line-height-relaxed); }
+.thai-leading-loose { line-height: var(--thai-line-height-loose); }
+
+/* Letter spacing utilities for Thai */
+.thai-tracking-tight { letter-spacing: var(--thai-letter-spacing-tight); }
+.thai-tracking-normal { letter-spacing: var(--thai-letter-spacing-normal); }
+.thai-tracking-wide { letter-spacing: var(--thai-letter-spacing-wide); }
+.thai-tracking-wider { letter-spacing: var(--thai-letter-spacing-wider); }
+
+/* Text size utilities for Thai */
+.thai-text-xs { font-size: var(--thai-text-xs); }
+.thai-text-sm { font-size: var(--thai-text-sm); }
+.thai-text-base { font-size: var(--thai-text-base); }
+.thai-text-lg { font-size: var(--thai-text-lg); }
+.thai-text-xl { font-size: var(--thai-text-xl); }
+.thai-text-2xl { font-size: var(--thai-text-2xl); }
+.thai-text-3xl { font-size: var(--thai-text-3xl); }
+.thai-text-4xl { font-size: var(--thai-text-4xl); }
+.thai-text-5xl { font-size: var(--thai-text-5xl); }
+.thai-text-6xl { font-size: var(--thai-text-6xl); }
+.thai-text-7xl { font-size: var(--thai-text-7xl); }
+.thai-text-8xl { font-size: var(--thai-text-8xl); }
+.thai-text-9xl { font-size: var(--thai-text-9xl); }
+
+/* Text alignment utilities for Thai */
+.thai-text-left { text-align: left; }
+.thai-text-center { text-align: center; }
+.thai-text-right { text-align: right; }
+.thai-text-justify { text-align: justify; }
+
+/* ========================================
+   12. INTEGRATION WITH TAILWIND CSS
+   ======================================== */
+
+/* Extend Tailwind's font family utilities */
+@layer utilities {
+  .font-thai-primary { font-family: var(--font-thai-primary); }
+  .font-thai-secondary { font-family: var(--font-thai-secondary); }
+  .font-thai-display { font-family: var(--font-thai-display); }
+  .font-thai-mono { font-family: var(--font-thai-mono); }
+  .font-english-primary { font-family: var(--font-english-primary); }
+  .font-mixed-language { font-family: var(--font-thai-primary), var(--font-english-primary); }
+}
+
+/* Custom Tailwind-compatible spacing for Thai */
+@layer utilities {
+  .space-thai-y > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1.2rem;
+  }
+
+  .space-thai-x > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 0.8rem;
+  }
+}
+
+/* ========================================
+   13. DARK MODE ENHANCEMENTS
+   ======================================== */
+
+.dark .thai-text {
+  /* Enhanced contrast for dark mode */
+  color: hsl(var(--foreground) / 0.95);
+  text-shadow: 0 0 1px hsl(var(--background) / 0.1);
+}
+
+.dark .thai-form-input {
+  background-color: hsl(var(--background) / 0.8);
+  border-color: hsl(var(--border) / 0.6);
+  color: hsl(var(--foreground) / 0.9);
+}
+
+.dark .thai-card-content {
+  color: hsl(var(--foreground) / 0.85);
+}
+
+/* ========================================
+   14. ANIMATION & TRANSITION SUPPORT
+   ======================================== */
+
+/* Smooth transitions for Thai text changes */
+.thai-transition {
+  transition:
+    font-size 0.2s ease-in-out,
+    line-height 0.2s ease-in-out,
+    letter-spacing 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+}
+
+/* Loading states for Thai fonts */
+.thai-font-loading {
+  font-family: 'Arial Unicode MS', sans-serif;
+  opacity: 0.7;
+  animation: thai-font-fade-in 0.3s ease-in-out forwards;
+}
+
+@keyframes thai-font-fade-in {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   15. DEBUGGING & DEVELOPMENT UTILITIES
+   ======================================== */
+
+/* Development-only font debugging */
+.debug-thai-font {
+  outline: 1px dashed rgba(255, 0, 0, 0.3);
+  background: rgba(255, 255, 0, 0.1);
+}
+
+.debug-thai-font::before {
+  content: 'Thai Font: ' attr(class);
+  font-size: 10px;
+  color: red;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* End of Thai Font Configuration */

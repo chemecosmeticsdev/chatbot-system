@@ -1,0 +1,32 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Monitor and manage your chatbots",
+  "overview": {
+    "title": "Overview",
+    "totalChatbots": "Total Chatbots",
+    "activeConversations": "Active Conversations",
+    "messagesProcessed": "Messages Processed",
+    "documentsUploaded": "Documents Uploaded",
+    "successRate": "Success Rate",
+    "averageResponseTime": "Avg Response Time",
+    "costThisMonth": "Cost This Month",
+    "userSatisfaction": "User Satisfaction"
+  },
+  "metrics": {
+    "performance": "Performance",
+    "usage": "Usage",
+    "costs": "Costs",
+    "quality": "Quality",
+    "engagement": "Engagement",
+    "growth": "Growth"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "createChatbot": "Create New Chatbot",
+    "uploadDocument": "Upload Document",
+    "viewAnalytics": "View Analytics",
+    "manageUsers": "Manage Users",
+    "systemSettings": "System Settings",
+    "viewLogs": "View Logs"
+  }
+}

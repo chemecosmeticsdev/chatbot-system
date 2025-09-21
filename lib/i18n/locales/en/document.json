@@ -1,0 +1,41 @@
+{
+  "title": "Documents",
+  "upload": {
+    "title": "Upload Documents",
+    "subtitle": "Add knowledge base content for your chatbots",
+    "dragDrop": "Drag and drop files here, or click to browse",
+    "browse": "Browse Files",
+    "supportedFormats": "Supported formats: PDF, DOC, TXT, Images",
+    "maxSize": "Maximum file size: 10MB",
+    "processing": "Processing...",
+    "success": "Upload successful",
+    "error": "Upload failed"
+  },
+  "process": {
+    "title": "Document Processing",
+    "ocr": "OCR Recognition",
+    "chunking": "Text Chunking",
+    "embedding": "Generating Embeddings",
+    "indexing": "Vector Indexing",
+    "completed": "Processing Complete",
+    "failed": "Processing Failed"
+  },
+  "manage": {
+    "title": "Manage Documents",
+    "search": "Search documents...",
+    "filter": "Filter",
+    "sort": "Sort",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete",
+    "reprocess": "Reprocess"
+  },
+  "types": {
+    "pdf": "PDF Document",
+    "doc": "Word Document",
+    "txt": "Text File",
+    "image": "Image",
+    "spreadsheet": "Spreadsheet",
+    "presentation": "Presentation"
+  }
+}

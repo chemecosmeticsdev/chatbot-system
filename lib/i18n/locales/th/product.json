@@ -1,0 +1,36 @@
+{
+  "title": "%4 1L",
+  "category": "+!'+!9H",
+  "categories": {
+    "all": "+!'+!9H1I+!",
+    "electronics": "-8#L-4@%G#-4*L",
+    "software": "-LA'#L",
+    "hardware": ".2#LA'#L",
+    "services": "#42#",
+    "accessories": "-8#L@*#4!",
+    "consumables": "'1*8*4I@%7-"
+  },
+  "properties": {
+    "name": "
+7H-%4 1L",
+    "description": "3-42"",
+    "price": "#22",
+    "category": "+!'+!9H",
+    "brand": ""5H+I-",
+    "model": "#8H",
+    "specifications": "I-!9%3@20",
+    "availability": "'2!#I-!C
+I2",
+    "warranty": "2##1#01",
+    "support": "2#*1*8"
+  },
+  "actions": {
+    "view": "9#2"%0@-5"",
+    "edit": "AID%4 1L",
+    "delete": "%%4 1L",
+    "duplicate": "3*3@2%4 1L",
+    "export": "*H--I-!9%",
+    "assignToBot": "!-+!2"C+IA
+-"
+  }
+}

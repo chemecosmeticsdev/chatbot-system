@@ -37,7 +37,9 @@
       "Bash(powershell.exe:*)",
       "Bash(.specify/scripts/powershell/check-task-prerequisites.ps1 -Json)",
       "Bash(npx:*)",
-      "Bash(npm run test:e2e:*)"
+      "Bash(npm run test:e2e:*)",
+      "Bash(npm ci:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

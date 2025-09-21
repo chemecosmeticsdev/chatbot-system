@@ -1,0 +1,32 @@
+{
+  "title": "แดชบอร์ด",
+  "subtitle": "ติดตามและจัดการแชทบอทของคุณ",
+  "overview": {
+    "title": "ภาพรวม",
+    "totalChatbots": "แชทบอททั้งหมด",
+    "activeConversations": "การสนทนาที่ใช้งานอยู่",
+    "messagesProcessed": "ข้อความที่ดำเนินการแล้ว",
+    "documentsUploaded": "เอกสารที่อัปโหลดแล้ว",
+    "successRate": "อัตราความสำเร็จ",
+    "averageResponseTime": "เวลาตอบสนองเฉลี่ย",
+    "costThisMonth": "ค่าใช้จ่ายเดือนนี้",
+    "userSatisfaction": "ความพึงพอใจของผู้ใช้"
+  },
+  "metrics": {
+    "performance": "ประสิทธิภาพ",
+    "usage": "การใช้งาน",
+    "costs": "ค่าใช้จ่าย",
+    "quality": "คุณภาพ",
+    "engagement": "การมีส่วนร่วม",
+    "growth": "การเติบโต"
+  },
+  "quickActions": {
+    "title": "การดำเนินการด่วน",
+    "createChatbot": "สร้างแชทบอทใหม่",
+    "uploadDocument": "อัปโหลดเอกสาร",
+    "viewAnalytics": "ดูการวิเคราะห์",
+    "manageUsers": "จัดการผู้ใช้",
+    "systemSettings": "การตั้งค่าระบบ",
+    "viewLogs": "ดูล็อก"
+  }
+}

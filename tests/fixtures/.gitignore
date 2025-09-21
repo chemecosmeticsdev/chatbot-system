@@ -1,0 +1,13 @@
+# Test fixture files are generated programmatically
+# Do not commit actual test files
+*.pdf
+*.txt
+*.jpg
+*.png
+*.doc
+*.docx
+*.exe
+
+# Keep only the README
+!README.md
+!.gitignore

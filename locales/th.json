@@ -1,0 +1,1000 @@
+{
+  "app": {
+    "name": "ระบบจัดการแชทบอท",
+    "tagline": "การจัดการการสนทนาอัจฉริยะ",
+    "description": "แพลตฟอร์มฐานความรู้และการจัดการแชทบอทแบบครบวงจร"
+  },
+  "navigation": {
+    "header": {
+      "home": "หน้าหลัก",
+      "dashboard": "แดชบอร์ด",
+      "products": "สินค้า",
+      "documents": "เอกสาร",
+      "chatbots": "แชทบอท",
+      "playground": "พื้นที่ทดสอบ",
+      "analytics": "การวิเคราะห์",
+      "admin": "ผู้ดูแลระบบ",
+      "profile": "โปรไฟล์",
+      "settings": "การตั้งค่า",
+      "help": "ความช่วยเหลือ",
+      "logout": "ออกจากระบบ"
+    },
+    "sidebar": {
+      "overview": "ภาพรวม",
+      "products": "จัดการสินค้า",
+      "documents": "จัดการเอกสาร",
+      "chatbots": "จัดการแชทบอท",
+      "playground": "ทดสอบการสนทนา",
+      "analytics": "รายงานการวิเคราะห์",
+      "conversations": "บทสนทนา",
+      "knowledge_base": "ฐานความรู้",
+      "users": "ผู้ใช้งาน",
+      "teams": "ทีมงาน",
+      "integrations": "การเชื่อมต่อ",
+      "api": "API",
+      "documentation": "เอกสารประกอบ"
+    },
+    "breadcrumb": {
+      "home": "หน้าหลัก",
+      "back_to": "กลับไปยัง {{page}}"
+    },
+    "footer": {
+      "copyright": "© {{year}} ระบบจัดการแชทบอท สงวนลิขสิทธิ์",
+      "privacy": "นโยบายความเป็นส่วนตัว",
+      "terms": "ข้อกำหนดการใช้งาน",
+      "support": "ฝ่ายสนับสนุน",
+      "contact": "ติดต่อเรา"
+    },
+    "menu": {
+      "main_menu": "เมนูหลัก",
+      "user_menu": "เมนูผู้ใช้",
+      "toggle_menu": "เปิด/ปิดเมนู",
+      "close_menu": "ปิดเมนู"
+    }
+  },
+  "dashboard": {
+    "title": "แดชบอร์ด",
+    "welcome": {
+      "title": "ยินดีต้อนรับสู่ระบบจัดการแชทบอท",
+      "subtitle": "ติดตามและจัดการระบบการสนทนาอัจฉริยะของคุณ",
+      "get_started": "เริ่มต้นใช้งาน"
+    },
+    "metrics": {
+      "title": "ตัวชี้วัดประสิทธิภาพ",
+      "total_conversations": "การสนทนาทั้งหมด",
+      "active_users": "ผู้ใช้งานที่ใช้งานอยู่",
+      "response_time": "เวลาตอบสนองเฉลี่ย",
+      "satisfaction_rate": "อัตราความพึงพอใจ",
+      "total_chatbots": "แชทบอททั้งหมด",
+      "total_documents": "เอกสารทั้งหมด",
+      "total_products": "สินค้าทั้งหมด",
+      "api_calls": "การเรียก API",
+      "today": "วันนี้",
+      "this_week": "สัปดาห์นี้",
+      "this_month": "เดือนนี้",
+      "last_7_days": "7 วันที่ผ่านมา",
+      "last_30_days": "30 วันที่ผ่านมา"
+    },
+    "charts": {
+      "conversations_over_time": "การสนทนาตามช่วงเวลา",
+      "user_engagement": "การมีส่วนร่วมของผู้ใช้",
+      "response_accuracy": "ความแม่นยำของการตอบ",
+      "popular_topics": "หัวข้อยอดนิยม",
+      "error_rates": "อัตราข้อผิดพลาด",
+      "cost_analysis": "การวิเคราะห์ต้นทุน",
+      "model_performance": "ประสิทธิภาพของโมเดล",
+      "loading": "กำลังโหลดข้อมูลกราฟ...",
+      "no_data": "ไม่มีข้อมูลสำหรับช่วงเวลานี้"
+    },
+    "recent_activity": {
+      "title": "กิจกรรมล่าสุด",
+      "view_all": "ดูทั้งหมด",
+      "no_activity": "ไม่มีกิจกรรมล่าสุด",
+      "conversation_started": "เริ่มการสนทนาใหม่",
+      "user_registered": "ผู้ใช้ใหม่ลงทะเบียน",
+      "error_occurred": "เกิดข้อผิดพลาดในระบบ",
+      "integration_updated": "อัปเดตการเชื่อมต่อ",
+      "document_uploaded": "อัปโหลดเอกสารใหม่",
+      "chatbot_created": "สร้างแชทบอทใหม่",
+      "time_ago": "{{time}} ที่แล้ว"
+    },
+    "quick_actions": {
+      "title": "การดำเนินการด่วน",
+      "create_chatbot": "สร้างแชทบอทใหม่",
+      "upload_document": "อัปโหลดเอกสาร",
+      "create_product": "สร้างสินค้าใหม่",
+      "view_conversations": "ดูการสนทนา",
+      "manage_users": "จัดการผู้ใช้",
+      "check_analytics": "ตรวจสอบการวิเคราะห์",
+      "update_knowledge": "อัปเดตฐานความรู้",
+      "system_settings": "การตั้งค่าระบบ",
+      "test_playground": "ทดสอบในพื้นที่ทดลอง"
+    },
+    "status": {
+      "system_health": "สถานะความสมบูรณ์ของระบบ",
+      "all_services_operational": "บริการทั้งหมดทำงานปกติ",
+      "some_issues_detected": "ตรวจพบปัญหาบางอย่าง",
+      "major_outage": "ระบบขัดข้องสำคัญ",
+      "under_maintenance": "อยู่ระหว่างการบำรุงรักษา",
+      "last_updated": "อัปเดตล่าสุด: {{time}}"
+    }
+  },
+  "products": {
+    "title": "จัดการสินค้า",
+    "subtitle": "จัดการข้อมูลสินค้าและหมวดหมู่",
+    "create": {
+      "title": "สร้างสินค้าใหม่",
+      "subtitle": "เพิ่มสินค้าใหม่เข้าสู่ระบบ"
+    },
+    "edit": {
+      "title": "แก้ไขข้อมูลสินค้า",
+      "subtitle": "อัปเดตข้อมูลสินค้า"
+    },
+    "list": {
+      "title": "รายการสินค้า",
+      "empty": "ยังไม่มีสินค้าในระบบ",
+      "create_first": "สร้างสินค้าแรกของคุณ"
+    },
+    "fields": {
+      "name": "ชื่อสินค้า",
+      "description": "รายละเอียดสินค้า",
+      "category": "หมวดหมู่",
+      "sku": "รหัสสินค้า",
+      "status": "สถานะ",
+      "created_at": "วันที่สร้าง",
+      "updated_at": "วันที่อัปเดต",
+      "document_count": "จำนวนเอกสาร",
+      "price": "ราคา",
+      "stock": "สต็อก",
+      "brand": "แบรนด์",
+      "tags": "แท็ก"
+    },
+    "status": {
+      "active": "ใช้งาน",
+      "inactive": "ไม่ใช้งาน",
+      "draft": "ร่าง",
+      "archived": "เก็บถาวร",
+      "out_of_stock": "สินค้าหมด",
+      "discontinued": "หยุดจำหน่าย"
+    },
+    "categories": {
+      "electronics": "อิเล็กทรอนิกส์",
+      "cosmetics": "เครื่องสำอาง",
+      "software": "ซอฟต์แวร์",
+      "hardware": "ฮาร์ดแวร์",
+      "services": "บริการ",
+      "accessories": "อุปกรณ์เสริม",
+      "beauty": "ความงาม",
+      "health": "สุขภาพ",
+      "fashion": "แฟชั่น",
+      "home": "บ้านและสวน",
+      "automotive": "ยานยนต์",
+      "sports": "กีฬา"
+    },
+    "actions": {
+      "view": "ดูรายละเอียด",
+      "edit": "แก้ไข",
+      "delete": "ลบ",
+      "duplicate": "ทำซ้ำ",
+      "archive": "เก็บถาวร",
+      "activate": "เปิดใช้งาน",
+      "deactivate": "ปิดใช้งาน",
+      "assign_documents": "กำหนดเอกสาร",
+      "view_documents": "ดูเอกสาร"
+    },
+    "search": {
+      "placeholder": "ค้นหาสินค้า...",
+      "filter_by_category": "กรองตามหมวดหมู่",
+      "filter_by_status": "กรองตามสถานะ",
+      "sort_by": "เรียงตาม",
+      "sort_name": "ชื่อ",
+      "sort_created": "วันที่สร้าง",
+      "sort_updated": "วันที่อัปเดต"
+    },
+    "validation": {
+      "name_required": "กรุณากรอกชื่อสินค้า",
+      "description_required": "กรุณากรอกรายละเอียดสินค้า",
+      "category_required": "กรุณาเลือกหมวดหมู่",
+      "sku_required": "กรุณากรอกรหัสสินค้า",
+      "sku_exists": "รหัสสินค้านี้มีอยู่แล้ว",
+      "invalid_price": "กรุณากรอกราคาที่ถูกต้อง"
+    }
+  },
+  "documents": {
+    "title": "จัดการเอกสาร",
+    "subtitle": "อัปโหลดและจัดการเอกสารสำหรับฐานความรู้",
+    "upload": {
+      "title": "อัปโหลดเอกสาร",
+      "subtitle": "เพิ่มเอกสารใหม่เข้าสู่ระบบ",
+      "drag_drop": "ลากและวางไฟล์ที่นี่ หรือคลิกเพื่อเลือกไฟล์",
+      "select_files": "เลือกไฟล์",
+      "supported_formats": "รองรับไฟล์: PDF, DOC, DOCX, TXT, PNG, JPG",
+      "max_size": "ขนาดไฟล์สูงสุด: {{size}}MB",
+      "uploading": "กำลังอัปโหลด...",
+      "processing": "กำลังประมวลผล..."
+    },
+    "list": {
+      "title": "รายการเอกสาร",
+      "empty": "ยังไม่มีเอกสารในระบบ",
+      "upload_first": "อัปโหลดเอกสารแรกของคุณ"
+    },
+    "fields": {
+      "name": "ชื่อไฟล์",
+      "type": "ประเภทไฟล์",
+      "size": "ขนาดไฟล์",
+      "status": "สถานะ",
+      "progress": "ความคืบหน้า",
+      "created_at": "วันที่อัปโหลด",
+      "updated_at": "วันที่อัปเดต",
+      "product_name": "สินค้า",
+      "pages": "จำนวนหน้า",
+      "content": "เนื้อหา",
+      "category": "หมวดหมู่เอกสาร"
+    },
+    "status": {
+      "uploading": "กำลังอัปโหลด",
+      "processing": "กำลังประมวลผล",
+      "completed": "เสร็จสิ้น",
+      "error": "ข้อผิดพลาด",
+      "pending": "รอดำเนินการ",
+      "analyzing": "กำลังวิเคราะห์",
+      "indexing": "กำลังจัดทำดัชนี"
+    },
+    "types": {
+      "technical": "เอกสารทางเทคนิค",
+      "regulatory": "เอกสารกฎระเบียบ",
+      "safety": "เอกสารความปลอดภัย",
+      "marketing": "เอกสารการตลาด",
+      "certification": "เอกสารรับรอง",
+      "manual": "คู่มือการใช้งาน",
+      "specification": "ข้อกำหนดสินค้า",
+      "warranty": "เอกสารรับประกัน",
+      "installation": "คู่มือการติดตั้ง",
+      "maintenance": "คู่มือการบำรุงรักษา"
+    },
+    "processing": {
+      "ocr_status": "สถานะ OCR",
+      "vector_status": "สถานะ Vector",
+      "ocr_pending": "OCR รอดำเนินการ",
+      "ocr_completed": "OCR เสร็จสิ้น",
+      "ocr_failed": "OCR ล้มเหลว",
+      "vector_pending": "Vector รอดำเนินการ",
+      "vector_completed": "Vector เสร็จสิ้น",
+      "vector_failed": "Vector ล้มเหลว",
+      "extracting_text": "กำลังแยกข้อความ",
+      "creating_embeddings": "กำลังสร้าง Embeddings",
+      "chunking": "กำลังแบ่งข้อมูล"
+    },
+    "actions": {
+      "view": "ดูเอกสาร",
+      "download": "ดาวน์โหลด",
+      "delete": "ลบ",
+      "reprocess": "ประมวลผลใหม่",
+      "assign_product": "กำหนดสินค้า",
+      "preview": "ดูตัวอย่าง",
+      "extract_text": "แยกข้อความ",
+      "view_content": "ดูเนื้อหา"
+    },
+    "search": {
+      "placeholder": "ค้นหาเอกสาร...",
+      "filter_by_type": "กรองตามประเภท",
+      "filter_by_status": "กรองตามสถานะ",
+      "filter_by_product": "กรองตามสินค้า",
+      "sort_by_name": "เรียงตามชื่อ",
+      "sort_by_date": "เรียงตามวันที่",
+      "sort_by_size": "เรียงตามขนาด"
+    },
+    "errors": {
+      "upload_failed": "การอัปโหลดล้มเหลว",
+      "file_too_large": "ไฟล์ใหญ่เกินไป",
+      "invalid_format": "รูปแบบไฟล์ไม่ถูกต้อง",
+      "processing_failed": "การประมวลผลล้มเหลว",
+      "ocr_failed": "การแยกข้อความล้มเหลว",
+      "network_error": "เกิดปัญหาการเชื่อมต่อ"
+    }
+  },
+  "chatbots": {
+    "title": "จัดการแชทบอท",
+    "subtitle": "สร้างและจัดการแชทบอทสำหรับองค์กรของคุณ",
+    "create": {
+      "title": "สร้างแชทบอทใหม่",
+      "subtitle": "ตั้งค่าแชทบอทใหม่สำหรับการใช้งาน",
+      "wizard": {
+        "step1": "ข้อมูลพื้นฐาน",
+        "step2": "เลือกโมเดล",
+        "step3": "ตั้งค่า RAG",
+        "step4": "การเชื่อมต่อ",
+        "step5": "ทบทวนและสร้าง"
+      }
+    },
+    "list": {
+      "title": "รายการแชทบอท",
+      "empty": "ยังไม่มีแชทบอทในระบบ",
+      "create_first": "สร้างแชทบอทแรกของคุณ"
+    },
+    "fields": {
+      "name": "ชื่อแชทบอท",
+      "description": "รายละเอียด",
+      "model": "โมเดล AI",
+      "status": "สถานะ",
+      "deployment_status": "สถานะการปรับใช้",
+      "created_at": "วันที่สร้าง",
+      "updated_at": "วันที่อัปเดต",
+      "conversation_count": "จำนวนการสนทนา",
+      "last_conversation": "การสนทนาล่าสุด",
+      "knowledge_products": "สินค้าที่เชื่อมโยง",
+      "integration_type": "ประเภทการเชื่อมต่อ",
+      "performance_score": "คะแนนประสิทธิภาพ",
+      "cost_24h": "ต้นทุน 24 ชั่วโมง",
+      "system_prompt": "System Prompt",
+      "temperature": "ค่า Temperature",
+      "max_tokens": "จำนวน Token สูงสุด"
+    },
+    "models": {
+      "claude-3-haiku": "Claude 3 Haiku (เร็ว, ประหยัด)",
+      "claude-3-sonnet": "Claude 3 Sonnet (สมดุล)",
+      "claude-3-opus": "Claude 3 Opus (ประสิทธิภาพสูง)",
+      "gpt-4o-mini": "GPT-4o Mini (เร็ว, ประหยัด)",
+      "gpt-4o": "GPT-4o (ประสิทธิภาพสูง)",
+      "titan-text": "Amazon Titan Text"
+    },
+    "status": {
+      "active": "ใช้งาน",
+      "inactive": "ไม่ใช้งาน",
+      "training": "กำลังฝึกอบรม",
+      "error": "ข้อผิดพลาด",
+      "deploying": "กำลังปรับใช้",
+      "testing": "กำลังทดสอบ"
+    },
+    "deployment_status": {
+      "deployed": "ปรับใช้แล้ว",
+      "pending": "รอการปรับใช้",
+      "failed": "ปรับใช้ล้มเหลว",
+      "updating": "กำลังอัปเดต"
+    },
+    "integration_types": {
+      "widget": "Widget (ฝังในเว็บไซต์)",
+      "iframe": "iFrame (ฝังเป็นกรอบ)",
+      "api": "API (เชื่อมต่อผ่าน API)",
+      "line-oa": "Line Official Account",
+      "webhook": "Webhook",
+      "embed": "โค้ดฝัง"
+    },
+    "actions": {
+      "view": "ดูรายละเอียด",
+      "edit": "แก้ไข",
+      "configure": "ตั้งค่า",
+      "test": "ทดสอบ",
+      "deploy": "ปรับใช้",
+      "delete": "ลบ",
+      "duplicate": "ทำซ้ำ",
+      "analytics": "ดูสถิติ",
+      "conversations": "ดูการสนทนา",
+      "train": "ฝึกอบรม",
+      "export": "ส่งออก",
+      "pause": "หยุดชั่วคราว",
+      "resume": "เริ่มต้นใหม่"
+    },
+    "configuration": {
+      "basic_settings": "การตั้งค่าพื้นฐาน",
+      "ai_model": "โมเดล AI",
+      "knowledge_base": "ฐานความรู้",
+      "integration": "การเชื่อมต่อ",
+      "advanced": "การตั้งค่าขั้นสูง",
+      "system_prompt_label": "System Prompt (คำสั่งระบบ)",
+      "system_prompt_placeholder": "กำหนดพฤติกรรมและบุคลิกของแชทบอท...",
+      "temperature_label": "ค่า Temperature (ความคิดสร้างสรรค์)",
+      "temperature_description": "0.0 = คำตอบที่แน่นอน, 1.0 = คำตอบที่หลากหลาย",
+      "max_tokens_label": "จำนวน Token สูงสุด",
+      "rag_settings": "การตั้งค่า RAG",
+      "retrieval_count": "จำนวนข้อมูลที่ค้นคืน",
+      "similarity_threshold": "เกณฑ์ความคล้ายคลึง",
+      "enable_conversation_memory": "เปิดใช้หน่วยความจำการสนทนา",
+      "fallback_response": "คำตอบสำรอง"
+    },
+    "performance": {
+      "title": "ประสิทธิภาพ",
+      "response_time": "เวลาตอบสนอง",
+      "accuracy": "ความแม่นยำ",
+      "user_satisfaction": "ความพึงพอใจ",
+      "cost_efficiency": "ประสิทธิภาพต้นทุน",
+      "uptime": "เวลาการทำงาน",
+      "error_rate": "อัตราข้อผิดพลาด"
+    },
+    "search": {
+      "placeholder": "ค้นหาแชทบอท...",
+      "filter_by_model": "กรองตามโมเดล",
+      "filter_by_status": "กรองตามสถานะ",
+      "filter_by_integration": "กรองตามการเชื่อมต่อ",
+      "sort_by_name": "เรียงตามชื่อ",
+      "sort_by_performance": "เรียงตามประสิทธิภาพ",
+      "sort_by_conversations": "เรียงตามการสนทนา"
+    }
+  },
+  "playground": {
+    "title": "พื้นที่ทดสอบการสนทนา",
+    "subtitle": "ทดสอบและพัฒนาแชทบอทของคุณ",
+    "chat": {
+      "title": "ทดสอบการสนทนา",
+      "select_chatbot": "เลือกแชทบอทสำหรับทดสอบ",
+      "message_placeholder": "พิมพ์ข้อความของคุณ...",
+      "send": "ส่ง",
+      "clear": "ล้างการสนทนา",
+      "thinking": "กำลังคิด...",
+      "typing": "กำลังพิมพ์...",
+      "error": "เกิดข้อผิดพลาดในการส่งข้อความ"
+    },
+    "sidebar": {
+      "conversation_history": "ประวัติการสนทนา",
+      "chat_settings": "การตั้งค่าการสนทนา",
+      "model_info": "ข้อมูลโมเดล",
+      "debug_info": "ข้อมูลการแก้ไขข้อบกพร่อง"
+    },
+    "message": {
+      "user": "คุณ",
+      "assistant": "ผู้ช่วย",
+      "system": "ระบบ",
+      "timestamp": "เวลา",
+      "tokens_used": "จำนวน Token ที่ใช้",
+      "response_time": "เวลาตอบสนอง",
+      "confidence": "ความมั่นใจ",
+      "sources": "แหล่งข้อมูล",
+      "copy": "คัดลอก",
+      "regenerate": "สร้างใหม่",
+      "feedback": "ให้ความคิดเห็น"
+    },
+    "feedback": {
+      "helpful": "มีประโยชน์",
+      "not_helpful": "ไม่มีประโยชน์",
+      "accurate": "ถูกต้อง",
+      "inaccurate": "ไม่ถูกต้อง",
+      "relevant": "เกี่ยวข้อง",
+      "irrelevant": "ไม่เกี่ยวข้อง",
+      "comment_placeholder": "แสดงความคิดเห็นเพิ่มเติม...",
+      "submit": "ส่งความคิดเห็น",
+      "thank_you": "ขอบคุณสำหรับความคิดเห็น"
+    },
+    "tools": {
+      "export_conversation": "ส่งออกการสนทนา",
+      "share_conversation": "แชร์การสนทนา",
+      "save_as_template": "บันทึกเป็นแม่แบบ",
+      "load_template": "โหลดแม่แบบ",
+      "performance_metrics": "ตัวชี้วัดประสิทธิภาพ"
+    }
+  },
+  "analytics": {
+    "title": "การวิเคราะห์และรายงาน",
+    "subtitle": "ติดตามประสิทธิภาพและการใช้งานของระบบ",
+    "overview": {
+      "title": "ภาพรวม",
+      "period_selector": "เลือกช่วงเวลา",
+      "today": "วันนี้",
+      "last_7_days": "7 วันที่ผ่านมา",
+      "last_30_days": "30 วันที่ผ่านมา",
+      "last_90_days": "90 วันที่ผ่านมา",
+      "custom_range": "กำหนดช่วงเวลาเอง"
+    },
+    "metrics": {
+      "conversations": {
+        "title": "สถิติการสนทนา",
+        "total": "การสนทนาทั้งหมด",
+        "completed": "การสนทนาที่เสร็จสิ้น",
+        "abandoned": "การสนทนาที่ถูกยกเลิก",
+        "average_length": "ความยาวเฉลี่ย",
+        "resolution_rate": "อัตราการแก้ปัญหา"
+      },
+      "performance": {
+        "title": "ประสิทธิภาพระบบ",
+        "response_time": "เวลาตอบสนองเฉลี่ย",
+        "uptime": "เวลาการทำงาน",
+        "error_rate": "อัตราข้อผิดพลาด",
+        "throughput": "ปริมาณงาน",
+        "latency": "ความล่าช้า"
+      },
+      "satisfaction": {
+        "title": "ความพึงพอใจ",
+        "average_rating": "คะแนนเฉลี่ย",
+        "positive_feedback": "ความคิดเห็นเชิงบวก",
+        "negative_feedback": "ความคิดเห็นเชิงลบ",
+        "nps_score": "คะแนน NPS"
+      },
+      "costs": {
+        "title": "ต้นทุนการดำเนินการ",
+        "total_cost": "ต้นทุนรวม",
+        "api_costs": "ต้นทุน API",
+        "storage_costs": "ต้นทุนพื้นที่เก็บข้อมูล",
+        "compute_costs": "ต้นทุนการประมวลผล",
+        "cost_per_conversation": "ต้นทุนต่อการสนทนา"
+      }
+    },
+    "charts": {
+      "conversation_trends": "แนวโน้มการสนทนา",
+      "user_engagement": "การมีส่วนร่วมของผู้ใช้",
+      "topic_analysis": "การวิเคราะห์หัวข้อ",
+      "sentiment_analysis": "การวิเคราะห์อารมณ์",
+      "response_accuracy": "ความแม่นยำของการตอบ",
+      "cost_breakdown": "การแจกแจงต้นทุน",
+      "model_comparison": "การเปรียบเทียบโมเดล"
+    },
+    "reports": {
+      "title": "รายงาน",
+      "generate": "สร้างรายงาน",
+      "export": "ส่งออกรายงาน",
+      "schedule": "กำหนดเวลารายงาน",
+      "daily": "รายวัน",
+      "weekly": "รายสัปดาห์",
+      "monthly": "รายเดือน",
+      "custom": "กำหนดเอง"
+    },
+    "filters": {
+      "chatbot": "แชทบอท",
+      "model": "โมเดล",
+      "user_type": "ประเภทผู้ใช้",
+      "conversation_status": "สถานะการสนทนา",
+      "date_range": "ช่วงวันที่",
+      "apply": "ใช้ตัวกรอง",
+      "reset": "รีเซ็ตตัวกรอง"
+    }
+  },
+  "integrations": {
+    "title": "การเชื่อมต่อและการปรับใช้",
+    "subtitle": "เชื่อมต่อแชทบอทกับแพลตฟอร์มต่างๆ",
+    "line_oa": {
+      "title": "Line Official Account",
+      "description": "เชื่อมต่อกับ Line OA เพื่อให้บริการลูกค้า",
+      "setup": "ตั้งค่า Line OA",
+      "webhook_url": "Webhook URL",
+      "channel_secret": "Channel Secret",
+      "channel_access_token": "Channel Access Token",
+      "verify_webhook": "ตรวจสอบ Webhook",
+      "test_connection": "ทดสอบการเชื่อมต่อ",
+      "status": "สถานะการเชื่อมต่อ"
+    },
+    "website": {
+      "title": "เว็บไซต์",
+      "description": "ฝังแชทบอทลงในเว็บไซต์ของคุณ",
+      "widget": "Widget (ปุ่มแชท)",
+      "iframe": "iFrame (ฝังเป็นกรอบ)",
+      "javascript": "JavaScript SDK",
+      "generate_code": "สร้างโค้ด",
+      "copy_code": "คัดลอกโค้ด",
+      "preview": "ดูตัวอย่าง",
+      "customization": "ปรับแต่งรูปลักษณ์"
+    },
+    "api": {
+      "title": "API Integration",
+      "description": "เชื่อมต่อผ่าน REST API",
+      "endpoint": "API Endpoint",
+      "api_key": "API Key",
+      "documentation": "เอกสาร API",
+      "example_request": "ตัวอย่างการเรียกใช้",
+      "test_api": "ทดสอบ API",
+      "rate_limits": "ข้อจำกัดการเรียกใช้"
+    },
+    "webhook": {
+      "title": "Webhook",
+      "description": "รับการแจ้งเตือนผ่าน Webhook",
+      "url": "Webhook URL",
+      "events": "เหตุการณ์ที่ต้องการ",
+      "secret": "Secret Key",
+      "test_webhook": "ทดสอบ Webhook",
+      "delivery_log": "บันทึกการส่ง"
+    },
+    "settings": {
+      "security": "การรักษาความปลอดภัย",
+      "allowed_domains": "โดเมนที่อนุญาต",
+      "cors_settings": "การตั้งค่า CORS",
+      "ssl_certificate": "ใบรับรอง SSL",
+      "authentication": "การยืนยันตัวตน"
+    }
+  },
+  "common": {
+    "actions": {
+      "save": "บันทึก",
+      "cancel": "ยกเลิก",
+      "delete": "ลบ",
+      "edit": "แก้ไข",
+      "create": "สร้าง",
+      "update": "อัปเดต",
+      "search": "ค้นหา",
+      "filter": "กรอง",
+      "sort": "เรียง",
+      "export": "ส่งออก",
+      "import": "นำเข้า",
+      "refresh": "รีเฟรช",
+      "close": "ปิด",
+      "open": "เปิด",
+      "view": "ดู",
+      "download": "ดาวน์โหลด",
+      "upload": "อัปโหลด",
+      "copy": "คัดลอก",
+      "share": "แชร์",
+      "back": "กลับ",
+      "next": "ถัดไป",
+      "previous": "ก่อนหน้า",
+      "continue": "ดำเนินการต่อ",
+      "finish": "เสร็จสิ้น",
+      "submit": "ส่ง",
+      "reset": "รีเซ็ต",
+      "clear": "ล้าง",
+      "apply": "ใช้",
+      "configure": "ตั้งค่า",
+      "test": "ทดสอบ",
+      "preview": "ดูตัวอย่าง",
+      "duplicate": "ทำซ้ำ"
+    },
+    "status": {
+      "loading": "กำลังโหลด...",
+      "saving": "กำลังบันทึก...",
+      "saved": "บันทึกแล้ว",
+      "error": "ข้อผิดพลาด",
+      "success": "สำเร็จ",
+      "warning": "คำเตือน",
+      "info": "ข้อมูล",
+      "pending": "รอดำเนินการ",
+      "completed": "เสร็จสิ้น",
+      "failed": "ล้มเหลว",
+      "active": "ใช้งาน",
+      "inactive": "ไม่ใช้งาน",
+      "enabled": "เปิดใช้งาน",
+      "disabled": "ปิดใช้งาน",
+      "online": "ออนไลน์",
+      "offline": "ออฟไลน์",
+      "connected": "เชื่อมต่อแล้ว",
+      "disconnected": "ไม่ได้เชื่อมต่อ",
+      "healthy": "ปกติ",
+      "unhealthy": "ไม่ปกติ"
+    },
+    "time": {
+      "now": "ตอนนี้",
+      "today": "วันนี้",
+      "yesterday": "เมื่อวาน",
+      "tomorrow": "พรุ่งนี้",
+      "thisWeek": "สัปดาห์นี้",
+      "lastWeek": "สัปดาห์ที่แล้ว",
+      "thisMonth": "เดือนนี้",
+      "lastMonth": "เดือนที่แล้ว",
+      "thisYear": "ปีนี้",
+      "lastYear": "ปีที่แล้ว",
+      "recently": "เมื่อเร็วๆ นี้",
+      "never": "ไม่เคย",
+      "always": "เสมอ",
+      "ago": "ที่แล้ว",
+      "from_now": "จากนี้",
+      "seconds": "วินาที",
+      "minutes": "นาที",
+      "hours": "ชั่วโมง",
+      "days": "วัน",
+      "weeks": "สัปดาห์",
+      "months": "เดือน",
+      "years": "ปี"
+    },
+    "validation": {
+      "required": "กรุณากรอกข้อมูลในช่องนี้",
+      "invalid": "ข้อมูลไม่ถูกต้อง",
+      "tooShort": "ข้อมูลสั้นเกินไป",
+      "tooLong": "ข้อมูลยาวเกินไป",
+      "invalidEmail": "กรุณากรอกอีเมลที่ถูกต้อง",
+      "invalidPhone": "กรุณากรอกหมายเลขโทรศัพท์ที่ถูกต้อง",
+      "invalidUrl": "กรุณากรอก URL ที่ถูกต้อง",
+      "passwordMismatch": "รหัสผ่านไม่ตรงกัน",
+      "invalidFormat": "รูปแบบไม่ถูกต้อง",
+      "outOfRange": "ค่าอยู่นอกช่วงที่กำหนด",
+      "alreadyExists": "มีอยู่แล้ว",
+      "notFound": "ไม่พบข้อมูล",
+      "unauthorized": "ไม่ได้รับอนุญาต",
+      "forbidden": "ถูกห้ามเข้าถึง",
+      "minLength": "ต้องมีอย่างน้อย {{min}} ตัวอักษร",
+      "maxLength": "ต้องไม่เกิน {{max}} ตัวอักษร",
+      "minValue": "ค่าต้องมากกว่าหรือเท่ากับ {{min}}",
+      "maxValue": "ค่าต้องน้อยกว่าหรือเท่ากับ {{max}}"
+    },
+    "pagination": {
+      "page": "หน้า",
+      "of": "จาก",
+      "items": "รายการ",
+      "itemsPerPage": "รายการต่อหน้า",
+      "showingResults": "แสดง {{start}} ถึง {{end}} จาก {{total}} ผลลัพธ์",
+      "noResults": "ไม่พบผลลัพธ์",
+      "loadMore": "โหลดเพิ่มเติม",
+      "showAll": "แสดงทั้งหมด",
+      "first": "หน้าแรก",
+      "last": "หน้าสุดท้าย",
+      "next": "ถัดไป",
+      "previous": "ก่อนหน้า"
+    },
+    "confirmation": {
+      "areYouSure": "คุณแน่ใจหรือไม่?",
+      "thisActionCannotBeUndone": "การดำเนินการนี้ไม่สามารถยกเลิกได้",
+      "confirmDelete": "คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?",
+      "confirmSave": "คุณแน่ใจหรือไม่ว่าต้องการบันทึกการเปลี่ยนแปลง?",
+      "confirmCancel": "คุณแน่ใจหรือไม่ว่าต้องการยกเลิก? การเปลี่ยนแปลงที่ไม่ได้บันทึกจะหายไป",
+      "confirmLogout": "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?",
+      "yes": "ใช่",
+      "no": "ไม่",
+      "ok": "ตกลง",
+      "confirm": "ยืนยัน"
+    },
+    "errors": {
+      "networkError": "เกิดปัญหาการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง",
+      "serverError": "เกิดข้อผิดพลาดในเซิร์ฟเวอร์ กรุณาลองใหม่ภายหลัง",
+      "notFound": "ไม่พบข้อมูลที่ต้องการ",
+      "unauthorized": "คุณไม่มีสิทธิ์เข้าถึงข้อมูลนี้",
+      "forbidden": "การเข้าถึงถูกห้าม",
+      "badRequest": "คำขอไม่ถูกต้อง",
+      "timeout": "หมดเวลาการเชื่อมต่อ",
+      "unknown": "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ"
+    },
+    "messages": {
+      "loading": "กำลังโหลดข้อมูล...",
+      "noData": "ไม่มีข้อมูล",
+      "emptyList": "รายการว่างเปล่า",
+      "comingSoon": "เร็วๆ นี้",
+      "underMaintenance": "อยู่ระหว่างการบำรุงรักษา",
+      "operationSuccessful": "ดำเนินการสำเร็จ",
+      "operationFailed": "ดำเนินการล้มเหลว",
+      "pleaseWait": "กรุณารอสักครู่",
+      "processingRequest": "กำลังประมวลผลคำขอ"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "เข้าสู่ระบบ",
+      "subtitle": "ยินดีต้อนรับกลับสู่บัญชีของคุณ",
+      "email": {
+        "label": "ที่อยู่อีเมล",
+        "placeholder": "กรอกที่อยู่อีเมลของคุณ"
+      },
+      "password": {
+        "label": "รหัสผ่าน",
+        "placeholder": "กรอกรหัสผ่านของคุณ"
+      },
+      "remember_me": "จดจำการเข้าสู่ระบบ",
+      "forgot_password": "ลืมรหัสผ่าน?",
+      "sign_in_button": "เข้าสู่ระบบ",
+      "no_account": "ยังไม่มีบัญชี?",
+      "sign_up_link": "สมัครสมาชิกที่นี่",
+      "or": "หรือ",
+      "continue_with": "ดำเนินการต่อด้วย {{provider}}",
+      "social": {
+        "google": "ดำเนินการต่อด้วย Google",
+        "facebook": "ดำเนินการต่อด้วย Facebook",
+        "github": "ดำเนินการต่อด้วย GitHub"
+      }
+    },
+    "signup": {
+      "title": "สร้างบัญชี",
+      "subtitle": "เข้าร่วมแพลตฟอร์มจัดการแชทบอทของเรา",
+      "first_name": {
+        "label": "ชื่อ",
+        "placeholder": "กรอกชื่อของคุณ"
+      },
+      "last_name": {
+        "label": "นามสกุล",
+        "placeholder": "กรอกนามสกุลของคุณ"
+      },
+      "email": {
+        "label": "ที่อยู่อีเมล",
+        "placeholder": "กรอกที่อยู่อีเมลของคุณ"
+      },
+      "password": {
+        "label": "รหัสผ่าน",
+        "placeholder": "สร้างรหัสผ่านที่แข็งแกร่ง"
+      },
+      "confirm_password": {
+        "label": "ยืนยันรหัสผ่าน",
+        "placeholder": "ยืนยันรหัสผ่านของคุณ"
+      },
+      "terms": "ฉันยอมรับ {{terms_link}} และ {{privacy_link}}",
+      "terms_link": "ข้อกำหนดการใช้งาน",
+      "privacy_link": "นโยบายความเป็นส่วนตัว",
+      "sign_up_button": "สร้างบัญชี",
+      "already_have_account": "มีบัญชีอยู่แล้ว?",
+      "sign_in_link": "เข้าสู่ระบบที่นี่"
+    },
+    "forgot_password": {
+      "title": "รีเซ็ตรหัสผ่าน",
+      "subtitle": "กรอกอีเมลเพื่อรับคำแนะนำในการรีเซ็ต",
+      "email": {
+        "label": "ที่อยู่อีเมล",
+        "placeholder": "กรอกที่อยู่อีเมลของคุณ"
+      },
+      "send_reset_button": "ส่งลิงก์รีเซ็ต",
+      "back_to_login": "กลับไปยังหน้าเข้าสู่ระบบ",
+      "success": "คำแนะนำในการรีเซ็ตรหัสผ่านได้ถูกส่งไปยังอีเมลของคุณแล้ว",
+      "check_email": "กรุณาตรวจสอบอีเมลของคุณสำหรับคำแนะนำเพิ่มเติม"
+    },
+    "reset_password": {
+      "title": "สร้างรหัสผ่านใหม่",
+      "subtitle": "กรอกรหัสผ่านใหม่ของคุณด้านล่าง",
+      "password": {
+        "label": "รหัสผ่านใหม่",
+        "placeholder": "กรอกรหัสผ่านใหม่ของคุณ"
+      },
+      "confirm_password": {
+        "label": "ยืนยันรหัสผ่านใหม่",
+        "placeholder": "ยืนยันรหัสผ่านใหม่ของคุณ"
+      },
+      "reset_button": "อัปเดตรหัสผ่าน",
+      "success": "รหัสผ่านของคุณได้รับการอัปเดตสำเร็จแล้ว",
+      "expired": "ลิงก์รีเซ็ตนี้หมดอายุแล้ว กรุณาขอลิงก์ใหม่"
+    },
+    "validation": {
+      "email_required": "กรุณากรอกที่อยู่อีเมล",
+      "email_invalid": "กรุณากรอกที่อยู่อีเมลที่ถูกต้อง",
+      "password_required": "กรุณากรอกรหัสผ่าน",
+      "password_min_length": "รหัสผ่านต้องมีอย่างน้อย {{min}} ตัวอักษร",
+      "password_mismatch": "รหัสผ่านไม่ตรงกัน",
+      "first_name_required": "กรุณากรอกชื่อ",
+      "last_name_required": "กรุณากรอกนามสกุล",
+      "terms_required": "คุณต้องยอมรับข้อกำหนดและนโยบายความเป็นส่วนตัว"
+    },
+    "errors": {
+      "invalid_credentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+      "account_not_found": "ไม่พบบัญชีที่ใช้อีเมลนี้",
+      "account_already_exists": "มีบัญชีที่ใช้อีเมลนี้อยู่แล้ว",
+      "network_error": "เกิดปัญหาการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง",
+      "server_error": "เกิดข้อผิดพลาดในเซิร์ฟเวอร์ กรุณาลองใหม่ภายหลัง",
+      "invalid_token": "โทเค็นรีเซ็ตไม่ถูกต้องหรือหมดอายุ",
+      "login_failed": "การเข้าสู่ระบบล้มเหลว กรุณาตรวจสอบข้อมูลและลองใหม่อีกครั้ง"
+    },
+    "success": {
+      "login_success": "เข้าสู่ระบบสำเร็จ",
+      "signup_success": "สร้างบัญชีสำเร็จ",
+      "logout_success": "ออกจากระบบสำเร็จ",
+      "password_reset_sent": "ส่งคำแนะนำรีเซ็ตรหัสผ่านแล้ว",
+      "password_updated": "อัปเดตรหัสผ่านสำเร็จ"
+    }
+  },
+  "forms": {
+    "labels": {
+      "first_name": "ชื่อ",
+      "last_name": "นามสกุล",
+      "full_name": "ชื่อ-นามสกุล",
+      "email": "ที่อยู่อีเมล",
+      "password": "รหัสผ่าน",
+      "confirm_password": "ยืนยันรหัสผ่าน",
+      "phone": "หมายเลขโทรศัพท์",
+      "company": "บริษัท",
+      "job_title": "ตำแหน่งงาน",
+      "website": "เว็บไซต์",
+      "message": "ข้อความ",
+      "subject": "หัวข้อ",
+      "category": "หมวดหมู่",
+      "priority": "ความสำคัญ",
+      "due_date": "วันครบกำหนด",
+      "start_date": "วันเริ่มต้น",
+      "end_date": "วันสิ้นสุด",
+      "description": "รายละเอียด",
+      "notes": "หมายเหตุ",
+      "tags": "แท็ก",
+      "status": "สถานะ",
+      "type": "ประเภท",
+      "language": "ภาษา",
+      "timezone": "เขตเวลา",
+      "currency": "สกุลเงิน"
+    },
+    "placeholders": {
+      "enter_first_name": "กรอกชื่อของคุณ",
+      "enter_last_name": "กรอกนามสกุลของคุณ",
+      "enter_email": "กรอกที่อยู่อีเมลของคุณ",
+      "enter_password": "กรอกรหัสผ่านของคุณ",
+      "confirm_password": "ยืนยันรหัสผ่านของคุณ",
+      "enter_phone": "กรอกหมายเลขโทรศัพท์ของคุณ",
+      "enter_company": "กรอกชื่อบริษัทของคุณ",
+      "enter_website": "กรอก URL เว็บไซต์ของคุณ",
+      "enter_message": "กรอกข้อความของคุณ",
+      "enter_subject": "กรอกหัวข้อ",
+      "enter_description": "กรอกรายละเอียด",
+      "enter_notes": "กรอกหมายเหตุเพิ่มเติม",
+      "select_category": "เลือกหมวดหมู่",
+      "select_priority": "เลือกระดับความสำคัญ",
+      "select_status": "เลือกสถานะ",
+      "select_type": "เลือกประเภท",
+      "select_language": "เลือกภาษา",
+      "select_timezone": "เลือกเขตเวลา",
+      "search": "ค้นหา...",
+      "filter": "กรองผลลัพธ์..."
+    },
+    "validation": {
+      "required": "กรุณากรอกข้อมูลในช่องนี้",
+      "invalid_email": "กรุณากรอกที่อยู่อีเมลที่ถูกต้อง",
+      "invalid_phone": "กรุณากรอกหมายเลขโทรศัพท์ที่ถูกต้อง",
+      "invalid_url": "กรุณากรอก URL ที่ถูกต้อง",
+      "password_too_short": "รหัสผ่านต้องมีอย่างน้อย {{min}} ตัวอักษร",
+      "password_too_weak": "รหัสผ่านอ่อนแอเกินไป ควรประกอบด้วยตัวอักษรใหญ่ เล็ก ตัวเลข และสัญลักษณ์",
+      "passwords_dont_match": "รหัสผ่านไม่ตรงกัน",
+      "invalid_date": "กรุณากรอกวันที่ที่ถูกต้อง",
+      "date_in_past": "วันที่ไม่สามารถเป็นอดีตได้",
+      "date_in_future": "วันที่ไม่สามารถเป็นอนาคตได้",
+      "file_too_large": "ไฟล์ใหญ่เกินไป ขนาดสูงสุดคือ {{max}}MB",
+      "invalid_file_type": "ประเภทไฟล์ไม่ถูกต้อง ประเภทที่อนุญาต: {{types}}",
+      "min_length": "ต้องมีอย่างน้อย {{min}} ตัวอักษร",
+      "max_length": "ต้องไม่เกิน {{max}} ตัวอักษร",
+      "min_value": "ค่าต้องมากกว่าหรือเท่ากับ {{min}}",
+      "max_value": "ค่าต้องน้อยกว่าหรือเท่ากับ {{max}}",
+      "invalid_format": "รูปแบบไม่ถูกต้อง",
+      "already_exists": "{{field}} นี้มีอยู่แล้ว",
+      "not_found": "ไม่พบ {{field}}"
+    },
+    "actions": {
+      "submit": "ส่ง",
+      "save": "บันทึก",
+      "save_draft": "บันทึกเป็นร่าง",
+      "cancel": "ยกเลิก",
+      "reset": "รีเซ็ต",
+      "clear": "ล้าง",
+      "add": "เพิ่ม",
+      "remove": "ลบ",
+      "edit": "แก้ไข",
+      "delete": "ลบ",
+      "upload": "อัปโหลด",
+      "browse": "เลือกไฟล์",
+      "select": "เลือก",
+      "choose": "เลือก",
+      "confirm": "ยืนยัน",
+      "apply": "ใช้",
+      "preview": "ดูตัวอย่าง",
+      "generate": "สร้าง",
+      "copy": "คัดลอก",
+      "paste": "วาง",
+      "cut": "ตัด",
+      "duplicate": "ทำซ้ำ"
+    },
+    "messages": {
+      "saving": "กำลังบันทึก...",
+      "saved": "บันทึกสำเร็จ",
+      "save_failed": "การบันทึกล้มเหลว กรุณาลองใหม่อีกครั้ง",
+      "uploading": "กำลังอัปโหลด...",
+      "uploaded": "อัปโหลดสำเร็จ",
+      "upload_failed": "การอัปโหลดล้มเหลว กรุณาลองใหม่อีกครั้ง",
+      "processing": "กำลังประมวลผล...",
+      "completed": "เสร็จสิ้นสำเร็จ",
+      "failed": "การดำเนินการล้มเหลว",
+      "unsaved_changes": "คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก คุณแน่ใจหรือไม่ว่าต้องการออก?",
+      "form_invalid": "กรุณาแก้ไขข้อผิดพลาดด้านล่างก่อนส่ง",
+      "required_fields": "กรุณากรอกข้อมูลในช่องที่จำเป็นทั้งหมด",
+      "max_files": "อนุญาตไฟล์สูงสุด {{max}} ไฟล์",
+      "drag_drop": "ลากและวางไฟล์ที่นี่ หรือคลิกเพื่อเลือก",
+      "file_selected": "เลือกไฟล์แล้ว {{count}} ไฟล์",
+      "files_selected": "เลือกไฟล์แล้ว {{count}} ไฟล์"
+    },
+    "tooltips": {
+      "required": "ช่องนี้จำเป็นต้องกรอก",
+      "optional": "ช่องนี้ไม่บังคับ",
+      "password_requirements": "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวอักษรใหญ่ เล็ก ตัวเลข และสัญลักษณ์",
+      "file_formats": "รูปแบบที่รองรับ: {{formats}}",
+      "max_file_size": "ขนาดไฟล์สูงสุด: {{size}}MB",
+      "character_limit": "เหลืออีก {{remaining}} ตัวอักษร",
+      "word_limit": "เหลืออีก {{remaining}} คำ"
+    }
+  },
+  "monitoring": {
+    "title": "การติดตามและแจ้งเตือน",
+    "health": {
+      "title": "สถานะความสมบูรณ์ของระบบ",
+      "all_systems_operational": "ระบบทั้งหมดทำงานปกติ",
+      "issues_detected": "ตรวจพบปัญหา",
+      "major_outage": "ระบบขัดข้องสำคัญ",
+      "maintenance_mode": "โหมดบำรุงรักษา"
+    },
+    "alerts": {
+      "title": "การแจ้งเตือน",
+      "high_response_time": "เวลาตอบสนองสูง",
+      "error_rate_increased": "อัตราข้อผิดพลาดเพิ่มขึ้น",
+      "service_unavailable": "บริการไม่พร้อมใช้งาน",
+      "memory_usage_high": "การใช้หน่วยความจำสูง",
+      "disk_space_low": "พื้นที่ดิสก์เหลือน้อย"
+    },
+    "metrics": {
+      "response_time": "เวลาตอบสนอง",
+      "throughput": "ปริมาณงาน",
+      "error_rate": "อัตราข้อผิดพลาด",
+      "uptime": "เวลาการทำงาน",
+      "cpu_usage": "การใช้ CPU",
+      "memory_usage": "การใช้หน่วยความจำ",
+      "disk_usage": "การใช้พื้นที่ดิสก์",
+      "network_traffic": "ปริมาณการส่งข้อมูลผ่านเครือข่าย"
+    }
+  }
+}

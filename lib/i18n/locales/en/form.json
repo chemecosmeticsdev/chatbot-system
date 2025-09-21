@@ -1,0 +1,32 @@
+{
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "password": "Password must be at least 8 characters long",
+    "confirmPassword": "Passwords do not match",
+    "minLength": "Must be at least {{min}} characters",
+    "maxLength": "Must not exceed {{max}} characters",
+    "number": "Please enter a valid number",
+    "url": "Please enter a valid URL",
+    "date": "Please enter a valid date",
+    "fileSize": "File size must not exceed {{size}}",
+    "fileType": "Unsupported file type. Allowed types: {{types}}"
+  },
+  "placeholders": {
+    "search": "Search...",
+    "email": "Enter your email address",
+    "password": "Enter your password",
+    "name": "Enter name",
+    "description": "Enter description",
+    "url": "https://example.com",
+    "phone": "Enter phone number",
+    "address": "Enter address"
+  },
+  "help": {
+    "password": "Use a combination of letters, numbers, and symbols",
+    "email": "We'll never share your email with anyone else",
+    "phone": "Include country code if international",
+    "required": "Required field",
+    "optional": "Optional field"
+  }
+}

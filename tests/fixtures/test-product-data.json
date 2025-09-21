@@ -1,0 +1,67 @@
+{
+  "validProducts": [
+    {
+      "name": "Premium Electronics Kit",
+      "description": "A comprehensive electronics kit for testing and development",
+      "category": "Electronics",
+      "sku": "ELEC-KIT-001",
+      "status": "active",
+      "metadata": {
+        "features": ["LED", "resistors", "capacitors", "microcontroller"],
+        "difficulty": "intermediate",
+        "age_range": "14+"
+      }
+    },
+    {
+      "name": "Software Development Tools",
+      "description": "Essential tools for modern software development",
+      "category": "Software",
+      "sku": "SW-TOOLS-001",
+      "status": "active",
+      "metadata": {
+        "languages": ["JavaScript", "Python", "TypeScript"],
+        "platforms": ["Web", "Mobile", "Desktop"]
+      }
+    },
+    {
+      "name": "Learning Materials Bundle",
+      "description": "Educational materials for technology learning",
+      "category": "Education",
+      "sku": "EDU-BUNDLE-001",
+      "status": "active",
+      "metadata": {
+        "subjects": ["Programming", "Electronics", "AI"],
+        "level": "beginner"
+      }
+    }
+  ],
+  "invalidProducts": [
+    {
+      "description": "Missing name and category"
+    },
+    {
+      "name": "",
+      "category": "Electronics",
+      "description": "Empty name should fail"
+    },
+    {
+      "name": "Valid Name",
+      "category": "InvalidCategory",
+      "description": "Invalid category test"
+    }
+  ],
+  "thaiProducts": [
+    {
+      "name": "ชุดอิเล็กทรอนิกส์พรีเมียม",
+      "description": "ชุดอิเล็กทรอนิกส์ครบครันสำหรับการทดสอบและพัฒนา",
+      "category": "Electronics",
+      "sku": "THAI-ELEC-001",
+      "status": "active",
+      "metadata": {
+        "features": ["LED", "ตัวต้านทาน", "ตัวเก็บประจุ", "ไมโครคอนโทรลเลอร์"],
+        "difficulty": "ระดับกลาง",
+        "age_range": "14 ปีขึ้นไป"
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "electronics": [
+    "electronics specifications",
+    "LED circuit design",
+    "microcontroller programming",
+    "resistor color codes",
+    "voltage calculations",
+    "Arduino projects",
+    "sensor connections",
+    "power supply design"
+  ],
+  "software": [
+    "JavaScript frameworks",
+    "TypeScript configuration",
+    "API development",
+    "database queries",
+    "authentication systems",
+    "deployment strategies",
+    "testing methodologies",
+    "code optimization"
+  ],
+  "general": [
+    "installation guide",
+    "troubleshooting steps",
+    "safety instructions",
+    "warranty information",
+    "technical support",
+    "user manual",
+    "getting started",
+    "best practices"
+  ],
+  "thai": [
+    "คู่มือการติดตั้ง",
+    "ขั้นตอนการแก้ไขปัญหา",
+    "คำแนะนำด้านความปลอดภัย",
+    "ข้อมูลการรับประกัน",
+    "การสนับสนุนทางเทคนิค",
+    "คู่มือผู้ใช้",
+    "การเริ่มต้นใช้งาน",
+    "แนวทางปฏิบัติที่ดี"
+  ],
+  "performance": [
+    "quick test query",
+    "performance benchmark",
+    "load testing search",
+    "concurrent access test",
+    "stress test query",
+    "response time validation"
+  ]
+}

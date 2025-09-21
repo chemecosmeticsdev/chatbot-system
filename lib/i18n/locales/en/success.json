@@ -1,0 +1,38 @@
+{
+  "general": {
+    "saved": "Successfully saved",
+    "created": "Successfully created",
+    "updated": "Successfully updated",
+    "deleted": "Successfully deleted",
+    "completed": "Successfully completed",
+    "sent": "Successfully sent",
+    "uploaded": "Successfully uploaded",
+    "processed": "Successfully processed"
+  },
+  "auth": {
+    "signIn": "Successfully signed in",
+    "signUp": "Account created successfully",
+    "logout": "Successfully signed out",
+    "passwordReset": "Password reset email sent",
+    "emailVerified": "Email verified successfully"
+  },
+  "chatbot": {
+    "created": "Chatbot created successfully",
+    "updated": "Chatbot updated successfully",
+    "deployed": "Chatbot deployed successfully",
+    "trained": "Chatbot trained successfully",
+    "deleted": "Chatbot deleted successfully"
+  },
+  "document": {
+    "uploaded": "Document uploaded successfully",
+    "processed": "Document processed successfully",
+    "indexed": "Document indexed successfully",
+    "deleted": "Document deleted successfully"
+  },
+  "product": {
+    "created": "Product created successfully",
+    "updated": "Product updated successfully",
+    "deleted": "Product deleted successfully",
+    "assigned": "Product assigned successfully"
+  }
+}

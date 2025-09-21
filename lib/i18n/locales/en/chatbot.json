@@ -1,0 +1,73 @@
+{
+  "title": "Chatbots",
+  "list": {
+    "title": "Your Chatbots",
+    "empty": "No chatbots found. Create your first chatbot to get started.",
+    "loading": "Loading chatbots...",
+    "error": "Failed to load chatbots. Please try again."
+  },
+  "create": {
+    "title": "Create New Chatbot",
+    "subtitle": "Set up a new AI assistant for your business",
+    "form": {
+      "name": "Chatbot Name",
+      "nameHint": "Give your chatbot a descriptive name",
+      "description": "Description",
+      "descriptionHint": "Describe what this chatbot will help with",
+      "model": "AI Model",
+      "modelHint": "Choose the AI model that best fits your needs",
+      "language": "Primary Language",
+      "languageHint": "Select the main language for interactions",
+      "purpose": "Purpose",
+      "purposeHint": "What will this chatbot primarily be used for?",
+      "visibility": "Visibility",
+      "visibilityHint": "Who can access this chatbot?"
+    },
+    "models": {
+      "claude3Haiku": "Claude 3 Haiku - Fast and efficient",
+      "claude3Sonnet": "Claude 3 Sonnet - Balanced performance",
+      "claude3Opus": "Claude 3 Opus - Most capable",
+      "gpt4": "GPT-4 - Advanced reasoning",
+      "gpt35Turbo": "GPT-3.5 Turbo - Cost-effective"
+    },
+    "purposes": {
+      "customerSupport": "Customer Support",
+      "salesAssistant": "Sales Assistant",
+      "technicalSupport": "Technical Support",
+      "productInfo": "Product Information",
+      "general": "General Purpose",
+      "training": "Training & Education"
+    }
+  },
+  "configure": {
+    "title": "Configure Chatbot",
+    "systemPrompt": "System Prompt",
+    "systemPromptHint": "Define how your chatbot should behave and respond",
+    "temperature": "Creativity Level",
+    "temperatureHint": "Higher values make responses more creative",
+    "maxTokens": "Maximum Response Length",
+    "maxTokensHint": "Limit how long responses can be",
+    "knowledgeBase": "Knowledge Base",
+    "knowledgeBaseHint": "Select documents and products for this chatbot",
+    "integrations": "Integrations",
+    "integrationsHint": "Connect to external platforms and services"
+  },
+  "deploy": {
+    "title": "Deploy Chatbot",
+    "status": "Deployment Status",
+    "url": "Chatbot URL",
+    "embedCode": "Embed Code",
+    "apiKey": "API Key",
+    "webhookUrl": "Webhook URL",
+    "testChat": "Test Your Chatbot"
+  },
+  "analytics": {
+    "title": "Chatbot Analytics",
+    "conversations": "Total Conversations",
+    "messages": "Messages Exchanged",
+    "satisfaction": "User Satisfaction",
+    "responseTime": "Average Response Time",
+    "accuracy": "Response Accuracy",
+    "costs": "Operational Costs"
+  }
+}

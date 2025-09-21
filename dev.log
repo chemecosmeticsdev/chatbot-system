@@ -1,0 +1,36 @@
+
+> chatbot-starter@0.1.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use by process 19168, using available port 3001 instead.
+   ▲ Next.js 15.5.3
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.1.107:3001
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · clientTraceMetadata
+
+ ✓ Starting...
+ ○ Compiling /instrumentation ...
+ ✓ Compiled /instrumentation in 2.3s (1043 modules)
+[Sentry] Cannot initialize SDK with `debug` option using a non-debug bundle.
+ ✓ Ready in 9.9s
+   Reload env: .env.local
+ ✓ Compiled in 4.1s (1043 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'D:\dev\chatbot\.next\cache\webpack\server-development\11.pack.gz_' -> 'D:\dev\chatbot\.next\cache\webpack\server-development\11.pack.gz'
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+   ▲ Next.js 15.5.3
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.1.107:3001
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ strictNextHead
+     · clientTraceMetadata
+     · serverComponentsExternalPackages
+
+ ✓ Starting...
+`headers` field cannot be empty for route {"source":"/(.*)","headers":[]}
+
+
+Error: Invalid header found
+[?25h

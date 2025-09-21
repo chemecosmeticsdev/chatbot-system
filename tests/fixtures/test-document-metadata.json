@@ -1,0 +1,96 @@
+{
+  "validDocuments": [
+    {
+      "title": "Technical Specifications Manual.pdf",
+      "document_type": "technical",
+      "file_size": 2048000,
+      "file_url": "test://technical-specs.pdf",
+      "metadata": {
+        "pages": 45,
+        "language": "en",
+        "version": "1.0",
+        "test_document": true
+      }
+    },
+    {
+      "title": "User Guide.pdf",
+      "document_type": "manual",
+      "file_size": 1536000,
+      "file_url": "test://user-guide.pdf",
+      "metadata": {
+        "pages": 32,
+        "language": "en",
+        "version": "2.1",
+        "test_document": true
+      }
+    },
+    {
+      "title": "Safety Instructions.pdf",
+      "document_type": "safety",
+      "file_size": 512000,
+      "file_url": "test://safety-instructions.pdf",
+      "metadata": {
+        "pages": 8,
+        "language": "en",
+        "critical": true,
+        "test_document": true
+      }
+    }
+  ],
+  "thaiDocuments": [
+    {
+      "title": "คู่มือทางเทคนิค.pdf",
+      "document_type": "technical",
+      "file_size": 2048000,
+      "file_url": "test://thai-technical-manual.pdf",
+      "metadata": {
+        "pages": 45,
+        "language": "th",
+        "version": "1.0",
+        "test_document": true
+      }
+    }
+  ],
+  "invalidDocuments": [
+    {
+      "title": "",
+      "document_type": "technical",
+      "file_size": 1024000
+    },
+    {
+      "title": "Valid Title",
+      "document_type": "invalid_type",
+      "file_size": 1024000
+    },
+    {
+      "title": "Invalid Size",
+      "document_type": "technical",
+      "file_size": -1
+    }
+  ],
+  "processingStates": [
+    {
+      "status": "pending",
+      "progress": 0,
+      "message": "Document uploaded successfully"
+    },
+    {
+      "status": "processing",
+      "progress": 50,
+      "message": "Extracting text from document"
+    },
+    {
+      "status": "completed",
+      "progress": 100,
+      "message": "Document processed successfully",
+      "chunk_count": 25,
+      "embedding_model": "titan-embed-text-v2"
+    },
+    {
+      "status": "failed",
+      "progress": 0,
+      "message": "Failed to process document: corrupted file",
+      "error_code": "CORRUPTED_FILE"
+    }
+  ]
+}

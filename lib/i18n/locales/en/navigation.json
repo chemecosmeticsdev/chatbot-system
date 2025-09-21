@@ -1,0 +1,34 @@
+{
+  "main": {
+    "dashboard": "Dashboard",
+    "chatbots": "Chatbots",
+    "products": "Products",
+    "documents": "Documents",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "admin": "Admin"
+  },
+  "sub": {
+    "overview": "Overview",
+    "create": "Create",
+    "manage": "Manage",
+    "deploy": "Deploy",
+    "train": "Train",
+    "test": "Test",
+    "monitor": "Monitor",
+    "reports": "Reports",
+    "users": "Users",
+    "permissions": "Permissions",
+    "integrations": "Integrations",
+    "billing": "Billing",
+    "logs": "Logs"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "chatbots": "Chatbots",
+    "products": "Products",
+    "documents": "Documents",
+    "settings": "Settings"
+  }
+}

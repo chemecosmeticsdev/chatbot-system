@@ -1,0 +1,33 @@
+{
+  "title": "Products",
+  "category": "Category",
+  "categories": {
+    "all": "All Categories",
+    "electronics": "Electronics",
+    "software": "Software",
+    "hardware": "Hardware",
+    "services": "Services",
+    "accessories": "Accessories",
+    "consumables": "Consumables"
+  },
+  "properties": {
+    "name": "Product Name",
+    "description": "Description",
+    "price": "Price",
+    "category": "Category",
+    "brand": "Brand",
+    "model": "Model",
+    "specifications": "Specifications",
+    "availability": "Availability",
+    "warranty": "Warranty",
+    "support": "Support"
+  },
+  "actions": {
+    "view": "View Details",
+    "edit": "Edit Product",
+    "delete": "Delete Product",
+    "duplicate": "Duplicate Product",
+    "export": "Export Data",
+    "assignToBot": "Assign to Chatbot"
+  }
+}

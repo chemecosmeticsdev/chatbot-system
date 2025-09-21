@@ -1,0 +1,34 @@
+{
+  "main": {
+    "dashboard": "แดชบอร์ด",
+    "chatbots": "แชทบอท",
+    "products": "ผลิตภัณฑ์",
+    "documents": "เอกสาร",
+    "analytics": "การวิเคราะห์",
+    "settings": "การตั้งค่า",
+    "admin": "ผู้ดูแลระบบ"
+  },
+  "sub": {
+    "overview": "ภาพรวม",
+    "create": "สร้าง",
+    "manage": "จัดการ",
+    "deploy": "ปรับใช้",
+    "train": "ฝึกอบรม",
+    "test": "ทดสอบ",
+    "monitor": "ติดตาม",
+    "reports": "รายงาน",
+    "users": "ผู้ใช้",
+    "permissions": "สิทธิ์",
+    "integrations": "การเชื่อมต่อ",
+    "billing": "การเรียกเก็บเงิน",
+    "logs": "ล็อก"
+  },
+  "breadcrumb": {
+    "home": "หน้าแรก",
+    "dashboard": "แดชบอร์ด",
+    "chatbots": "แชทบอท",
+    "products": "ผลิตภัณฑ์",
+    "documents": "เอกสาร",
+    "settings": "การตั้งค่า"
+  }
+}

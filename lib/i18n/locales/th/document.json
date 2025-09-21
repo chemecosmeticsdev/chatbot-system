@@ -1,0 +1,44 @@
+{
+  "title": "@-*2#",
+  "upload": {
+    "title": "-1B+%@-*2#",
+    "subtitle": "@4H!@7I-+22'2!#9I*3+#1A
+--8",
+    "dragDrop": "%2A%0'2D%L5H5H +#7-%4@7H-@%7-D%L",
+    "browse": "@%7-D%L",
+    "supportedFormats": "#9A5H#-#1: PDF, DOC, TXT, #9 2",
+    "maxSize": "2D%L*9*8: 10MB",
+    "processing": "3%1#0!'%%...",
+    "success": "-1B+%*3@#G",
+    "error": "-1B+%%I!@+%'"
+  },
+  "process": {
+    "title": "2##0!'%%@-*2#",
+    "ocr": "2##9I31'-1)#",
+    "chunking": "2#AHI-'2!",
+    "embedding": "3%1*#I2@'@-#L",
+    "indexing": "2#131
+5@'@-#L",
+    "completed": "#0!'%%@*#G*4I",
+    "failed": "#0!'%%%I!@+%'"
+  },
+  "manage": {
+    "title": "12#@-*2#",
+    "search": "I+2@-*2#...",
+    "filter": "#-",
+    "sort": "@#5"",
+    "view": "9",
+    "edit": "AID",
+    "delete": "%",
+    "reprocess": "#0!'%%C+!H"
+  },
+  "types": {
+    "pdf": "@-*2# PDF",
+    "doc": "@-*2# Word",
+    "txt": "D%LI-'2!",
+    "image": "#9 2",
+    "spreadsheet": "*@#
+5",
+    "presentation": "23@*-"
+  }
+}
