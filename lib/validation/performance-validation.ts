@@ -254,8 +254,10 @@ export class PerformanceValidationService {
 
     } catch (error) {
       SentryUtils.captureError(error as Error, {
-        dataset_sizes: datasetSizes,
-        benchmarks_completed: benchmarks.length
+        additionalData: {
+          dataset_sizes: datasetSizes,
+          benchmarks_completed: benchmarks.length
+        }
       });
 
       throw new VectorSearchError(

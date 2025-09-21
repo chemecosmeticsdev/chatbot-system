@@ -228,7 +228,7 @@ export class VectorOptimizationService {
               description: `Rebuild ${index.index_name} - fragmentation: ${index.fragmentation_ratio.toFixed(2)}, avg query time: ${index.avg_query_time_ms.toFixed(2)}ms`,
               estimated_improvement: `${Math.min(50, index.fragmentation_ratio * 100).toFixed(0)}% query time reduction`,
               implementation_sql: `REINDEX INDEX CONCURRENTLY ${index.index_name};`,
-              rollback_sql: null, // Reindex is safe, no rollback needed
+              rollback_sql: undefined, // Reindex is safe, no rollback needed
               estimated_downtime_minutes: 0, // CONCURRENTLY = no downtime
               cost_benefit_score: this.calculateCostBenefitScore(index, 'rebuild')
             });
@@ -316,7 +316,7 @@ export class VectorOptimizationService {
               description: `Table ${index.table_name} needs vacuum (${daysSinceVacuum.toFixed(0)} days since last vacuum)`,
               estimated_improvement: '5-10% query performance improvement',
               implementation_sql: `VACUUM ANALYZE ${index.table_name};`,
-              rollback_sql: null,
+              rollback_sql: undefined,
               estimated_downtime_minutes: 1,
               cost_benefit_score: 15
             });
@@ -329,7 +329,7 @@ export class VectorOptimizationService {
               description: `Table ${index.table_name} needs analyze (${daysSinceAnalyze.toFixed(0)} days since last analyze)`,
               estimated_improvement: '5-15% query planning improvement',
               implementation_sql: `ANALYZE ${index.table_name};`,
-              rollback_sql: null,
+              rollback_sql: undefined,
               estimated_downtime_minutes: 0,
               cost_benefit_score: 20
             });
@@ -621,7 +621,7 @@ export class VectorOptimizationService {
             } catch (error) {
               SentryUtils.captureError(
                 new VectorSearchError(`Vacuum failed for ${table.table_name}: ${(error as Error).message}`),
-                { operation: 'maintenance_vacuum', table: table.table_name }
+                { additionalData: { operation: 'maintenance_vacuum', table: table.table_name } }
               );
             }
           }
@@ -649,7 +649,7 @@ export class VectorOptimizationService {
             } catch (error) {
               SentryUtils.captureError(
                 new VectorSearchError(`Analyze failed for ${table.table_name}: ${(error as Error).message}`),
-                { operation: 'maintenance_analyze', table: table.table_name }
+                { additionalData: { operation: 'maintenance_analyze', table: table.table_name } }
               );
             }
           }

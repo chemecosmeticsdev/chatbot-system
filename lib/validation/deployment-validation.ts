@@ -949,9 +949,13 @@ export async function runValidationCLI(): Promise<void> {
   ];
 
   checks.forEach(([name, result]) => {
-    const status = result.success ? '✅' : '❌';
-    const duration = result.duration ? ` (${result.duration}ms)` : '';
-    console.log(`${status} ${name}: ${result.message}${duration}`);
+    if (typeof result === 'string') {
+      console.log(`❌ ${name}: ${result}`);
+    } else {
+      const status = result.success ? '✅' : '❌';
+      const duration = result.duration ? ` (${result.duration}ms)` : '';
+      console.log(`${status} ${name}: ${result.message}${duration}`);
+    }
   });
 
   // Print critical issues
