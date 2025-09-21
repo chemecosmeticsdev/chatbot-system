@@ -293,7 +293,7 @@ export class SecurityAuditor {
 
         // Check for default/weak values
         const weakValues = [];
-        if (process.env.STACK_SECRET_SERVER_KEY?.length < 32) {
+        if (process.env.STACK_SECRET_SERVER_KEY && process.env.STACK_SECRET_SERVER_KEY.length < 32) {
           weakValues.push('STACK_SECRET_SERVER_KEY appears weak');
         }
 
@@ -930,7 +930,7 @@ export class RateLimiter {
     if (realIP) return realIP;
     if (forwarded) return forwarded.split(',')[0].trim();
 
-    return req.ip || 'unknown';
+    return 'unknown';
   }
 
   // Normalize endpoint path for rate limiting
@@ -963,13 +963,11 @@ export class RateLimiter {
 
       // This should integrate with your actual role system
       // For now, we'll use a simple check based on user properties
-      const userRole = 'user'; // This should come from your user management
+      const userRole: string = 'user'; // This should come from your user management
 
-      switch (userRole) {
-        case 'superadmin': return 'superadmin';
-        case 'admin': return 'admin';
-        default: return 'authenticated';
-      }
+      if (userRole === 'superadmin') return 'superadmin';
+      if (userRole === 'admin') return 'admin';
+      return 'authenticated';
     } catch {
       return 'anonymous';
     }
@@ -1162,7 +1160,11 @@ export class RateLimiter {
 
   // Update rate limit configuration
   updateConfig(newConfig: Partial<EndpointRateLimits>): void {
-    this.config = { ...this.config, ...newConfig };
+    // Filter out undefined values to maintain type safety
+    const filteredConfig = Object.fromEntries(
+      Object.entries(newConfig).filter(([_, value]) => value !== undefined)
+    ) as EndpointRateLimits;
+    this.config = { ...this.config, ...filteredConfig };
   }
 }
 
@@ -1173,7 +1175,16 @@ export function createSecurityMiddleware(options?: {
   enableVulnerabilityScanning?: boolean;
   customRateLimits?: Partial<EndpointRateLimits>;
 }) {
-  const rateLimiter = new RateLimiter(options?.customRateLimits ? { ...DEFAULT_RATE_LIMITS, ...options.customRateLimits } : DEFAULT_RATE_LIMITS);
+  const rateLimiter = new RateLimiter(
+    options?.customRateLimits
+      ? {
+          ...DEFAULT_RATE_LIMITS,
+          ...Object.fromEntries(
+            Object.entries(options.customRateLimits).filter(([_, value]) => value !== undefined)
+          )
+        } as EndpointRateLimits
+      : DEFAULT_RATE_LIMITS
+  );
   const securityAuditor = new SecurityAuditor();
 
   return async function securityMiddleware(
