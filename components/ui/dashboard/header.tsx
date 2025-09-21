@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useUser } from '@stackframe/stack';
+import { useUniversalUser, useHybridAuth } from '@/lib/auth/hybrid-auth-provider';
+import { useFallbackAuth } from '@/lib/auth/fallback-auth-provider';
 import { cn } from '@/lib/utils';
 import {
   Menu,
@@ -35,7 +36,9 @@ interface HeaderProps {
  * and theme/language switching. Optimized for mobile and accessibility.
  */
 export function Header({ onMenuClick }: HeaderProps) {
-  const user = useUser();
+  const user = useUniversalUser();
+  const { authMode } = useHybridAuth();
+  const fallbackAuth = authMode === 'fallback' ? useFallbackAuth() : null;
   const [searchFocused, setSearchFocused] = useState(false);
   const [notifications] = useState([
     { id: 1, title: 'New chatbot deployed', message: 'Customer Support Assistant is now live', time: '2 min ago', unread: true },
@@ -191,7 +194,13 @@ export function Header({ onMenuClick }: HeaderProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-red-600 focus:text-red-600"
-                    onClick={() => user.signOut()}
+                    onClick={() => {
+                      if (authMode === 'fallback' && fallbackAuth) {
+                        fallbackAuth.signOut();
+                      } else if (user?.signOut) {
+                        user.signOut();
+                      }
+                    }}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Sign out</span>
