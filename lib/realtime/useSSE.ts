@@ -28,7 +28,7 @@ import type {
 export type SSEConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'reconnecting' | 'error';
 
 // Hook configuration
-interface UseSSEConfig {
+export interface UseSSEConfig {
   /** Event types to subscribe to */
   subscriptions?: SSEEventType[];
   /** Organization ID filter */
@@ -44,7 +44,7 @@ interface UseSSEConfig {
 }
 
 // Hook return type
-interface UseSSEReturn {
+export interface UseSSEReturn {
   /** Current connection status */
   status: SSEConnectionStatus;
   /** Last received event */
@@ -72,14 +72,13 @@ interface UseSSEReturn {
 }
 
 // Default configuration
-const defaultConfig: Required<UseSSEConfig> = {
+const defaultConfig = {
   subscriptions: ['document_processing', 'conversation_activity', 'system_health', 'chatbot_metrics'],
-  organizationId: undefined,
   autoReconnect: true,
   reconnectDelay: 1000,
   maxReconnectAttempts: 10,
   debug: false
-};
+} as const;
 
 /**
  * Custom hook for SSE integration
@@ -463,9 +462,3 @@ export function useChatbotMetricsEvents(chatbotId?: string, organizationId?: str
   };
 }
 
-// Export types
-export type {
-  SSEConnectionStatus,
-  UseSSEConfig,
-  UseSSEReturn
-};

@@ -10,17 +10,46 @@ import {
   ConversationSession,
   CreateConversationSession,
   UpdateConversationSession,
-  ConversationWithMessages,
-  ConversationListFilters,
-  ConversationListResponse,
   ConversationSessionSchema,
   CreateConversationSessionSchema,
   UpdateConversationSessionSchema,
-  ConversationModel,
-  CONVERSATION_PLATFORMS,
-  MAX_INACTIVE_HOURS,
-  SESSION_LIMITS
+  ConversationPlatform,
+  ConversationStatus,
+  PLATFORM_CONFIGURATIONS
 } from '@/lib/models/conversation';
+import ConversationSessionModel from '@/lib/models/conversation';
+
+// Service-specific types
+interface ConversationWithMessages extends ConversationSession {
+  messages: Message[];
+  messageCount: number;
+}
+
+interface ConversationListFilters {
+  chatbotId?: string;
+  status?: ConversationStatus;
+  platform?: ConversationPlatform;
+  userIdentifier?: string;
+  dateFrom?: Date;
+  dateTo?: Date;
+  limit?: number;
+  offset?: number;
+}
+
+interface ConversationListResponse {
+  conversations: ConversationWithMessages[];
+  total: number;
+  hasMore: boolean;
+}
+
+// Constants
+const MAX_INACTIVE_HOURS = 24;
+const SESSION_LIMITS = {
+  MAX_DURATION_HOURS: 72,
+  MAX_MESSAGES_PER_SESSION: 1000,
+  CLEANUP_INTERVAL_HOURS: 6
+};
+const CONVERSATION_PLATFORMS = ['web', 'line', 'whatsapp', 'messenger', 'api'] as const;
 import {
   Message,
   CreateMessage,

@@ -60,9 +60,7 @@ export {
 export {
   SSEDashboard,
   DocumentProcessingMonitor,
-  SystemHealthMonitor,
-  StatusIndicator,
-  EventList
+  SystemHealthMonitor
 } from './SSEDashboard';
 
 /**
