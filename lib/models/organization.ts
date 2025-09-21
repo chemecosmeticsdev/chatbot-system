@@ -5,6 +5,17 @@ import { z } from 'zod';
  * Multi-tenant organizations for chatbot management system
  */
 
+// Input interface for organizations (allows optional fields)
+export interface IOrganizationData {
+  id: string;
+  name: string;
+  slug: string;
+  settings?: Record<string, any>;
+  subscription_tier?: 'basic' | 'professional' | 'enterprise';
+  created_at: Date;
+  updated_at: Date;
+}
+
 // Database interface for organizations table
 export interface IOrganization {
   id: string;
@@ -66,16 +77,20 @@ export type UpdateOrganization = z.infer<typeof UpdateOrganizationSchema>;
 export class OrganizationModel {
   private data: IOrganization;
 
-  constructor(data: IOrganization) {
-    const validatedData: IOrganization = {
-      ...data,
-      settings: (data.settings ?? {}) as Record<string, any>,
-      subscription_tier: (data.subscription_tier ?? 'basic') as 'basic' | 'professional' | 'enterprise',
+  constructor(data: IOrganizationData) {
+    this.data = OrganizationSchema.parse(this.normalizeData(data));
+  }
+
+  private normalizeData(data: IOrganizationData): IOrganization {
+    return {
+      id: data.id,
+      name: data.name,
+      slug: data.slug,
+      settings: data.settings ?? {},
+      subscription_tier: data.subscription_tier ?? 'basic',
       created_at: new Date(data.created_at),
       updated_at: new Date(data.updated_at)
     };
-
-    this.data = OrganizationSchema.parse(validatedData);
   }
 
   // Getters

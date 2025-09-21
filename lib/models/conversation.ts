@@ -5,6 +5,23 @@ import { z } from 'zod';
  * Conversation management and session tracking for chatbot interactions
  */
 
+// Input interface for conversation sessions (allows optional fields)
+export interface IConversationSessionData {
+  id: string;
+  chatbot_instance_id: string;
+  platform: 'web' | 'line' | 'whatsapp' | 'messenger' | 'api';
+  user_identifier: string;
+  status?: 'active' | 'inactive' | 'expired' | 'terminated';
+  start_time: Date;
+  end_time?: Date;
+  message_count?: number;
+  user_satisfaction_score?: number;
+  session_context?: Record<string, any>;
+  session_metadata?: Record<string, any>;
+  created_at: Date;
+  updated_at: Date;
+}
+
 // Database interface for conversation_sessions table
 export interface IConversationSession {
   id: string;
@@ -85,17 +102,26 @@ export type UpdateConversationSession = z.infer<typeof UpdateConversationSession
 export class ConversationSessionModel {
   private data: IConversationSession;
 
-  constructor(data: IConversationSession) {
-    const validatedData: IConversationSession = {
-      ...data,
-      status: (data.status ?? 'active') as 'active' | 'inactive' | 'expired' | 'terminated',
+  constructor(data: IConversationSessionData) {
+    this.data = ConversationSessionSchema.parse(this.normalizeData(data));
+  }
+
+  private normalizeData(data: IConversationSessionData): IConversationSession {
+    return {
+      id: data.id,
+      chatbot_instance_id: data.chatbot_instance_id,
+      platform: data.platform,
+      user_identifier: data.user_identifier,
+      status: data.status ?? 'active',
       start_time: new Date(data.start_time),
       end_time: data.end_time ? new Date(data.end_time) : undefined,
+      message_count: data.message_count ?? 0,
+      user_satisfaction_score: data.user_satisfaction_score,
+      session_context: data.session_context ?? {},
+      session_metadata: data.session_metadata ?? {},
       created_at: new Date(data.created_at),
       updated_at: new Date(data.updated_at)
     };
-
-    this.data = ConversationSessionSchema.parse(validatedData);
   }
 
   // Getters

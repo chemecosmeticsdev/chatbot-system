@@ -656,9 +656,8 @@ export function sseMiddleware(eventType: string) {
   };
 }
 
-// Export all integration classes
+// Export all integration classes (DocumentProcessingSSE already exported above)
 export {
-  DocumentProcessingSSE,
   ConversationSSE,
   SystemHealthSSE,
   ErrorMonitoringSSE,

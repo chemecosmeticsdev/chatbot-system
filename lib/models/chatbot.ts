@@ -6,6 +6,28 @@ import { z } from 'zod';
  */
 
 // Database interface for chatbot_instances table
+export interface IChatbotInstanceData {
+  id: string;
+  organization_id: string;
+  name: string;
+  description?: string;
+  status?: 'draft' | 'active' | 'inactive' | 'archived';
+  llm_provider: 'bedrock' | 'openai' | 'anthropic';
+  llm_model: string;
+  system_prompt: string;
+  model_config?: Record<string, any>;
+  rag_enabled?: boolean;
+  retrieval_k?: number;
+  score_threshold?: number;
+  context_window?: number;
+  welcome_message?: string;
+  fallback_message?: string;
+  performance_metrics?: Record<string, any>;
+  created_at: Date;
+  updated_at: Date;
+  created_by?: string;
+}
+
 export interface IChatbotInstance {
   id: string;
   organization_id: string;
@@ -129,21 +151,32 @@ export type UpdateChatbotInstance = z.infer<typeof UpdateChatbotInstanceSchema>;
 export class ChatbotInstanceModel {
   private data: IChatbotInstance;
 
-  constructor(data: IChatbotInstance) {
-    const validatedData: IChatbotInstance = {
-      ...data,
-      status: (data.status ?? 'draft') as 'draft' | 'active' | 'inactive' | 'archived',
-      model_config: data.model_config || {},
-      rag_enabled: data.rag_enabled !== undefined ? data.rag_enabled : true,
-      retrieval_k: data.retrieval_k || 5,
-      score_threshold: data.score_threshold || 0.7,
-      context_window: data.context_window || 4000,
-      performance_metrics: data.performance_metrics || {},
-      created_at: new Date(data.created_at),
-      updated_at: new Date(data.updated_at)
-    };
+  constructor(data: IChatbotInstanceData) {
+    this.data = ChatbotInstanceSchema.parse(ChatbotInstanceModel.normalizeData(data));
+  }
 
-    this.data = ChatbotInstanceSchema.parse(validatedData);
+  private static normalizeData(data: IChatbotInstanceData): IChatbotInstance {
+    return {
+      id: data.id,
+      organization_id: data.organization_id,
+      name: data.name,
+      description: data.description,
+      status: data.status ?? 'draft',
+      llm_provider: data.llm_provider,
+      llm_model: data.llm_model,
+      system_prompt: data.system_prompt,
+      model_config: data.model_config ?? {},
+      rag_enabled: data.rag_enabled ?? true,
+      retrieval_k: data.retrieval_k ?? 5,
+      score_threshold: data.score_threshold ?? 0.7,
+      context_window: data.context_window ?? 4000,
+      welcome_message: data.welcome_message,
+      fallback_message: data.fallback_message,
+      performance_metrics: data.performance_metrics ?? {},
+      created_at: new Date(data.created_at),
+      updated_at: new Date(data.updated_at),
+      created_by: data.created_by
+    } as IChatbotInstance;
   }
 
   // Getters

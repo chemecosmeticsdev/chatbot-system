@@ -385,7 +385,7 @@ export class SentryUtils {
     // Return a mock transaction object for compatibility
     return {
       setStatus: (status: string) => {},
-      setData: (data: any) => {},
+      setData: (key: string, value: any) => {},
       finish: () => {}
     };
   }
