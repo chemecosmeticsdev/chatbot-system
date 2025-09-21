@@ -39,7 +39,10 @@
       "Bash(npx:*)",
       "Bash(npm run test:e2e:*)",
       "Bash(npm ci:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git show-branch:*)",
+      "Bash(git remote:*)",
+      "mcp__playwright__get-context"
     ],
     "deny": [],
     "ask": []
@@ -95,5 +98,6 @@
         ]
       }
     ]
-  }
+  },
+  "disableAllHooks": true
 }

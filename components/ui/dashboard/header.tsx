@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment, useState } from 'react';
+import { Menu, Transition } from '@headlessui/react';
 
 // Temporary stubs for Stack Auth
 // TODO: Replace with real hooks when @stackframe/stack is installed

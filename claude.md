@@ -579,6 +579,49 @@ LLAMAINDEX_API_KEY=<llamaindex_api_key>
 - **Security Incident Detection**: Automated detection of suspicious activities
 - **Compliance Monitoring**: GDPR, data retention, and security policy compliance
 
+## Git Branch Management Strategy
+
+### Branch Structure
+- **`main`**: Production deployment branch (AWS Amplify)
+- **`feature/complete-chatbot-system`**: Active development branch with complete implementation
+- **`archive/project-specifications`**: Archived planning and specification documents
+
+### Branch History and Purpose
+
+#### Active Branches
+- **`main`**: Contains the deployed version with basic starter functionality. Currently has build errors that will be addressed after feature development is complete.
+- **`feature/complete-chatbot-system`**: Primary development branch containing:
+  - Complete chatbot management system (169 files, 54,000+ lines)
+  - S3 configuration fixes
+  - Database schema and TDD foundation
+  - Core chatbot management functionality
+
+#### Archived Branches
+- **`archive/project-specifications`**: Preserved planning documentation including:
+  - Complete project specifications (64 numbered tasks T001-T064)
+  - API contracts and data models
+  - Claude Code hooks and automation scripts
+  - PowerShell utilities and project constitution
+  - Research documents and quickstart guides
+
+### Branch Management Decisions (2025-09-21)
+**Decision**: Archived `001-refer-to-these` branch to `archive/project-specifications` to:
+1. **Preserve Planning History**: Maintain complete project blueprint and task management system
+2. **Clean Development Focus**: Keep active development branch focused on implementation
+3. **Historical Reference**: Enable future reference to original specifications and planning documents
+4. **Separate Concerns**: Maintain clear separation between planning artifacts and implementation code
+
+### Development Workflow
+1. **Primary Development**: Use `feature/complete-chatbot-system` for all active development
+2. **Planning Reference**: Access archived specifications in `archive/project-specifications` when needed
+3. **Production Deployment**: Merge stable features to `main` branch for AWS Amplify deployment
+4. **Specification Updates**: Create new planning branches if major architectural changes are needed
+
+### Branch Access
+- **Active Development**: `git checkout feature/complete-chatbot-system`
+- **Planning Reference**: `git checkout archive/project-specifications` (read-only)
+- **Production**: `git checkout main` (for deployment fixes only)
+
 ## Commands Reference
 
 ### Development
