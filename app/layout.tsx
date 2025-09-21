@@ -4,8 +4,8 @@ import { stackServerApp } from "../stack";
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Chatbot Starter - API Integration Tests',
-  description: 'Testing all API integrations for the chatbot system',
+  title: 'ChatBot Manager - Professional AI Chatbot Platform',
+  description: 'Create, deploy, and manage intelligent AI chatbots with advanced knowledge management, multi-model support, and comprehensive analytics.',
 }
 
 export default function RootLayout({
