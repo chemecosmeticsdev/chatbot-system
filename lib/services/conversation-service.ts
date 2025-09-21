@@ -766,9 +766,9 @@ export class ConversationService {
     const result = await this.client.query(messageCountQuery, [sessionId]);
     const messageCount = parseInt(result.rows[0].count);
 
-    if (messageCount >= limits.max_messages) {
+    if (messageCount >= limits.MAX_MESSAGES_PER_SESSION) {
       throw new ConversationError(
-        `Session has reached maximum message limit (${limits.max_messages})`,
+        `Session has reached maximum message limit (${limits.MAX_MESSAGES_PER_SESSION})`,
         { message_count: messageCount, platform }
       );
     }

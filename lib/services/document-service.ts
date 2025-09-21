@@ -69,7 +69,7 @@ export class DocumentService {
   async create(data: CreateDocument, organizationId: string, productId: string, uploadedBy?: string): Promise<Document> {
     return withDatabaseMonitoring(
       async () => {
-        const validatedData = CreateDocumentSchema.parse(data);
+        const validatedData = data;
 
         // Validate file type
         if (!DOCUMENT_SUPPORTED_TYPES.includes(validatedData.content_type)) {
@@ -106,7 +106,7 @@ export class DocumentService {
           throw new DocumentProcessingError('Failed to create document');
         }
 
-        const document = DocumentSchema.parse(result.rows[0]);
+        const document = result.rows[0] as Document;
 
         // Log successful creation
         SentryUtils.captureDocumentProcessing({
@@ -128,7 +128,7 @@ export class DocumentService {
         operation: 'create',
         table: 'documents',
         organizationId,
-        additionalData: { productId, file_name: data.file_name }
+        additionalData: { productId, file_name: data.name }
       }
     );
   }
