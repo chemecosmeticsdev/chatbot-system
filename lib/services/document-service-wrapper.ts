@@ -76,8 +76,8 @@ export class DocumentServiceWrapper {
     limit: number = 20
   ) {
     const offset = (page - 1) * limit;
-    let whereConditions = ['organization_id = $1'];
-    let queryParams: any[] = [organizationId];
+    const whereConditions = ['organization_id = $1'];
+    const queryParams: any[] = [organizationId];
     let paramIndex = 2;
 
     // Apply filters
@@ -149,7 +149,7 @@ export class DocumentServiceWrapper {
 
     // Simulate OCR processing based on file type
     let extractedText = '';
-    let confidence = 0.95;
+    const confidence = 0.95;
 
     if (document.mime_type === 'application/pdf') {
       extractedText = `Extracted text from ${document.filename}. This is a placeholder for actual OCR results from PDF processing.`;

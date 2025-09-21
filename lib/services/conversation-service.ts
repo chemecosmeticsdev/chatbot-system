@@ -236,8 +236,8 @@ export class ConversationService {
     return withDatabaseMonitoring(
       async () => {
         const offset = (page - 1) * limit;
-        let whereConditions = ['ci.organization_id = $1'];
-        let queryParams: any[] = [organizationId];
+        const whereConditions = ['ci.organization_id = $1'];
+        const queryParams: any[] = [organizationId];
         let paramIndex = 2;
 
         // Apply filters
@@ -660,8 +660,8 @@ export class ConversationService {
       async () => {
         const daysBack = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
 
-        let whereConditions = ['ci.organization_id = $1'];
-        let queryParams: any[] = [organizationId];
+        const whereConditions = ['ci.organization_id = $1'];
+        const queryParams: any[] = [organizationId];
         let paramIndex = 2;
 
         if (chatbotId) {

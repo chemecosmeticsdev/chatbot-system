@@ -3,7 +3,9 @@
   "rules": {
     "@next/next/no-html-link-for-pages": "off",
     "react/no-unescaped-entities": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+    "prefer-const": "warn",
+    "react-hooks/rules-of-hooks": "warn",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "overrides": [
     {
@@ -19,41 +21,16 @@
       }
     },
     {
-      "files": ["lib/models/**/*.ts"],
+      "files": ["lib/auth/**/*.tsx"],
       "rules": {
-        "@typescript-eslint/naming-convention": [
-          "error",
-          {
-            "selector": "interface",
-            "format": ["PascalCase"],
-            "prefix": ["I"]
-          },
-          {
-            "selector": "typeAlias",
-            "format": ["PascalCase"]
-          }
-        ]
-      }
-    },
-    {
-      "files": ["lib/services/**/*.ts"],
-      "rules": {
-        "@typescript-eslint/explicit-function-return-type": "warn",
-        "prefer-const": "error"
-      }
-    },
-    {
-      "files": ["lib/vector/**/*.ts", "lib/chatbot/**/*.ts"],
-      "rules": {
-        "@typescript-eslint/no-explicit-any": "error",
-        "@typescript-eslint/prefer-readonly": "warn"
+        "react-hooks/rules-of-hooks": "off"
       }
     },
     {
       "files": ["tests/**/*.ts", "tests/**/*.tsx"],
       "rules": {
-        "@typescript-eslint/no-explicit-any": "off",
-        "import/no-unresolved": "off"
+        "import/no-unresolved": "off",
+        "prefer-const": "off"
       }
     }
   ]

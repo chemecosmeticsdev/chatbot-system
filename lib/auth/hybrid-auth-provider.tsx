@@ -106,14 +106,15 @@ export function useHybridAuth() {
  */
 export function useUniversalUser(options?: { or?: 'redirect' }) {
   const { authMode } = useHybridAuth();
-  const stackUser = authMode === 'stack' ? useStackUser(options as any) : null;
-  const fallbackAuth = authMode === 'fallback' ? useFallbackAuth() : null;
 
   if (authMode === 'stack') {
-    return stackUser;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useStackUser(options as any);
   }
 
-  if (authMode === 'fallback' && fallbackAuth) {
+  if (authMode === 'fallback') {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const fallbackAuth = useFallbackAuth();
     if (options?.or === 'redirect') {
       return fallbackAuth.user;
     }

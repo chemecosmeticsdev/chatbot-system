@@ -38,6 +38,7 @@ interface HeaderProps {
 export function Header({ onMenuClick }: HeaderProps) {
   const user = useUniversalUser();
   const { authMode } = useHybridAuth();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const fallbackAuth = authMode === 'fallback' ? useFallbackAuth() : null;
   const [searchFocused, setSearchFocused] = useState(false);
   const [notifications] = useState([

@@ -175,8 +175,8 @@ export class DocumentService {
     return withDatabaseMonitoring(
       async () => {
         const offset = (page - 1) * limit;
-        let whereConditions = ['organization_id = $1'];
-        let queryParams: any[] = [organizationId];
+        const whereConditions = ['organization_id = $1'];
+        const queryParams: any[] = [organizationId];
         let paramIndex = 2;
 
         // Apply filters
