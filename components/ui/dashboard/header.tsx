@@ -1,32 +1,26 @@
 'use client';
 
-import { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-
-// Temporary stubs for Stack Auth
-// TODO: Replace with real hooks when @stackframe/stack is installed
-const useUserStub = () => null;
-const UserButtonStub = () => (
-  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs">
-    U
-  </div>
-);
+import { useState } from 'react';
+import { useUser } from '@stackframe/stack';
 import { cn } from '@/lib/utils';
 import {
-  Bars3Icon,
-  BellIcon,
-  MagnifyingGlassIcon,
-  GlobeAltIcon,
-  SunIcon,
-  MoonIcon,
-  CommandLineIcon,
-  Cog6ToothIcon,
-} from '@heroicons/react/24/outline';
+  Menu,
+  Bell,
+  Search,
+  Globe,
+  Sun,
+  Moon,
+  Terminal,
+  Settings,
+  User,
+  LogOut,
+  ChevronDown,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuGroup } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -41,7 +35,7 @@ interface HeaderProps {
  * and theme/language switching. Optimized for mobile and accessibility.
  */
 export function Header({ onMenuClick }: HeaderProps) {
-  const user = useUserStub();
+  const user = useUser();
   const [searchFocused, setSearchFocused] = useState(false);
   const [notifications] = useState([
     { id: 1, title: 'New chatbot deployed', message: 'Customer Support Assistant is now live', time: '2 min ago', unread: true },
@@ -59,7 +53,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         onClick={onMenuClick}
       >
         <span className="sr-only">Open sidebar</span>
-        <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+        <Menu className="h-6 w-6" aria-hidden="true" />
       </button>
 
       {/* Separator */}
@@ -71,7 +65,7 @@ export function Header({ onMenuClick }: HeaderProps) {
           <label htmlFor="search-field" className="sr-only">
             Search
           </label>
-          <MagnifyingGlassIcon
+          <Search
             className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
             aria-hidden="true"
           />
@@ -86,117 +80,124 @@ export function Header({ onMenuClick }: HeaderProps) {
 
         <div className="flex items-center gap-x-4 lg:gap-x-6">
           {/* Language switcher */}
-          <Menu as="div" className="relative">
-            <Menu.Button className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-              <span className="sr-only">Switch language</span>
-              <GlobeAltIcon className="h-6 w-6" aria-hidden="true" />
-            </Menu.Button>
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-            >
-              <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      className={cn(
-                        'block px-3 py-1 text-sm leading-6 text-gray-900',
-                        active && 'bg-gray-50'
-                      )}
-                    >
-                      🇺🇸 English
-                    </button>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      className={cn(
-                        'block px-3 py-1 text-sm leading-6 text-gray-900',
-                        active && 'bg-gray-50'
-                      )}
-                    >
-                      🇹🇭 ไทย
-                    </button>
-                  )}
-                </Menu.Item>
-              </Menu.Items>
-            </Transition>
-          </Menu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Globe className="h-5 w-5" />
+                <span className="sr-only">Switch language</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-32">
+              <DropdownMenuLabel>Language</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                🇺🇸 English
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                🇹🇭 ไทย
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Theme switcher */}
-          <Menu as="div" className="relative">
-            <Menu.Button className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-              <span className="sr-only">Switch theme</span>
-              <SunIcon className="h-6 w-6" aria-hidden="true" />
-            </Menu.Button>
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-            >
-              <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      className={cn(
-                        'flex items-center gap-2 px-3 py-1 text-sm leading-6 text-gray-900',
-                        active && 'bg-gray-50'
-                      )}
-                    >
-                      <SunIcon className="h-4 w-4" />
-                      Light
-                    </button>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      className={cn(
-                        'flex items-center gap-2 px-3 py-1 text-sm leading-6 text-gray-900',
-                        active && 'bg-gray-50'
-                      )}
-                    >
-                      <MoonIcon className="h-4 w-4" />
-                      Dark
-                    </button>
-                  )}
-                </Menu.Item>
-              </Menu.Items>
-            </Transition>
-          </Menu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Sun className="h-5 w-5" />
+                <span className="sr-only">Switch theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-32">
+              <DropdownMenuLabel>Theme</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Sun className="mr-2 h-4 w-4" />
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Moon className="mr-2 h-4 w-4" />
+                Dark
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Notifications */}
-          <button
-            type="button"
-            className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-          >
-            <span className="sr-only">View notifications</span>
-            <BellIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9 relative">
+                  <Bell className="h-5 w-5" />
+                  {unreadCount > 0 && (
+                    <Badge
+                      variant="destructive"
+                      className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center"
+                    >
+                      {unreadCount}
+                    </Badge>
+                  )}
+                  <span className="sr-only">View notifications</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Notifications ({unreadCount} unread)</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
           {/* Separator */}
-          <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
+          <Separator orientation="vertical" className="hidden lg:block lg:h-6" />
 
           {/* User menu */}
           <div className="flex items-center">
             {user ? (
-              <div className="flex items-center gap-x-3">
-                <div className="hidden lg:flex lg:flex-col lg:items-end lg:text-sm lg:leading-6">
-                  <p className="text-gray-900">{user.displayName || 'User'}</p>
-                  <p className="text-xs text-gray-500">{user.primaryEmail}</p>
-                </div>
-                <UserButtonStub />
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage
+                        src={user.profileImageUrl || ''}
+                        alt={user.displayName || 'User avatar'}
+                      />
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {user.displayName
+                          ? user.displayName.charAt(0).toUpperCase()
+                          : user.primaryEmail?.charAt(0).toUpperCase() || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.displayName || 'User'}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.primaryEmail}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-600 focus:text-red-600"
+                    onClick={() => user.signOut()}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <div className="flex items-center gap-x-2">
                 <Button variant="ghost" size="sm">
