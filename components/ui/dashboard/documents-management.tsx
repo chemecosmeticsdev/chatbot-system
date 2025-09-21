@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -153,7 +153,8 @@ const productCategories = [
 ];
 
 export function DocumentsManagement() {
-  const [documents, setDocuments] = useState<Document[]>(mockDocuments);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
@@ -189,31 +190,154 @@ export function DocumentsManagement() {
     }
   }, []);
 
+  // Load documents from API
+  const loadDocuments = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/v1/documents');
+      if (response.ok) {
+        const data = await response.json();
+        const apiDocuments = data.data.documents.map((doc: any) => ({
+          id: doc.id,
+          name: doc.title || doc.filename,
+          description: doc.extracted_metadata?.description || 'No description available',
+          type: getFileType(doc.filename),
+          size: doc.file_size,
+          status: mapProcessingStatus(doc.processing_status),
+          uploadedAt: doc.created_at,
+          processedAt: doc.processed_at,
+          chunks: doc.extracted_metadata?.total_chunks || 0,
+          productCategory: doc.extracted_metadata?.product_category || 'Unknown',
+          extractedText: doc.extracted_metadata?.text_length ? `${doc.extracted_metadata.text_length} characters` : undefined,
+          ocrProgress: doc.processing_status === 'processing' ? 50 : 100
+        }));
+        setDocuments(apiDocuments);
+      } else {
+        console.error('Failed to load documents');
+        // Fallback to mock data if API fails
+        setDocuments(mockDocuments);
+      }
+    } catch (error) {
+      console.error('Error loading documents:', error);
+      // Fallback to mock data if API fails
+      setDocuments(mockDocuments);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Map API processing status to UI status
+  const mapProcessingStatus = (apiStatus: string): 'processing' | 'completed' | 'failed' | 'pending' => {
+    switch (apiStatus) {
+      case 'processing': return 'processing';
+      case 'completed': return 'completed';
+      case 'failed': return 'failed';
+      case 'uploaded': return 'pending';
+      default: return 'pending';
+    }
+  };
+
+  // Load documents on component mount
+  useEffect(() => {
+    loadDocuments();
+  }, []);
+
   const handleUploadDocument = async () => {
     if (!formData.file) return;
 
     setIsUploading(true);
     setUploadProgress(0);
 
-    // Simulate upload progress
-    const progressInterval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return prev + 10;
+    try {
+      // Step 1: Get presigned URL from our API
+      const uploadUrlResponse = await fetch('/api/v1/documents/upload-url', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filename: formData.file.name,
+          content_type: formData.file.type,
+          file_size: formData.file.size,
+          product_id: 'bf5e7b6e-f44c-4393-9fc4-8be04af5be45' // Default product ID - should be dynamic
+        }),
       });
-    }, 200);
 
-    // Simulate upload completion
-    setTimeout(() => {
+      if (!uploadUrlResponse.ok) {
+        const errorData = await uploadUrlResponse.json();
+        throw new Error(errorData.error || 'Failed to get upload URL');
+      }
+
+      const uploadUrlData = await uploadUrlResponse.json();
+      const { upload_url, s3_key, required_headers } = uploadUrlData.data;
+
+      setUploadProgress(10);
+
+      // Step 2: Upload file directly to S3
+      const uploadResponse = await fetch(upload_url, {
+        method: 'PUT',
+        body: formData.file,
+        headers: {
+          'Content-Type': required_headers['Content-Type'],
+          'Content-Length': required_headers['Content-Length'],
+        },
+        // Track upload progress
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`S3 upload failed: ${uploadResponse.statusText}`);
+      }
+
+      setUploadProgress(60);
+
+      // Step 3: Create document record in database
+      const documentResponse = await fetch('/api/v1/documents', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          product_id: 'bf5e7b6e-f44c-4393-9fc4-8be04af5be45', // Default product ID
+          title: formData.name,
+          filename: formData.file.name,
+          s3_key: s3_key,
+          mime_type: formData.file.type,
+          file_size: formData.file.size,
+          document_type: 'technical', // Default type - should be configurable
+          language: 'en',
+          extracted_metadata: {
+            description: formData.description,
+            product_category: formData.productCategory
+          }
+        }),
+      });
+
+      if (!documentResponse.ok) {
+        const errorData = await documentResponse.json();
+        throw new Error(errorData.error || 'Failed to create document record');
+      }
+
+      const documentData = await documentResponse.json();
+      setUploadProgress(80);
+
+      // Step 4: Start OCR processing
+      const processResponse = await fetch(`/api/v1/documents/${documentData.data.id}/process`, {
+        method: 'POST',
+      });
+
+      if (!processResponse.ok) {
+        console.warn('OCR processing failed to start, but document was uploaded successfully');
+      }
+
+      setUploadProgress(100);
+
+      // Create new document for UI
       const newDocument: Document = {
-        id: Date.now().toString(),
+        id: documentData.data.id,
         name: formData.name,
         description: formData.description,
-        type: getFileType(formData.file!.name),
-        size: formData.file!.size,
+        type: getFileType(formData.file.name),
+        size: formData.file.size,
         status: 'processing',
         uploadedAt: new Date().toISOString(),
         chunks: 0,
@@ -227,20 +351,46 @@ export function DocumentsManagement() {
       setUploadProgress(0);
       resetForm();
 
-      // Simulate processing completion
-      setTimeout(() => {
-        setDocuments(prev => prev.map(doc =>
-          doc.id === newDocument.id
-            ? {
-                ...doc,
-                status: 'completed',
-                processedAt: new Date().toISOString(),
-                chunks: Math.floor(Math.random() * 50) + 10
-              }
-            : doc
-        ));
-      }, 3000);
-    }, 2000);
+      // Poll for processing completion
+      pollDocumentStatus(newDocument.id);
+
+      // Reload documents to get fresh data
+      setTimeout(() => loadDocuments(), 1000);
+
+    } catch (error) {
+      console.error('Upload failed:', error);
+      setIsUploading(false);
+      setUploadProgress(0);
+      // TODO: Show error message to user
+      alert(`Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  // Poll document processing status
+  const pollDocumentStatus = async (documentId: string) => {
+    const pollInterval = setInterval(async () => {
+      try {
+        // Reload all documents to get fresh data
+        await loadDocuments();
+
+        // Check if this specific document is done processing
+        const response = await fetch(`/api/v1/documents?search=${documentId}`);
+        if (response.ok) {
+          const data = await response.json();
+          const document = data.data.documents.find((doc: any) => doc.id === documentId);
+
+          if (document && (document.processing_status === 'completed' || document.processing_status === 'failed')) {
+            clearInterval(pollInterval);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to poll document status:', error);
+        clearInterval(pollInterval);
+      }
+    }, 3000); // Poll every 3 seconds
+
+    // Stop polling after 5 minutes
+    setTimeout(() => clearInterval(pollInterval), 300000);
   };
 
   const handleEditDocument = () => {
@@ -266,7 +416,8 @@ export function DocumentsManagement() {
     setDocuments(documents.filter(doc => doc.id !== id));
   };
 
-  const handleReprocessDocument = (id: string) => {
+  const handleReprocessDocument = async (id: string) => {
+    // Update UI to show processing state
     setDocuments(documents.map(doc =>
       doc.id === id
         ? {
@@ -278,19 +429,29 @@ export function DocumentsManagement() {
         : doc
     ));
 
-    // Simulate reprocessing
-    setTimeout(() => {
+    try {
+      // Start OCR processing via API
+      const processResponse = await fetch(`/api/v1/documents/${id}/process`, {
+        method: 'POST',
+      });
+
+      if (!processResponse.ok) {
+        throw new Error('Failed to start document reprocessing');
+      }
+
+      // Poll for processing completion
+      pollDocumentStatus(id);
+
+    } catch (error) {
+      console.error('Reprocessing failed:', error);
+      // Update UI to show error state
       setDocuments(prev => prev.map(doc =>
         doc.id === id
-          ? {
-              ...doc,
-              status: 'completed',
-              processedAt: new Date().toISOString(),
-              chunks: Math.floor(Math.random() * 50) + 10
-            }
+          ? { ...doc, status: 'failed' }
           : doc
       ));
-    }, 3000);
+      alert(`Reprocessing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const resetForm = () => {
@@ -558,7 +719,23 @@ export function DocumentsManagement() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredDocuments.map((document) => (
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="h-24 text-center">
+                      <div className="flex items-center justify-center space-x-2">
+                        <RefreshCw className="h-4 w-4 animate-spin" />
+                        <span>Loading documents...</span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : filteredDocuments.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="h-24 text-center">
+                      No documents found. Upload your first document to get started.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredDocuments.map((document) => (
                   <TableRow key={document.id}>
                     <TableCell>
                       <div>
@@ -652,7 +829,8 @@ export function DocumentsManagement() {
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                ))}
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>

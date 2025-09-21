@@ -135,7 +135,6 @@ export class DocumentServiceWrapper {
   }
 
   async processOCR(id: string, organizationId: string) {
-    // Simplified OCR processing - similar to our test implementation
     const document = await this.getById(id, organizationId);
     if (!document) {
       throw new Error(`Document not found: ${id}`);
@@ -147,44 +146,169 @@ export class DocumentServiceWrapper {
       [id]
     );
 
-    // Simulate OCR processing based on file type
-    let extractedText = '';
-    const confidence = 0.95;
+    try {
+      // Import and use the real OCR service
+      const { OCRService } = await import('./ocr-service');
+      const ocrService = new OCRService();
 
-    if (document.mime_type === 'application/pdf') {
-      extractedText = `Extracted text from ${document.filename}. This is a placeholder for actual OCR results from PDF processing.`;
-    } else if (document.mime_type.startsWith('image/')) {
-      extractedText = `Extracted text from ${document.filename}. This is a placeholder for actual OCR results from image processing.`;
-    } else {
-      throw new Error(`Unsupported file type for OCR: ${document.mime_type}`);
+      // Check if file type is supported
+      if (!OCRService.isSupportedFileType(document.mime_type)) {
+        throw new Error(`Unsupported file type for OCR: ${document.mime_type}`);
+      }
+
+      // Process document with OCR service
+      const ocrResult = await ocrService.processDocument({
+        id: document.id,
+        s3_key: document.s3_key,
+        mime_type: document.mime_type,
+        filename: document.filename,
+        file_size: document.file_size
+      });
+
+      if (!ocrResult.success) {
+        throw new Error(ocrResult.error || 'OCR processing failed');
+      }
+
+      // Update to completed status with real OCR results
+      await this.client.query(
+        `UPDATE documents
+         SET processing_status = 'completed',
+             ocr_confidence = $1,
+             extracted_metadata = $2,
+             processed_at = NOW(),
+             updated_at = NOW()
+         WHERE id = $3`,
+        [
+          ocrResult.confidence || 0.85,
+          JSON.stringify({
+            ...document.extracted_metadata,
+            ocr_completed: true,
+            ocr_provider: ocrResult.provider,
+            text_length: ocrResult.text?.length || 0,
+            confidence: ocrResult.confidence || 0.85,
+            processing_timestamp: new Date().toISOString(),
+            ocr_metadata: ocrResult.metadata || {}
+          }),
+          id
+        ]
+      );
+
+      // Store extracted text in a separate table
+      if (ocrResult.text) {
+        await this.client.query(
+          `INSERT INTO document_extracted_text (document_id, extracted_text, confidence, provider, created_at)
+           VALUES ($1, $2, $3, $4, NOW())
+           ON CONFLICT (document_id)
+           DO UPDATE SET
+             extracted_text = EXCLUDED.extracted_text,
+             confidence = EXCLUDED.confidence,
+             provider = EXCLUDED.provider,
+             updated_at = NOW()`,
+          [id, ocrResult.text, ocrResult.confidence || 0.85, ocrResult.provider || 'unknown']
+        );
+
+        // Process for vector storage (chunk + embed + store)
+        try {
+          const { VectorService } = await import('./vector-service');
+          const vectorService = new VectorService(this.client);
+
+          const vectorResult = await vectorService.processDocumentForVector(
+            id,
+            ocrResult.text,
+            {
+              chunk_size: 1000,
+              chunk_overlap: 200,
+              preserve_paragraphs: true
+            }
+          );
+
+          if (vectorResult.success) {
+            // Update document metadata with chunking information
+            await this.client.query(
+              `UPDATE documents
+               SET extracted_metadata = $1
+               WHERE id = $2`,
+              [
+                JSON.stringify({
+                  ...document.extracted_metadata,
+                  ocr_completed: true,
+                  ocr_provider: ocrResult.provider,
+                  text_length: ocrResult.text?.length || 0,
+                  confidence: ocrResult.confidence || 0.85,
+                  processing_timestamp: new Date().toISOString(),
+                  ocr_metadata: ocrResult.metadata || {},
+                  // Vector processing info
+                  vector_processed: true,
+                  total_chunks: vectorResult.total_chunks || 0,
+                  total_tokens: vectorResult.total_tokens || 0,
+                  chunking_completed_at: new Date().toISOString()
+                }),
+                id
+              ]
+            );
+          } else {
+            console.warn('Vector processing failed:', vectorResult.error);
+            // Update metadata to indicate vector processing failed
+            await this.client.query(
+              `UPDATE documents
+               SET extracted_metadata = $1
+               WHERE id = $2`,
+              [
+                JSON.stringify({
+                  ...document.extracted_metadata,
+                  ocr_completed: true,
+                  ocr_provider: ocrResult.provider,
+                  text_length: ocrResult.text?.length || 0,
+                  confidence: ocrResult.confidence || 0.85,
+                  processing_timestamp: new Date().toISOString(),
+                  ocr_metadata: ocrResult.metadata || {},
+                  // Vector processing info
+                  vector_processed: false,
+                  vector_error: vectorResult.error,
+                  chunking_failed_at: new Date().toISOString()
+                }),
+                id
+              ]
+            );
+          }
+        } catch (vectorError) {
+          console.error('Vector processing error:', vectorError);
+          // Don't fail the entire OCR process if vector processing fails
+        }
+      }
+
+      return {
+        success: true,
+        text: ocrResult.text,
+        confidence: ocrResult.confidence || 0.85,
+        provider: ocrResult.provider
+      };
+
+    } catch (error) {
+      console.error('OCR processing error:', error);
+
+      // Update status to failed
+      await this.client.query(
+        `UPDATE documents
+         SET processing_status = 'failed',
+             extracted_metadata = $1,
+             updated_at = NOW()
+         WHERE id = $2`,
+        [
+          JSON.stringify({
+            ...document.extracted_metadata,
+            ocr_failed: true,
+            error_message: error instanceof Error ? error.message : 'Unknown error',
+            failed_at: new Date().toISOString()
+          }),
+          id
+        ]
+      );
+
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
     }
-
-    // Update to completed status
-    await this.client.query(
-      `UPDATE documents
-       SET processing_status = 'completed',
-           ocr_confidence = $1,
-           extracted_metadata = $2,
-           processed_at = NOW(),
-           updated_at = NOW()
-       WHERE id = $3`,
-      [
-        confidence,
-        JSON.stringify({
-          ...document.extracted_metadata,
-          ocr_completed: true,
-          text_length: extractedText.length,
-          confidence: confidence,
-          processing_timestamp: new Date().toISOString()
-        }),
-        id
-      ]
-    );
-
-    return {
-      success: true,
-      text: extractedText,
-      confidence: confidence
-    };
   }
 }
