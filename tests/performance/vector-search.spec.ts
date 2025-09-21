@@ -532,10 +532,10 @@ test.describe('Vector Search Performance Tests', () => {
       const dataset = tester.generateTestDataset(100);
       await tester.setupTestData(dataset);
 
-      const results = await tester.vectorService.similaritySearch(
+      const results = await (tester as any).vectorService.similaritySearch(
         'product specifications',
-        tester.testChatbotId,
-        tester.testSessionId,
+        (tester as any).testChatbotId,
+        (tester as any).testSessionId,
         { max_results: 10, min_similarity: 0.1 }
       );
 
@@ -545,7 +545,7 @@ test.describe('Vector Search Performance Tests', () => {
       }
 
       // All results should meet minimum similarity threshold
-      results.forEach(result => {
+      results.forEach((result: any) => {
         expect(result.similarity).toBeGreaterThanOrEqual(0.1);
       });
     });
@@ -560,10 +560,10 @@ test.describe('Vector Search Performance Tests', () => {
         const queries = Array.from({ length: 100 }, (_, i) => `test query ${i}`);
 
         for (const query of queries) {
-          await tester.vectorService.similaritySearch(
+          await (tester as any).vectorService.similaritySearch(
             query,
-            tester.testChatbotId,
-            tester.testSessionId,
+            (tester as any).testChatbotId,
+            (tester as any).testSessionId,
             { max_results: 5 }
           );
         }
@@ -587,10 +587,10 @@ test.describe('Vector Search Performance Tests', () => {
       // Perform multiple search operations
       for (let batch = 0; batch < 5; batch++) {
         for (let i = 0; i < 20; i++) {
-          await tester.vectorService.similaritySearch(
+          await (tester as any).vectorService.similaritySearch(
             `memory test query ${batch}-${i}`,
-            tester.testChatbotId,
-            tester.testSessionId,
+            (tester as any).testChatbotId,
+            (tester as any).testSessionId,
             { max_results: 3 }
           );
         }
@@ -632,10 +632,10 @@ test.describe('Vector Search Performance Tests', () => {
       `;
 
       // Generate a test embedding
-      const testEmbedding = await tester.vectorService.generateEmbedding('test query for index performance');
+      const testEmbedding = await (tester as any).vectorService.generateEmbedding('test query for index performance');
 
-      const result = await tester.dbClient.query(query, [JSON.stringify(testEmbedding.embedding)]);
-      const executionPlan = result.rows.map(row => row['QUERY PLAN']).join('\n');
+      const result = await (tester as any).dbClient.query(query, [JSON.stringify(testEmbedding.embedding)]);
+      const executionPlan = result.rows.map((row: any) => row['QUERY PLAN']).join('\n');
 
       console.log('📊 Query Execution Plan:', executionPlan);
 
@@ -661,10 +661,10 @@ test.describe('Vector Search Performance Tests', () => {
       for (const threshold of thresholds) {
         const startTime = performance.now();
 
-        const results = await tester.vectorService.similaritySearch(
+        const results = await (tester as any).vectorService.similaritySearch(
           query,
-          tester.testChatbotId,
-          tester.testSessionId,
+          (tester as any).testChatbotId,
+          (tester as any).testSessionId,
           { max_results: 20, min_similarity: threshold }
         );
 
@@ -676,7 +676,7 @@ test.describe('Vector Search Performance Tests', () => {
         expect(responseTime).toBeLessThan(300);
 
         // Verify all results meet the threshold
-        results.forEach(result => {
+        results.forEach((result: any) => {
           expect(result.similarity).toBeGreaterThanOrEqual(threshold);
         });
       }
@@ -700,10 +700,10 @@ test.describe('Vector Search Performance Tests', () => {
         for (let i = 0; i < 10; i++) {
           const startTime = performance.now();
 
-          await tester.vectorService.hybridSearch(
+          await (tester as any).vectorService.hybridSearch(
             query,
-            tester.testChatbotId,
-            tester.testSessionId,
+            (tester as any).testChatbotId,
+            (tester as any).testSessionId,
             { max_results: 10 },
             0.7, // vector weight
             0.3  // text weight
@@ -784,10 +784,10 @@ test.describe('Vector Search Performance Tests', () => {
       // Take multiple measurements over time
       for (let i = 0; i < 20; i++) {
         const startTime = performance.now();
-        await tester.vectorService.similaritySearch(
+        await (tester as any).vectorService.similaritySearch(
           baselineQuery,
-          tester.testChatbotId,
-          tester.testSessionId
+          (tester as any).testChatbotId,
+          (tester as any).testSessionId
         );
         const responseTime = performance.now() - startTime;
         measurements.push(responseTime);

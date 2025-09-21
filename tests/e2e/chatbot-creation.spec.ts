@@ -118,7 +118,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Verify configuration saved correctly
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.waitForSelector('[data-testid="chatbot-details"]');
 
       await expect(page.locator('[data-testid="model-display"]')).toContainText('Claude 3 Haiku');
@@ -143,7 +143,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Verify higher cost estimation for Sonnet
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await expect(page.locator('[data-testid="model-display"]')).toContainText('Claude 3 Sonnet');
     });
 
@@ -158,7 +158,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.click('[data-testid="create-chatbot-submit"]');
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await expect(page.locator('[data-testid="model-display"]')).toContainText('Titan');
     });
   });
@@ -184,7 +184,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Test RAG functionality
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       // Send test query
@@ -198,7 +198,7 @@ test.describe('Chatbot Creation and Configuration', () => {
 
       // Verify RAG sources are displayed
       const sources = page.locator('[data-testid="source-document"]');
-      await expect(sources).toHaveCountGreaterThan(0);
+      expect(await sources.count()).toBeGreaterThan(0);
 
       // Check retrieval metrics
       await expect(page.locator('[data-testid="retrieval-score"]')).toBeVisible();
@@ -221,7 +221,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Test with complex query
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       await page.fill('[data-testid="test-message-input"]', 'Compare different moisturizers for dry skin with detailed ingredient analysis');
@@ -231,7 +231,7 @@ test.describe('Chatbot Creation and Configuration', () => {
 
       // Should retrieve more sources due to higher K
       const sources = page.locator('[data-testid="source-document"]');
-      await expect(sources).toHaveCountGreaterThanOrEqual(5);
+      expect(await sources.count()).toBeGreaterThanOrEqual(5);
     });
 
     test('should test score threshold filtering', async ({ page }) => {
@@ -248,7 +248,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Test with off-topic query
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       await page.fill('[data-testid="test-message-input"]', 'What is the weather like today?');
@@ -281,7 +281,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Test filtering effectiveness
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       // Query about skincare (should find results)
@@ -290,7 +290,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="response-message"]', { timeout: 30000 });
 
       const sources = page.locator('[data-testid="source-document"]');
-      await expect(sources).toHaveCountGreaterThan(0);
+      expect(await sources.count()).toBeGreaterThan(0);
 
       // Verify sources are from correct categories
       await expect(page.locator('[data-testid="source-category"]').first()).toContainText(/skincare|cosmetics/);
@@ -312,7 +312,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Test with technical query
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       await page.fill('[data-testid="test-message-input"]', 'What are the safety guidelines for product storage?');
@@ -339,7 +339,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Test multiple conversations
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       const testQueries = [
@@ -380,7 +380,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.click('[data-testid="create-chatbot-submit"]');
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       // Send message and provide feedback
@@ -422,13 +422,13 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Open chatbot in playground
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       // Open a second tab to simulate concurrent usage
       const page2 = await context.newPage();
       await page2.goto('/dashboard/chatbots');
-      await page2.click('[data-testid="chatbot-card"]').first();
+      await page2.locator('[data-testid="chatbot-card"]').first().click();
       await page2.click('[data-testid="metrics-tab"]');
 
       // Send message from first tab
@@ -458,7 +458,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.click('[data-testid="create-chatbot-submit"]');
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       // Send many messages rapidly to trigger rate limiting
@@ -484,7 +484,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.click('[data-testid="create-chatbot-submit"]');
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       // Simulate network error or RAG failure
@@ -552,7 +552,7 @@ test.describe('Chatbot Creation and Configuration', () => {
         await page.waitForSelector('[data-testid="creation-success-message"]');
 
         // Test same query on each model
-        await page.click('[data-testid="chatbot-card"]').first();
+        await page.locator('[data-testid="chatbot-card"]').first().click();
         await page.click('[data-testid="test-playground-tab"]');
 
         await page.fill('[data-testid="test-message-input"]', 'Please provide a detailed explanation of skincare routines for different skin types.');
@@ -582,7 +582,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.click('[data-testid="create-chatbot-submit"]');
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="test-playground-tab"]');
 
       // Initial cost should be 0
@@ -633,7 +633,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await expect(page.locator('[data-testid="chatbot-status"]').first()).toContainText('draft');
 
       // Activate chatbot
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="activate-chatbot"]');
       await page.waitForSelector('[data-testid="activation-confirmation"]');
       await page.click('[data-testid="confirm-activation"]');
@@ -658,7 +658,7 @@ test.describe('Chatbot Creation and Configuration', () => {
       await page.waitForSelector('[data-testid="creation-success-message"]');
 
       // Try to activate
-      await page.click('[data-testid="chatbot-card"]').first();
+      await page.locator('[data-testid="chatbot-card"]').first().click();
       await page.click('[data-testid="activate-chatbot"]');
 
       // Should show validation errors

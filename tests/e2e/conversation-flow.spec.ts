@@ -787,7 +787,7 @@ test.describe('Conversation Flow Edge Cases', () => {
     await conversationHelper.cleanup(testChatbotId, [session.id]);
 
     // Verify session is cleaned up
-    const cleanupResponse = await conversationHelper.page.request.get(`/api/v1/conversations/${session.id}/messages`);
+    const cleanupResponse = await (conversationHelper as any).page.request.get(`/api/v1/conversations/${session.id}/messages`);
     expect(cleanupResponse.status()).toBe(404);
   });
 });
