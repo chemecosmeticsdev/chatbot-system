@@ -35,29 +35,58 @@ export function getBedrockClient(): BedrockRuntimeClient {
 
 export async function testS3Connection(): Promise<{ success: boolean; message: string; data?: any }> {
   try {
+    const config = getConfig();
+
+    // Check if S3 bucket is configured
+    if (!config.S3_BUCKET_NAME) {
+      return {
+        success: false,
+        message: 'S3 bucket not configured - S3_BUCKET_NAME environment variable is required'
+      };
+    }
+
     const s3 = getS3Client();
 
     // Test upload a small text file
     const testContent = `Test file created at ${new Date().toISOString()}`;
     const uploadCommand = new PutObjectCommand({
-      Bucket: 'test-bucket-for-api-validation', // This needs to be a real bucket
+      Bucket: config.S3_BUCKET_NAME,
       Key: `test-${Date.now()}.txt`,
       Body: testContent,
       ContentType: 'text/plain',
     });
 
-    // Note: This will fail if bucket doesn't exist, which is expected for testing
     await s3.send(uploadCommand);
 
     return {
       success: true,
-      message: 'S3 connection and upload successful',
-      data: { uploadedAt: new Date().toISOString() }
+      message: `S3 connection and upload successful to bucket: ${config.S3_BUCKET_NAME}`,
+      data: {
+        bucket: config.S3_BUCKET_NAME,
+        uploadedAt: new Date().toISOString()
+      }
     };
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+    // Provide helpful error messages for common issues
+    if (errorMessage.includes('NoSuchBucket')) {
+      return {
+        success: false,
+        message: `S3 bucket does not exist. Please create bucket or update S3_BUCKET_NAME environment variable. Error: ${errorMessage}`
+      };
+    }
+
+    if (errorMessage.includes('AccessDenied')) {
+      return {
+        success: false,
+        message: `S3 access denied. Please check AWS credentials and bucket permissions. Error: ${errorMessage}`
+      };
+    }
+
     return {
       success: false,
-      message: `S3 connection test: ${error instanceof Error ? error.message : 'Unknown error'}`
+      message: `S3 connection test failed: ${errorMessage}`
     };
   }
 }

@@ -13,6 +13,7 @@ interface Config {
   BAWS_SECRET_ACCESS_KEY: string;
   DEFAULT_REGION: string;
   BEDROCK_REGION: string;
+  S3_BUCKET_NAME: string;
 
   // Third-party APIs
   MISTRAL_API_KEY: string;
@@ -28,6 +29,7 @@ const requiredEnvVars: (keyof Config)[] = [
   'BAWS_SECRET_ACCESS_KEY',
   'DEFAULT_REGION',
   'BEDROCK_REGION',
+  'S3_BUCKET_NAME',
   'MISTRAL_API_KEY',
   'LLAMAINDEX_API_KEY'
 ];
@@ -69,6 +71,7 @@ export function getConfig(): Config {
     BAWS_SECRET_ACCESS_KEY: process.env.BAWS_SECRET_ACCESS_KEY!,
     DEFAULT_REGION: process.env.DEFAULT_REGION!,
     BEDROCK_REGION: process.env.BEDROCK_REGION!,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME!,
     MISTRAL_API_KEY: process.env.MISTRAL_API_KEY!,
     LLAMAINDEX_API_KEY: process.env.LLAMAINDEX_API_KEY!,
   };
@@ -92,6 +95,7 @@ export function getConfigSafe(): Partial<Config> {
     BAWS_SECRET_ACCESS_KEY: process.env.BAWS_SECRET_ACCESS_KEY || undefined,
     DEFAULT_REGION: process.env.DEFAULT_REGION || undefined,
     BEDROCK_REGION: process.env.BEDROCK_REGION || undefined,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME || undefined,
     MISTRAL_API_KEY: process.env.MISTRAL_API_KEY || undefined,
     LLAMAINDEX_API_KEY: process.env.LLAMAINDEX_API_KEY || undefined,
   };
