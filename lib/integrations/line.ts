@@ -352,7 +352,7 @@ export class LineIntegrationService {
 
         // Store integration configuration
         const integrationConfig: Omit<LineIntegrationConfig, 'id' | 'created_at' | 'updated_at'> = {
-          chatbot_id: chatbotId,
+          chatbot_instance_id: chatbotId,
           integration_type: 'line_oa',
           integration_name: `Line OA Integration - ${new Date().toLocaleDateString('th-TH')}`,
           credentials: this.encryptCredentials(validatedConfig),
@@ -436,7 +436,7 @@ export class LineIntegrationService {
 
         // Set webhook URL in Line console (informational)
         SentryUtils.addBreadcrumb('Line integration created', {
-          chatbot_id: chatbotId,
+          chatbot_instance_id: chatbotId,
           integration_id: savedConfig.id,
           webhook_url: webhookUrl,
           organization_id: organizationId
@@ -503,7 +503,7 @@ export class LineIntegrationService {
 
           // Log webhook processing
           SentryUtils.addBreadcrumb('Line webhook processed', {
-            chatbot_id: chatbotId,
+            chatbot_instance_id: chatbotId,
             events_count: events.length,
             processed_count: processedEvents,
             errors_count: errors.length,
@@ -875,7 +875,7 @@ export class LineIntegrationService {
     // Determine chatbot from webhook URL if not provided
     if (!chatbotId) {
       // Extract from webhook context - this would be implemented based on webhook URL structure
-      chatbotId = await this.extractChatbotIdFromEvent(event);
+      chatbotId = (await this.extractChatbotIdFromEvent(event)) || undefined;
     }
 
     if (!chatbotId) {
@@ -918,7 +918,7 @@ export class LineIntegrationService {
       default:
         SentryUtils.addBreadcrumb('Unhandled Line event type', {
           event_type: event.type,
-          chatbot_id: chatbotId,
+          chatbot_instance_id: chatbotId,
           user_id: userId
         });
     }
@@ -953,7 +953,7 @@ export class LineIntegrationService {
 
     // Get or create conversation session
     const session = await this.conversationService.createSession({
-      chatbot_id: chatbotId,
+      chatbot_instance_id: chatbotId,
       user_identifier: userId,
       platform: 'line',
       metadata: {
@@ -1014,7 +1014,7 @@ export class LineIntegrationService {
     const messageResponse = await this.conversationService.addMessage(
       session.id,
       {
-        role: 'user',
+        message_type: 'user_message',
         content: messageContent,
         attachments,
         metadata: {
@@ -1039,7 +1039,7 @@ export class LineIntegrationService {
         await this.conversationService.addMessage(
           session.id,
           {
-            role: 'assistant',
+            message_type: 'bot_response',
             content: botResponse.text,
             metadata: {
               sources: messageResponse.context_sources,
@@ -1143,7 +1143,7 @@ export class LineIntegrationService {
 
     // Log new follower
     SentryUtils.addBreadcrumb('New Line follower', {
-      chatbot_id: chatbotId,
+      chatbot_instance_id: chatbotId,
       user_id: userId,
       user_name: userProfile?.displayName,
       timestamp: event.timestamp
@@ -1165,7 +1165,7 @@ export class LineIntegrationService {
 
     // Get or create conversation session
     const session = await this.conversationService.createSession({
-      chatbot_id: chatbotId,
+      chatbot_instance_id: chatbotId,
       user_identifier: userId,
       platform: 'line',
       metadata: {
@@ -1178,7 +1178,7 @@ export class LineIntegrationService {
     await this.conversationService.addMessage(
       session.id,
       {
-        role: 'user',
+        message_type: 'user_message',
         content: `[POSTBACK] ${postbackData}`,
         metadata: {
           postback_data: postbackData,

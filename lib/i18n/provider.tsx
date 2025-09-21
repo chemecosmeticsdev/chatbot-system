@@ -148,7 +148,7 @@ export function I18nProvider({
   };
 
   // Preload namespaces
-  const preloadNamespaces = async (namespaces: string[]) => {
+  const preloadNamespacesAsync = async (namespaces: string[]) => {
     if (!enablePerformanceMode) return;
 
     try {
@@ -243,7 +243,7 @@ export function RouteNamespaceLoader({ route, children }: RouteNamespaceLoaderPr
       if (unloadedNamespaces.length > 0) {
         setIsLoading(true);
         try {
-          await preloadNamespaces(unloadedNamespaces);
+          await preloadNamespacesAsync(unloadedNamespaces);
         } catch (error) {
           console.warn('Failed to preload route namespaces:', error);
         } finally {
@@ -280,10 +280,10 @@ export function LazyTranslation({ namespace, children, fallback }: LazyTranslati
   useEffect(() => {
     if (!isNamespaceLoaded(namespace)) {
       setIsLoading(true);
-      preloadNamespaces([namespace])
+      preloadNamespacesAsync([namespace])
         .finally(() => setIsLoading(false));
     }
-  }, [namespace, currentLocale, isNamespaceLoaded, preloadNamespaces]);
+  }, [namespace, currentLocale, isNamespaceLoaded, preloadNamespacesAsync]);
 
   if (isLoading) {
     return <>{fallback || <div className="animate-pulse bg-muted h-4 w-24 rounded"></div>}</>;

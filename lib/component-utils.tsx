@@ -8,9 +8,7 @@ import { cn } from "./utils"
 export function createVariants<T extends Record<string, Record<string, string>>>(
   base: string,
   variants: T,
-  defaultVariants?: Partial<{
-    [K in keyof T]: keyof T[K]
-  }>
+  defaultVariants?: any
 ) {
   return cva(base, {
     variants,
@@ -282,7 +280,7 @@ export function createForwardRefComponent<T, P = {}>(
   render: (props: P, ref: React.Ref<T>) => React.ReactNode,
   displayName?: string
 ) {
-  const component = React.forwardRef<T, P>(render)
+  const component = React.forwardRef<T, P>((props, ref) => render(props, ref))
   if (displayName) {
     component.displayName = displayName
   }
