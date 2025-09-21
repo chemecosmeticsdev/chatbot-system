@@ -536,6 +536,13 @@ export class ChatbotService {
 
         return {
           ...chatbot,
+          status: chatbot.status || 'draft',
+          model_config: chatbot.model_config || {},
+          rag_enabled: chatbot.rag_enabled !== undefined ? chatbot.rag_enabled : true,
+          retrieval_k: chatbot.retrieval_k || 5,
+          score_threshold: chatbot.score_threshold || 0.7,
+          context_window: chatbot.context_window || 4000,
+          performance_metrics: chatbot.performance_metrics || {},
           products: row.products || []
         };
       },

@@ -49,13 +49,13 @@ export const ConversationSessionSchema = z.object({
   chatbot_instance_id: z.string().uuid(),
   platform: z.enum(['web', 'line', 'whatsapp', 'messenger', 'api']),
   user_identifier: z.string().min(1).max(255),
-  status: z.enum(['active', 'inactive', 'expired', 'terminated']).optional().default('active'),
+  status: z.enum(['active', 'inactive', 'expired', 'terminated']).optional(),
   start_time: z.date(),
   end_time: z.date().optional(),
-  message_count: z.number().int().min(0).optional().default(0),
+  message_count: z.number().int().min(0).optional(),
   user_satisfaction_score: z.number().min(1).max(5).optional(),
-  session_context: z.record(z.any()).optional().default({}),
-  session_metadata: z.record(z.any()).optional().default({}),
+  session_context: z.record(z.any()).optional(),
+  session_metadata: z.record(z.any()).optional(),
   created_at: z.date(),
   updated_at: z.date()
 });
@@ -64,7 +64,7 @@ export const CreateConversationSessionSchema = z.object({
   chatbot_instance_id: z.string().uuid(),
   platform: z.enum(['web', 'line', 'whatsapp', 'messenger', 'api']),
   user_identifier: z.string().min(1).max(255),
-  session_context: z.record(z.any()).optional().default({}),
+  session_context: z.record(z.any()).optional(),
   session_metadata: z.record(z.any()).optional().default({})
 });
 

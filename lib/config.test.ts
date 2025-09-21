@@ -158,7 +158,7 @@ describe('Configuration Management', () => {
     })
 
     it('should handle completely empty environment', () => {
-      process.env = {}
+      process.env = { NODE_ENV: 'test' } as NodeJS.ProcessEnv
 
       expect(() => getConfigSafe()).not.toThrow()
       const config = getConfigSafe()
@@ -201,21 +201,21 @@ describe('Configuration Management', () => {
 
   describe('Environment detection', () => {
     it('should correctly identify production environment', () => {
-      process.env.NODE_ENV = 'production'
+      ;(process.env as any).NODE_ENV = 'production'
       expect(isProduction()).toBe(true)
       expect(isDevelopment()).toBe(false)
       expect(isTest()).toBe(false)
     })
 
     it('should correctly identify development environment', () => {
-      process.env.NODE_ENV = 'development'
+      ;(process.env as any).NODE_ENV = 'development'
       expect(isProduction()).toBe(false)
       expect(isDevelopment()).toBe(true)
       expect(isTest()).toBe(false)
     })
 
     it('should correctly identify test environment', () => {
-      process.env.NODE_ENV = 'test'
+      ;(process.env as any).NODE_ENV = 'test'
       expect(isProduction()).toBe(false)
       expect(isDevelopment()).toBe(false)
       expect(isTest()).toBe(true)
@@ -224,7 +224,7 @@ describe('Configuration Management', () => {
 
   describe('getConfigAdaptive', () => {
     it('should use safe config in test environment', () => {
-      process.env.NODE_ENV = 'test'
+      ;(process.env as any).NODE_ENV = 'test'
 
       const config = getConfigAdaptive()
 
@@ -233,7 +233,7 @@ describe('Configuration Management', () => {
     })
 
     it('should use development config in development environment', () => {
-      process.env.NODE_ENV = 'development'
+      ;(process.env as any).NODE_ENV = 'development'
 
       const config = getConfigAdaptive()
 
@@ -246,13 +246,13 @@ describe('Configuration Management', () => {
   describe('Integration tests', () => {
     it('should handle rapid environment switching', () => {
       // Simulate switching between environments
-      process.env.NODE_ENV = 'test'
+      ;(process.env as any).NODE_ENV = 'test'
       expect(isTest()).toBe(true)
 
-      process.env.NODE_ENV = 'development'
+      ;(process.env as any).NODE_ENV = 'development'
       expect(isDevelopment()).toBe(true)
 
-      process.env.NODE_ENV = 'production'
+      ;(process.env as any).NODE_ENV = 'production'
       expect(isProduction()).toBe(true)
     })
 

@@ -10,10 +10,11 @@ export function createVariants<T extends Record<string, Record<string, string>>>
   variants: T,
   defaultVariants?: any
 ) {
-  return cva(base, {
+  const config = {
     variants,
     defaultVariants,
-  })
+  };
+  return cva(base, config as any)
 }
 
 /**
@@ -280,7 +281,7 @@ export function createForwardRefComponent<T, P = {}>(
   render: (props: P, ref: React.Ref<T>) => React.ReactNode,
   displayName?: string
 ) {
-  const component = React.forwardRef<T, P>((props, ref) => render(props, ref))
+  const component = React.forwardRef<T, P>((props: any, ref) => render(props as P, ref))
   if (displayName) {
     component.displayName = displayName
   }

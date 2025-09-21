@@ -162,7 +162,7 @@ export function validateTranslations(locale: string, namespace: string): Validat
   } catch (error) {
     return {
       isValid: false,
-      errors: [`Failed to validate translations: ${error.message}`],
+      errors: [`Failed to validate translations: ${error instanceof Error ? error.message : 'Unknown error'}`],
       warnings: [],
       coverage: 0,
       missingKeys: []
@@ -454,7 +454,7 @@ export function suggestTranslationKeys(namespace: string, context: string): stri
     suggestions.push(`${namespace}.${basePath}`);
   }
 
-  return [...new Set(suggestions)].slice(0, 10);
+  return Array.from(new Set(suggestions)).slice(0, 10);
 }
 
 /**
@@ -497,7 +497,7 @@ export function exportForTranslation(
       exportData[namespace] = namespaceData;
 
     } catch (error) {
-      console.warn(`Failed to export namespace ${namespace}:`, error.message);
+      console.warn(`Failed to export namespace ${namespace}:`, error instanceof Error ? error.message : 'Unknown error');
     }
   });
 

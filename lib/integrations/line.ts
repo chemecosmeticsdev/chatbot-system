@@ -352,7 +352,7 @@ export class LineIntegrationService {
 
         // Store integration configuration
         const integrationConfig: Omit<LineIntegrationConfig, 'id' | 'created_at' | 'updated_at'> = {
-          chatbot_instance_id: chatbotId,
+          chatbot_id: chatbotId,
           integration_type: 'line_oa',
           integration_name: `Line OA Integration - ${new Date().toLocaleDateString('th-TH')}`,
           credentials: this.encryptCredentials(validatedConfig),
@@ -956,7 +956,7 @@ export class LineIntegrationService {
       chatbot_instance_id: chatbotId,
       user_identifier: userId,
       platform: 'line',
-      metadata: {
+      session_metadata: {
         line_user_id: userId,
         line_source_type: event.source.type,
         line_group_id: event.source.groupId,
@@ -1014,10 +1014,12 @@ export class LineIntegrationService {
     const messageResponse = await this.conversationService.addMessage(
       session.id,
       {
+        session_id: session.id,
         message_type: 'user_message',
         content: messageContent,
+        content_type: 'text',
         attachments,
-        metadata: {
+        response_metadata: {
           line_message_id: message.id,
           line_message_type: message.type,
           timestamp: event.timestamp
@@ -1039,9 +1041,12 @@ export class LineIntegrationService {
         await this.conversationService.addMessage(
           session.id,
           {
+            session_id: session.id,
             message_type: 'bot_response',
             content: botResponse.text,
-            metadata: {
+            content_type: 'text',
+            attachments: [],
+            response_metadata: {
               sources: messageResponse.context_sources,
               response_type: 'ai_generated'
             }
@@ -1168,7 +1173,7 @@ export class LineIntegrationService {
       chatbot_instance_id: chatbotId,
       user_identifier: userId,
       platform: 'line',
-      metadata: {
+      session_metadata: {
         line_user_id: userId,
         line_source_type: event.source.type
       }
@@ -1178,9 +1183,12 @@ export class LineIntegrationService {
     await this.conversationService.addMessage(
       session.id,
       {
+        session_id: session.id,
         message_type: 'user_message',
         content: `[POSTBACK] ${postbackData}`,
-        metadata: {
+        content_type: 'text',
+        attachments: [],
+        response_metadata: {
           postback_data: postbackData,
           postback_params: event.postback.params,
           timestamp: event.timestamp

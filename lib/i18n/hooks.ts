@@ -6,7 +6,7 @@ import { ThaiDateFormatter, ThaiNumberFormatter, ThaiTextUtils } from './thai-cu
 
 // Enhanced translation hook with Thai cultural formatting
 export function useI18n(namespace?: string) {
-  const { t, i18n } = useTranslation(namespace);
+  const { t, i18n } = useTranslation(namespace as any);
 
   const currentLocale = i18n.language;
   const isThaiLanguage = currentLocale === 'th';

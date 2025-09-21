@@ -84,6 +84,8 @@ export { useTranslation, Trans } from 'react-i18next';
 
 // Quick setup helper
 export const setupI18n = async (locale = 'en') => {
+  // Import i18n here to avoid circular dependencies
+  const { default: i18n } = await import('./config');
   await i18n.changeLanguage(locale);
 
   if (typeof document !== 'undefined') {
@@ -97,9 +99,17 @@ export const setupI18n = async (locale = 'en') => {
 // Version
 export const version = '1.0.0';
 
+// Import all exports for re-export in default
+import { default as i18nInstance, i18nConfig } from './config';
+import { useI18n } from './hooks';
+import { ThaiDateFormatter, ThaiNumberFormatter, ThaiTextUtils } from './thai-cultural';
+import { TranslationManager } from './translation-manager';
+import { translationCache, translationLoader } from './performance';
+import { I18nProvider } from './provider';
+
 // Default export
 export default {
-  i18n,
+  i18n: i18nInstance,
   i18nConfig,
   useI18n,
   ThaiDateFormatter,
