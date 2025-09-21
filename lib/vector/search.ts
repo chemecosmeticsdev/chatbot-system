@@ -29,6 +29,8 @@ export interface SearchFilters {
   max_results?: number;
   limit?: number;
   similarity_threshold?: number;
+  boost_recent?: boolean;
+  include_metadata?: boolean;
 }
 
 export interface EmbeddingResult {

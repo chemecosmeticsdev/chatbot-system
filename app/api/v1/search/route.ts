@@ -135,9 +135,10 @@ async function handlePOST(request: NextRequest) {
       total_results: results.length,
       query: requestData.query,
       search_time: analytics.average_search_time || 0,
-      filters_applied: Object.keys(filters).filter(key =>
-        filters[key] && (Array.isArray(filters[key]) ? filters[key].length > 0 : true)
-      ),
+      filters_applied: Object.keys(filters).filter(key => {
+        const value = (filters as any)[key];
+        return value && (Array.isArray(value) ? value.length > 0 : true);
+      }),
       analytics: {
         session_search_count: analytics.total_searches || 0,
         average_similarity: results.length > 0 ?

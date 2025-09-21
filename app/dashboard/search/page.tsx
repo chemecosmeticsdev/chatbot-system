@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useUser } from '@stackframe/stack';
 import { useDebounce } from '@/hooks/use-debounce';
+import { VectorSearchResult } from '@/lib/vector/search';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -46,17 +47,7 @@ interface SearchFilters {
   maxResults: number;
 }
 
-interface VectorSearchResult {
-  chunk_id: string;
-  document_id: string;
-  product_id: string;
-  content: string;
-  similarity_score: number;
-  chunk_type: string;
-  document_title: string;
-  product_name: string;
-  metadata?: Record<string, any>;
-}
+// VectorSearchResult imported from @/lib/vector/search
 
 interface FullTextSearchResult {
   document_id: string;

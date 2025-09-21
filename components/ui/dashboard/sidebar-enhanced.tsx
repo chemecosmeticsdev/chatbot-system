@@ -61,7 +61,7 @@ const navigationGroups = [
         icon: DocumentIcon,
         description: 'Upload and process documents',
         count: 45,
-        badge: { text: '3 processing', variant: 'warning' as const },
+        badge: { text: '3 processing', variant: 'secondary' as const },
       },
     ],
   },
@@ -74,7 +74,7 @@ const navigationGroups = [
         icon: ChatBubbleLeftRightIcon,
         description: 'Create and manage chatbot instances',
         count: 5,
-        badge: { text: '2 active', variant: 'success' as const },
+        badge: { text: '2 active', variant: 'default' as const },
       },
       {
         name: 'Conversations',
@@ -82,7 +82,7 @@ const navigationGroups = [
         icon: UsersIcon,
         description: 'View conversation history',
         count: 1247,
-        badge: { text: '24 today', variant: 'info' as const },
+        badge: { text: '24 today', variant: 'outline' as const },
       },
       {
         name: 'Playground',

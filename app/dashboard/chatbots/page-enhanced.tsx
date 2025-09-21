@@ -218,7 +218,7 @@ function EnhancedChatbotCard({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <Typography variant="small" color="muted" className="line-clamp-2">
+        <Typography variant="body-small" color="muted" className="line-clamp-2">
           {chatbot.description}
         </Typography>
 
@@ -708,7 +708,7 @@ export default function EnhancedChatbotsPage() {
               ) : (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Typography variant="small" color="muted">
+                    <Typography variant="body-small" color="muted">
                       Showing {filteredChatbots.length} of {chatbots.length} chatbots
                     </Typography>
                     <div className="flex items-center gap-2">

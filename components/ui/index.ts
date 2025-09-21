@@ -7,9 +7,10 @@
 
 // Core UI Components
 export { Button, buttonVariants } from './button'
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './card'
+export { Card, CardHeader, CardDescription, CardContent, CardFooter } from './card'
+// CardTitle is exported from enhanced typography below
 export { Input } from './input'
-export { Typography } from './typography'
+// Typography is exported from enhanced typography below
 export { ResponsiveGrid } from './responsive-grid'
 export { ThemeProvider } from './theme-provider'
 
@@ -18,7 +19,8 @@ export { Badge, badgeVariants } from './badge'
 export { Skeleton } from './skeleton'
 export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip'
-export { toast, Toaster } from './sonner'
+export { Toaster } from './sonner'
+// toast is not exported from sonner component
 export { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from './dropdown-menu'
 export { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './sheet'
 export { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from './table'
@@ -104,8 +106,7 @@ export {
   type LanguageOption
 } from './language-switcher'
 
-// Dashboard Components
-export * from './dashboard'
+// Dashboard Components (dashboard module doesn't exist, use specific exports)
 
 // Re-export component types for convenience
 export type { ButtonProps } from './button'

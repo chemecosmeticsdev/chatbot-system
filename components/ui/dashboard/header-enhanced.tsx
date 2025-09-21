@@ -8,6 +8,7 @@ interface UserStub {
   displayName?: string;
   primaryEmail?: string;
   profileImageUrl?: string;
+  signOut?: () => void;
 }
 
 const useUserStub = (): UserStub | null => {
@@ -15,7 +16,11 @@ const useUserStub = (): UserStub | null => {
   return {
     displayName: 'John Doe',
     primaryEmail: 'john@example.com',
-    profileImageUrl: undefined
+    profileImageUrl: undefined,
+    signOut: () => {
+      console.log('User signed out (stub)');
+      // TODO: Implement actual sign out when Stack Auth is configured
+    }
   };
 };
 import { cn } from '@/lib/utils';
