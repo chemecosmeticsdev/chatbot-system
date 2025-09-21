@@ -163,32 +163,57 @@ export default function VectorSearchPage() {
     try {
       const startTime = performance.now();
 
-      // In real implementation, call actual API endpoints
-      const endpoint = mode === SEARCH_MODES.VECTOR ? '/api/v1/search/vector' : '/api/v1/search/fulltext';
+      // Call the working RAG search API
+      const response = await fetch('/api/test-rag-search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: searchQuery
+        })
+      });
 
-      const requestBody = mode === SEARCH_MODES.VECTOR ? {
-        query: searchQuery,
-        k: filters.maxResults,
-        score_threshold: filters.similarityThreshold,
-        filters: {
-          product_ids: filters.productIds.length > 0 ? filters.productIds : undefined,
-          document_types: filters.documentTypes.length > 0 ? filters.documentTypes : undefined
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || 'Search failed');
+      }
+
+      // Transform RAG API results to our UI format
+      const apiResults = data.data.search_results.map((result: any) => ({
+        chunk_id: result.chunk_id,
+        document_id: result.document_id || result.chunk_id,
+        product_id: result.metadata?.source || result.filename?.replace(/\.[^/.]+$/, "") || 'unknown',
+        content: result.content_preview,
+        similarity_score: result.similarity_score,
+        chunk_type: result.chunk_type,
+        document_title: result.document_title || result.filename || `${result.chunk_type.replace('_', ' ')} Document`,
+        product_name: result.document_title ?
+          result.document_title.split(' ')[0] : // Use first word of document title
+          (result.filename ?
+            result.filename.replace(/\.[^/.]+$/, "").replace(/_/g, ' ') : // Remove extension and format filename
+            (result.metadata?.source ?
+              result.metadata.source.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2') :
+              'Unknown Product')),
+        metadata: {
+          ...result.metadata,
+          relevance_reason: result.relevance_reason,
+          chunk_type: result.chunk_type,
+          search_method: data.data.knowledge_base_stats.search_method,
+          document_title: result.document_title,
+          filename: result.filename
         }
-      } : {
-        query: searchQuery,
-        limit: filters.maxResults,
-        offset: 0
-      };
-
-      // Mock API response for demonstration
-      await new Promise(resolve => setTimeout(resolve, Math.random() * 150 + 50)); // Simulate API call
-
-      const mockResults = generateMockResults(searchQuery, mode, filters);
+      }));
       const processingTime = performance.now() - startTime;
 
-      setResults(mockResults);
+      setResults(apiResults);
       setSearchMetadata({
-        totalResults: mockResults.length,
+        totalResults: apiResults.length,
         processingTime,
         query: searchQuery
       });

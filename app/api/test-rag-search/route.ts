@@ -178,11 +178,14 @@ export async function POST(request: NextRequest) {
         },
         search_results: topResults.map(result => ({
           chunk_id: result.chunk.id,
+          document_id: result.chunk.document_id,
           chunk_type: result.chunk.chunk_type,
           similarity_score: result.similarity_score,
           relevance_reason: result.relevance_reason,
           content_preview: result.chunk.chunk_text.substring(0, 150) +
                           (result.chunk.chunk_text.length > 150 ? '...' : ''),
+          document_title: result.chunk.document_title,
+          filename: result.chunk.filename,
           metadata: result.chunk.metadata
         })),
         chatbot_response: {
