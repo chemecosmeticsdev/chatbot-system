@@ -8,7 +8,7 @@ import { i18nConfig, type Locale, localeNames } from "@/lib/i18n-config"
 import { storage, updateUrlParams, cn } from "@/lib/utils"
 
 // Types for language switcher
-export interface LanguageSwitcherProps {
+interface LanguageSwitcherProps {
   variant?: "dropdown" | "compact" | "inline" | "footer" | "floating"
   size?: "sm" | "md" | "lg"
   showLabel?: boolean
@@ -56,7 +56,7 @@ const languageSwitcherVariants = cva(
 )
 
 // Custom hook for language management
-export function useLanguage() {
+function useLanguage() {
   const [currentLocale, setCurrentLocale] = React.useState<Locale>(() => {
     if (typeof window !== "undefined") {
       // Check localStorage first
@@ -148,7 +148,7 @@ export function useLanguage() {
       }
 
       // Use stored preference
-      const stored = storage.get<Locale>("preferred-locale", null)
+      const stored = storage.get<Locale>("preferred-locale", i18nConfig.defaultLocale)
       if (stored && i18nConfig.locales.includes(stored)) {
         setCurrentLocale(stored)
         return

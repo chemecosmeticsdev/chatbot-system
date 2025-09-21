@@ -295,7 +295,7 @@ export function EnhancedHeader({ onMenuClick }: HeaderProps) {
                     <span>Help & Support</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-600" onClick={() => user.signOut()}>
+                  <DropdownMenuItem className="text-red-600" onClick={() => user?.signOut?.()}>
                     <span>Sign Out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

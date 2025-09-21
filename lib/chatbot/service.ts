@@ -146,13 +146,14 @@ export class ChatbotService {
 
         // Generate default system prompt if not provided
         const systemPrompt = validatedData.system_prompt ||
-          DEFAULT_SYSTEM_PROMPTS.general;
+          DEFAULT_SYSTEM_PROMPTS['general-assistant'];
 
         // Match actual database schema - use model_config JSON field
         const modelConfig = {
-          temperature: validatedData.temperature || 0.7,
-          max_tokens: validatedData.max_tokens || 1000,
-          top_p: validatedData.top_p || 0.9
+          temperature: validatedData.model_config?.temperature || 0.7,
+          max_tokens: validatedData.model_config?.max_tokens || 1000,
+          top_p: validatedData.model_config?.top_p || 0.9,
+          ...validatedData.model_config
         };
 
         const query = `
@@ -267,15 +268,12 @@ export class ChatbotService {
           paramIndex++;
         }
 
-        if (filters.purpose) {
-          whereConditions.push(`purpose = $${paramIndex}`);
-          queryParams.push(filters.purpose);
-          paramIndex++;
-        }
+        // Purpose filter not available in ChatbotListFilters interface
+        // Remove or add to interface if needed
 
-        if (filters.llm_provider) {
+        if (filters.model_provider) {
           whereConditions.push(`llm_provider = $${paramIndex}`);
-          queryParams.push(filters.llm_provider);
+          queryParams.push(filters.model_provider);
           paramIndex++;
         }
 
@@ -340,15 +338,15 @@ export class ChatbotService {
           throw new ChatbotError('No valid fields provided for update');
         }
 
-        // Validate provider/model combination if being updated
-        if (validatedData.llm_provider || validatedData.llm_model) {
+        // Validate provider/model combination if model is being updated
+        if (validatedData.llm_model) {
           const currentChatbot = await this.getById(id, organizationId);
           if (!currentChatbot) {
             throw new ChatbotError(`Chatbot not found: ${id}`);
           }
 
-          const provider = validatedData.llm_provider || currentChatbot.llm_provider;
-          const model = validatedData.llm_model || currentChatbot.llm_model;
+          const provider = currentChatbot.llm_provider;
+          const model = validatedData.llm_model;
 
           const SUPPORTED_MODELS = {
             bedrock: [
@@ -645,17 +643,13 @@ export class ChatbotService {
           last_health_check: new Date()
         };
 
-        // Store deployment info (could be in a separate deployments table)
+        // Store deployment info (mark as active when deployed)
         await this.update(id, {
-          status: 'deployed',
-          settings: {
-            ...chatbot.settings,
-            deployments: {
-              ...chatbot.settings?.deployments,
-              [environment]: deployment
-            }
-          }
+          status: 'active'
         }, organizationId);
+
+        // Note: settings/deployments would need to be stored in a separate table
+        // or added to the schema to persist deployment information
 
         // Log successful deployment
         SentryUtils.addBreadcrumb('Chatbot deployed', {
@@ -705,16 +699,16 @@ export class ChatbotService {
           processed_at: new Date().toISOString()
         };
 
-        // Update chatbot settings with feedback history
-        const updatedSettings = {
-          ...chatbot.settings,
-          feedback_history: [
-            ...(chatbot.settings?.feedback_history || []).slice(-9), // Keep last 10
-            feedbackRecord
-          ]
-        };
+        // TODO: Store feedback history in separate table or model_config
+        // const updatedSettings = {
+        //   feedback_history: [
+        //     ...(chatbot.model_config?.feedback_history || []).slice(-9), // Keep last 10
+        //     feedbackRecord
+        //   ]
+        // };
 
-        await this.update(id, { settings: updatedSettings }, organizationId);
+        // For now, skip updating settings since it's not in the schema
+        // await this.update(id, { model_config: { ...chatbot.model_config, ...updatedSettings } }, organizationId);
 
         // Log feedback processing
         SentryUtils.addBreadcrumb('Chatbot feedback processed', {

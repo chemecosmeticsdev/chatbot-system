@@ -248,18 +248,20 @@ export default function VectorSearchPage() {
 
     if (isVector) {
       return Array.from({ length: baseCount }, (_, i) => ({
-        chunk_id: `chunk-${i + 1}`,
+        id: `chunk-${i + 1}`,
         document_id: `doc-${i + 1}`,
+        chunk_index: i,
         product_id: availableProducts[i % availableProducts.length].id,
         content: `This document section contains information about ${searchQuery}. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Detailed technical specifications and user guidelines are provided here. This content is relevant to your search query and provides comprehensive information about the topic.`,
+        similarity: Math.max(filters.similarityThreshold, Math.random() * (1 - filters.similarityThreshold) + filters.similarityThreshold),
         similarity_score: Math.max(filters.similarityThreshold, Math.random() * (1 - filters.similarityThreshold) + filters.similarityThreshold),
-        chunk_type: availableDocumentTypes[i % availableDocumentTypes.length],
-        document_title: `${availableDocumentTypes[i % availableDocumentTypes.length].replace('_', ' ')} Document ${i + 1}`,
-        product_name: availableProducts[i % availableProducts.length].name,
+        document_name: `${availableDocumentTypes[i % availableDocumentTypes.length].replace('_', ' ')} Document ${i + 1}`,
         metadata: {
           page_number: i + 1,
           section: `Section ${i + 1}`,
-          created_at: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString()
+          created_at: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+          chunk_type: availableDocumentTypes[i % availableDocumentTypes.length],
+          product_name: availableProducts[i % availableProducts.length].name
         }
       }));
     } else {
@@ -454,7 +456,7 @@ export default function VectorSearchPage() {
                 </div>
 
                 {results.map((result, index) => (
-                  <Card key={isVectorMode ? (result as VectorSearchResult).chunk_id : (result as FullTextSearchResult).document_id + index} className="hover:shadow-md transition-shadow">
+                  <Card key={isVectorMode ? (result as VectorSearchResult).id : (result as FullTextSearchResult).document_id + index} className="hover:shadow-md transition-shadow">
                     <CardContent className="p-6">
                       <div className="space-y-3">
                         {/* Result Header */}
@@ -462,20 +464,20 @@ export default function VectorSearchPage() {
                           <div className="space-y-1 flex-1">
                             <h4 className="font-semibold text-lg">
                               {isVectorMode
-                                ? (result as VectorSearchResult).document_title
+                                ? (result as VectorSearchResult).document_name || 'Untitled Document'
                                 : (result as FullTextSearchResult).title
                               }
                             </h4>
                             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                               <Badge variant="secondary">
                                 {isVectorMode
-                                  ? (result as VectorSearchResult).product_name
+                                  ? (result as VectorSearchResult).metadata?.product_name || 'Unknown Product'
                                   : (result as FullTextSearchResult).product_name || 'Unknown Product'
                                 }
                               </Badge>
                               {isVectorMode && (
                                 <Badge variant="outline">
-                                  {(result as VectorSearchResult).chunk_type.replace('_', ' ')}
+                                  {(result as VectorSearchResult).metadata?.chunk_type?.replace('_', ' ') || 'Document'}
                                 </Badge>
                               )}
                             </div>

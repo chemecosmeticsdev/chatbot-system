@@ -93,7 +93,7 @@ export function ChatbotErrorBoundary({
   return (
     <SentryErrorBoundary
       fallback={fallback || ErrorFallback}
-      beforeCapture={(scope, error, errorInfo) => {
+      beforeCapture={(scope, error, errorInfo: any) => {
         // Add chatbot-specific context
         scope.setTag('component', 'chatbot');
         scope.setTag('error_boundary', 'chatbot_error_boundary');
@@ -105,7 +105,7 @@ export function ChatbotErrorBoundary({
 
         // Add error context
         scope.setContext('chatbot_error', {
-          component_stack: errorInfo.componentStack,
+          component_stack: errorInfo?.componentStack || String(errorInfo),
           error_boundary: 'ChatbotErrorBoundary',
           timestamp: new Date().toISOString(),
           ...context

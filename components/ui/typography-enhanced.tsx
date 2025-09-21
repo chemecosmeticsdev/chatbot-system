@@ -119,7 +119,7 @@ function getLanguageClasses(text: string, language?: 'en' | 'th' | 'auto'): stri
 
 // Main Typography component
 export interface TypographyProps
-  extends React.HTMLAttributes<HTMLElement>,
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>,
     VariantProps<typeof typographyVariants> {
   as?: React.ElementType;
   children: React.ReactNode;
@@ -159,7 +159,7 @@ export function Typography({
 }
 
 // Helper to get default HTML element for variant
-function getDefaultElement(variant?: string): React.ElementType {
+function getDefaultElement(variant?: string | null): React.ElementType {
   switch (variant) {
     case 'h1': return 'h1';
     case 'h2': return 'h2';

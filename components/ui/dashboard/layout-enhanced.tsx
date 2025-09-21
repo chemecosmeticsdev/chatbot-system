@@ -33,7 +33,7 @@ export function EnhancedDashboardLayout({ children, className }: DashboardLayout
       <ChatbotErrorBoundary
         tags={{ component: 'dashboard_layout' }}
         context={{ sidebar_open: sidebarOpen }}
-        fallback={
+        fallback={() => (
           <div className="min-h-screen flex items-center justify-center p-6">
             <ErrorState
               title="Dashboard Error"
@@ -41,7 +41,7 @@ export function EnhancedDashboardLayout({ children, className }: DashboardLayout
               onRetry={() => window.location.reload()}
             />
           </div>
-        }
+        )}
       >
         <div className={cn('min-h-screen bg-gray-50/30', className)}>
           {/* Sidebar */}
@@ -57,13 +57,13 @@ export function EnhancedDashboardLayout({ children, className }: DashboardLayout
               <ChatbotErrorBoundary
                 tags={{ component: 'dashboard_main_content' }}
                 context={{ path: typeof window !== 'undefined' ? window.location.pathname : '' }}
-                fallback={
+                fallback={() => (
                   <ErrorState
                     title="Content Error"
                     description="Failed to load page content. Please try again."
                     onRetry={() => window.location.reload()}
                   />
-                }
+                )}
               >
                 {children}
               </ChatbotErrorBoundary>

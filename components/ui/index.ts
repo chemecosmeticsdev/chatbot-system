@@ -110,4 +110,3 @@ export {
 
 // Re-export component types for convenience
 export type { ButtonProps } from './button'
-export type { LanguageSwitcherProps } from './language-switcher'
