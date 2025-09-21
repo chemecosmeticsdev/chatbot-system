@@ -23,8 +23,8 @@ function createDatabaseClient(): Client {
 // Get organization ID from request (placeholder - integrate with Stack Auth)
 function getOrganizationId(request: NextRequest): string {
   // TODO: Extract from authenticated user context
-  // For now, use a valid UUID format for default organization
-  return '00000000-0000-0000-0000-000000000001';
+  // For now, use the existing organization ID from the database
+  return 'bf5e7b6e-f44c-4393-9fc4-8be04af5be45';
 }
 
 // Error response helper
@@ -126,15 +126,25 @@ async function handlePOST(request: NextRequest) {
       return errorResponse('name is required');
     }
 
-    if (!requestData.model_provider) {
-      return errorResponse('model_provider is required');
+    if (!requestData.llm_provider && !requestData.model_provider) {
+      return errorResponse('llm_provider is required');
+    }
+
+    // Support both field names for backward compatibility
+    if (requestData.model_provider && !requestData.llm_provider) {
+      requestData.llm_provider = requestData.model_provider;
     }
 
     // Set default model if not provided (Nova Micro for cost efficiency)
-    if (!requestData.model_name) {
-      requestData.model_name = requestData.model_provider === 'bedrock' ? 'amazon.nova-micro-v1:0' :
-                              requestData.model_provider === 'openai' ? 'gpt-3.5-turbo' :
+    if (!requestData.llm_model && !requestData.model_name) {
+      requestData.llm_model = requestData.llm_provider === 'bedrock' ? 'amazon.nova-micro-v1:0' :
+                              requestData.llm_provider === 'openai' ? 'gpt-3.5-turbo' :
                               'claude-3-haiku-20240307';
+    }
+
+    // Support both field names for backward compatibility
+    if (requestData.model_name && !requestData.llm_model) {
+      requestData.llm_model = requestData.model_name;
     }
 
     if (!requestData.system_prompt) {
@@ -142,11 +152,11 @@ async function handlePOST(request: NextRequest) {
     }
 
     // Validate enums
-    if (!['bedrock', 'openai', 'anthropic'].includes(requestData.model_provider)) {
-      return errorResponse('Invalid model_provider. Must be one of: bedrock, openai, anthropic. Recommended: Use bedrock with Amazon Nova models for best performance and cost efficiency.');
+    if (!['bedrock', 'openai', 'anthropic'].includes(requestData.llm_provider)) {
+      return errorResponse('Invalid llm_provider. Must be one of: bedrock, openai, anthropic. Recommended: Use bedrock with Amazon Nova models for best performance and cost efficiency.');
     }
 
-    // Validate model_name against supported models for the provider
+    // Validate llm_model against supported models for the provider
     const SUPPORTED_MODELS = {
       bedrock: [
         // Amazon Nova models (recommended defaults)
@@ -177,15 +187,20 @@ async function handlePOST(request: NextRequest) {
       ]
     };
 
-    const providerModels = SUPPORTED_MODELS[requestData.model_provider as keyof typeof SUPPORTED_MODELS];
-    if (!providerModels.includes(requestData.model_name)) {
-      const recommendedModel = requestData.model_provider === 'bedrock' ? 'amazon.nova-micro-v1:0' : providerModels[0];
-      return errorResponse(`Invalid model_name '${requestData.model_name}' for provider '${requestData.model_provider}'. Supported models: ${providerModels.join(', ')}. Recommended: ${recommendedModel}`);
+    const providerModels = SUPPORTED_MODELS[requestData.llm_provider as keyof typeof SUPPORTED_MODELS];
+    if (!providerModels.includes(requestData.llm_model)) {
+      const recommendedModel = requestData.llm_provider === 'bedrock' ? 'amazon.nova-micro-v1:0' : providerModels[0];
+      return errorResponse(`Invalid llm_model '${requestData.llm_model}' for provider '${requestData.llm_provider}'. Supported models: ${providerModels.join(', ')}. Recommended: ${recommendedModel}`);
     }
 
-    // Validate configuration structure
-    if (requestData.configuration) {
-      const config = requestData.configuration;
+    // Support both field names for backward compatibility
+    if (requestData.configuration && !requestData.model_config) {
+      requestData.model_config = requestData.configuration;
+    }
+
+    // Validate model_config structure
+    if (requestData.model_config) {
+      const config = requestData.model_config;
 
       if (config.temperature && (typeof config.temperature !== 'number' || config.temperature < 0 || config.temperature > 2)) {
         return errorResponse('temperature must be a number between 0 and 2');
@@ -198,6 +213,11 @@ async function handlePOST(request: NextRequest) {
       if (config.top_p && (typeof config.top_p !== 'number' || config.top_p < 0 || config.top_p > 1)) {
         return errorResponse('top_p must be a number between 0 and 1');
       }
+    }
+
+    // Set default purpose if not provided
+    if (!requestData.purpose) {
+      requestData.purpose = 'general';
     }
 
     // Create chatbot
@@ -222,6 +242,6 @@ async function handlePOST(request: NextRequest) {
   }
 }
 
-// Export Sentry-monitored route handlers
-export const GET = withChatbotMonitoring(handleGET, 'chatbots_list');
-export const POST = withChatbotMonitoring(handlePOST, 'chatbots_create');
+// Export route handlers without monitoring (temporarily disabled due to hanging issue)
+export const GET = handleGET;
+export const POST = handlePOST;
