@@ -37,8 +37,8 @@ export const OrganizationSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(255),
   slug: z.string().min(1).max(100).regex(/^[a-z0-9-]+$/),
-  settings: z.record(z.any()).default({}),
-  subscription_tier: z.enum(['basic', 'professional', 'enterprise']).default('basic'),
+  settings: z.record(z.string(), z.any()).optional(),
+  subscription_tier: z.enum(['basic', 'professional', 'enterprise']).optional(),
   created_at: z.date(),
   updated_at: z.date()
 });
@@ -46,14 +46,14 @@ export const OrganizationSchema = z.object({
 export const CreateOrganizationSchema = z.object({
   name: z.string().min(1).max(255),
   slug: z.string().min(1).max(100).regex(/^[a-z0-9-]+$/, 'Slug must contain only lowercase letters, numbers, and hyphens'),
-  settings: z.record(z.any()).optional().default({}),
-  subscription_tier: z.enum(['basic', 'professional', 'enterprise']).optional().default('basic')
+  settings: z.record(z.string(), z.any()).optional(),
+  subscription_tier: z.enum(['basic', 'professional', 'enterprise']).optional()
 });
 
 export const UpdateOrganizationSchema = z.object({
   name: z.string().min(1).max(255).optional(),
   slug: z.string().min(1).max(100).regex(/^[a-z0-9-]+$/).optional(),
-  settings: z.record(z.any()).optional(),
+  settings: z.record(z.string(), z.any()).optional(),
   subscription_tier: z.enum(['basic', 'professional', 'enterprise']).optional()
 });
 
@@ -67,11 +67,15 @@ export class OrganizationModel {
   private data: IOrganization;
 
   constructor(data: IOrganization) {
-    this.data = OrganizationSchema.parse({
+    const validatedData: IOrganization = {
       ...data,
+      settings: (data.settings ?? {}) as Record<string, any>,
+      subscription_tier: (data.subscription_tier ?? 'basic') as 'basic' | 'professional' | 'enterprise',
       created_at: new Date(data.created_at),
       updated_at: new Date(data.updated_at)
-    });
+    };
+
+    this.data = OrganizationSchema.parse(validatedData);
   }
 
   // Getters

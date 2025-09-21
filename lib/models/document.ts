@@ -100,7 +100,7 @@ export interface DocumentListResponse {
   };
 }
 
-export interface ProcessingStatus {
+export interface DocumentProcessingStatus {
   document_id: string;
   title: string;
   processing_status: ProcessingStatus;

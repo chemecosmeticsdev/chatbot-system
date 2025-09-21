@@ -55,7 +55,7 @@ describe('Neon Database Service', () => {
         rows: [{ id: 1, name: 'Test' }],
         rowCount: 1,
       }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       const result = await executeSQLQuery('SELECT * FROM test_table')
 
@@ -70,7 +70,7 @@ describe('Neon Database Service', () => {
         rows: [{ id: 1, name: 'Test User' }],
         rowCount: 1,
       }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       const result = await executeSQLQuery(
         'SELECT * FROM users WHERE id = $1',
@@ -88,7 +88,7 @@ describe('Neon Database Service', () => {
 
     it('should handle database connection errors', async () => {
       const connectionError = new Error('Connection failed')
-      mockClient.connect.mockRejectedValue(connectionError)
+      mockClient.connect.mockRejectedValue(connectionError as any)
 
       await expect(
         executeSQLQuery('SELECT * FROM test_table')
@@ -100,9 +100,9 @@ describe('Neon Database Service', () => {
     })
 
     it('should handle query execution errors', async () => {
-      mockClient.connect.mockResolvedValue()
+      mockClient.connect.mockResolvedValue(undefined as any)
       const queryError = new Error('Query failed')
-      mockClient.query.mockRejectedValue(queryError)
+      mockClient.query.mockRejectedValue(queryError as any)
 
       await expect(
         executeSQLQuery('INVALID SQL QUERY')
@@ -114,8 +114,8 @@ describe('Neon Database Service', () => {
     })
 
     it('should ensure client is closed even if query fails', async () => {
-      mockClient.connect.mockResolvedValue()
-      mockClient.query.mockRejectedValue(new Error('Query failed'))
+      mockClient.connect.mockResolvedValue(undefined as any)
+      mockClient.query.mockRejectedValue(new Error('Query failed') as any)
 
       try {
         await executeSQLQuery('SELECT * FROM test_table')
@@ -157,7 +157,7 @@ describe('Neon Database Service', () => {
         ],
         rowCount: 2,
       }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       const result = await executeSQLQuery('SELECT id, name, email FROM users')
 
@@ -170,7 +170,7 @@ describe('Neon Database Service', () => {
         rows: [{ id: 123 }],
         rowCount: 1,
       }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       const result = await executeSQLQuery(
         'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id',
@@ -186,7 +186,7 @@ describe('Neon Database Service', () => {
         rows: [],
         rowCount: 1,
       }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       const result = await executeSQLQuery(
         'UPDATE users SET name = $1 WHERE id = $2',
@@ -201,7 +201,7 @@ describe('Neon Database Service', () => {
         rows: [],
         rowCount: 1,
       }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       const result = await executeSQLQuery(
         'DELETE FROM users WHERE id = $1',
@@ -225,7 +225,7 @@ describe('Neon Database Service', () => {
         ],
         rowCount: 1,
       }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       const result = await executeSQLQuery(`
         SELECT
@@ -245,7 +245,7 @@ describe('Neon Database Service', () => {
 
     it('should handle vector index creation', async () => {
       const mockResult = { rows: [], rowCount: 0 }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       await executeSQLQuery(`
         CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_document_chunks_embedding
@@ -278,7 +278,7 @@ describe('Neon Database Service', () => {
     it('should handle connection timeouts gracefully', async () => {
       const timeoutError = new Error('Connection timeout')
       timeoutError.name = 'TimeoutError'
-      mockClient.connect.mockRejectedValue(timeoutError)
+      mockClient.connect.mockRejectedValue(timeoutError as any)
 
       await expect(
         executeSQLQuery('SELECT * FROM users')
@@ -300,7 +300,7 @@ describe('Neon Database Service', () => {
     it('should handle SQL injection attempts safely', async () => {
       const maliciousInput = "'; DROP TABLE users; --"
       const mockResult = { rows: [], rowCount: 0 }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       // Should use parameterized query
       await executeSQLQuery(
@@ -316,7 +316,7 @@ describe('Neon Database Service', () => {
 
     it('should handle null and undefined parameters', async () => {
       const mockResult = { rows: [], rowCount: 0 }
-      mockClient.query.mockResolvedValue(mockResult)
+      mockClient.query.mockResolvedValue(mockResult as any)
 
       await executeSQLQuery(
         'SELECT * FROM users WHERE name = $1 AND email = $2',

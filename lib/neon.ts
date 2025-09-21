@@ -16,6 +16,21 @@ export function getNeonPool(): Pool {
   return pool;
 }
 
+// Alias for test compatibility
+export const createDatabaseClient = getNeonPool;
+
+// SQL execution function for tests
+export async function executeSQLQuery(query: string, params: any[] = []) {
+  const pool = getNeonPool();
+  const client = await pool.connect();
+  try {
+    const result = await client.query(query, params);
+    return result;
+  } finally {
+    client.release();
+  }
+}
+
 export async function testNeonConnection(): Promise<{ success: boolean; message: string; data?: any }> {
   try {
     const pool = getNeonPool();

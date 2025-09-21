@@ -54,8 +54,8 @@ export const ConversationSessionSchema = z.object({
   end_time: z.date().optional(),
   message_count: z.number().int().min(0).optional(),
   user_satisfaction_score: z.number().min(1).max(5).optional(),
-  session_context: z.record(z.any()).optional(),
-  session_metadata: z.record(z.any()).optional(),
+  session_context: z.record(z.string(), z.any()).optional(),
+  session_metadata: z.record(z.string(), z.any()).optional(),
   created_at: z.date(),
   updated_at: z.date()
 });
@@ -64,15 +64,15 @@ export const CreateConversationSessionSchema = z.object({
   chatbot_instance_id: z.string().uuid(),
   platform: z.enum(['web', 'line', 'whatsapp', 'messenger', 'api']),
   user_identifier: z.string().min(1).max(255),
-  session_context: z.record(z.any()).optional(),
-  session_metadata: z.record(z.any()).optional().default({})
+  session_context: z.record(z.string(), z.any()).optional(),
+  session_metadata: z.record(z.string(), z.any()).optional().default({})
 });
 
 export const UpdateConversationSessionSchema = z.object({
   status: z.enum(['active', 'inactive', 'expired', 'terminated']).optional(),
   user_satisfaction_score: z.number().min(1).max(5).optional(),
-  session_context: z.record(z.any()).optional(),
-  session_metadata: z.record(z.any()).optional(),
+  session_context: z.record(z.string(), z.any()).optional(),
+  session_metadata: z.record(z.string(), z.any()).optional(),
   end_time: z.date().optional()
 });
 
@@ -86,13 +86,16 @@ export class ConversationSessionModel {
   private data: IConversationSession;
 
   constructor(data: IConversationSession) {
-    this.data = ConversationSessionSchema.parse({
+    const validatedData: IConversationSession = {
       ...data,
+      status: (data.status ?? 'active') as 'active' | 'inactive' | 'expired' | 'terminated',
       start_time: new Date(data.start_time),
       end_time: data.end_time ? new Date(data.end_time) : undefined,
       created_at: new Date(data.created_at),
       updated_at: new Date(data.updated_at)
-    });
+    };
+
+    this.data = ConversationSessionSchema.parse(validatedData);
   }
 
   // Getters

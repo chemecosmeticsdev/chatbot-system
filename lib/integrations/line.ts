@@ -1067,6 +1067,7 @@ export class LineIntegrationService {
           // Send quick replies if available
           if (botResponse.quickReplies && botResponse.quickReplies.length > 0) {
             const quickReplyMessage = {
+              id: `quick_reply_${Date.now()}`,
               type: 'text' as const,
               text: 'คุณต้องการข้อมูลเพิ่มเติมหรือไม่?',
               quickReply: {
@@ -1129,6 +1130,7 @@ export class LineIntegrationService {
     // Send quick replies if configured
     if (integration.settings.greeting_message?.quick_replies) {
       const quickReplyMessage = {
+        id: `greeting_quick_reply_${Date.now()}`,
         type: 'text' as const,
         text: 'เลือกหัวข้อที่สนใจ:',
         quickReply: {

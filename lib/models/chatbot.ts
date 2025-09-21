@@ -75,14 +75,14 @@ export const ChatbotInstanceSchema = z.object({
   llm_provider: z.enum(['bedrock', 'openai', 'anthropic']),
   llm_model: z.string().min(1),
   system_prompt: z.string().min(10).max(8000),
-  model_config: z.record(z.any()).optional(),
+  model_config: z.record(z.string(), z.any()).optional(),
   rag_enabled: z.boolean().optional(),
   retrieval_k: z.number().int().min(1).max(20).optional(),
   score_threshold: z.number().min(0).max(1).optional(),
   context_window: z.number().int().min(1000).max(32000).optional(),
   welcome_message: z.string().max(1000).optional(),
   fallback_message: z.string().max(1000).optional(),
-  performance_metrics: z.record(z.any()).optional(),
+  performance_metrics: z.record(z.string(), z.any()).optional(),
   created_at: z.date(),
   updated_at: z.date(),
   created_by: z.string().optional()
@@ -95,7 +95,7 @@ export const CreateChatbotInstanceSchema = z.object({
   llm_provider: z.enum(['bedrock', 'openai', 'anthropic']),
   llm_model: z.string().min(1),
   system_prompt: z.string().min(10).max(8000),
-  model_config: z.record(z.any()).optional(),
+  model_config: z.record(z.string(), z.any()).optional(),
   rag_enabled: z.boolean().optional(),
   retrieval_k: z.number().int().min(1).max(20).optional(),
   score_threshold: z.number().min(0).max(1).optional(),
@@ -110,14 +110,14 @@ export const UpdateChatbotInstanceSchema = z.object({
   status: z.enum(['draft', 'active', 'inactive', 'archived']).optional(),
   llm_model: z.string().min(1).optional(),
   system_prompt: z.string().min(10).max(8000).optional(),
-  model_config: z.record(z.any()).optional(),
+  model_config: z.record(z.string(), z.any()).optional(),
   rag_enabled: z.boolean().optional(),
   retrieval_k: z.number().int().min(1).max(20).optional(),
   score_threshold: z.number().min(0).max(1).optional(),
   context_window: z.number().int().min(1000).max(32000).optional(),
   welcome_message: z.string().max(1000).optional(),
   fallback_message: z.string().max(1000).optional(),
-  performance_metrics: z.record(z.any()).optional()
+  performance_metrics: z.record(z.string(), z.any()).optional()
 });
 
 // Type exports
@@ -130,11 +130,20 @@ export class ChatbotInstanceModel {
   private data: IChatbotInstance;
 
   constructor(data: IChatbotInstance) {
-    this.data = ChatbotInstanceSchema.parse({
+    const validatedData: IChatbotInstance = {
       ...data,
+      status: (data.status ?? 'draft') as 'draft' | 'active' | 'inactive' | 'archived',
+      model_config: data.model_config || {},
+      rag_enabled: data.rag_enabled !== undefined ? data.rag_enabled : true,
+      retrieval_k: data.retrieval_k || 5,
+      score_threshold: data.score_threshold || 0.7,
+      context_window: data.context_window || 4000,
+      performance_metrics: data.performance_metrics || {},
       created_at: new Date(data.created_at),
       updated_at: new Date(data.updated_at)
-    });
+    };
+
+    this.data = ChatbotInstanceSchema.parse(validatedData);
   }
 
   // Getters
@@ -265,13 +274,13 @@ export class ChatbotInstanceModel {
   }
 
   private getInputTokenCost(tokens: number): number {
-    const costs = ChatbotInstanceModel.TOKEN_COSTS[this.data.llm_model];
+    const costs = ChatbotInstanceModel.TOKEN_COSTS[this.data.llm_model as keyof typeof ChatbotInstanceModel.TOKEN_COSTS];
     if (!costs) return 0;
     return (tokens / 1000) * costs.input;
   }
 
   private getOutputTokenCost(tokens: number): number {
-    const costs = ChatbotInstanceModel.TOKEN_COSTS[this.data.llm_model];
+    const costs = ChatbotInstanceModel.TOKEN_COSTS[this.data.llm_model as keyof typeof ChatbotInstanceModel.TOKEN_COSTS];
     if (!costs) return 0;
     return (tokens / 1000) * costs.output;
   }

@@ -106,7 +106,7 @@ export const MessageSchema = z.object({
   content_type: z.enum(['text', 'image', 'file', 'quick_reply', 'rich_media']).default('text'),
   timestamp: z.date(),
   sequence_number: z.number().int().min(0),
-  response_metadata: z.record(z.any()).optional(),
+  response_metadata: z.record(z.string(), z.any()).optional(),
   token_usage: TokenUsageSchema.optional(),
   processing_time_ms: z.number().min(0).optional(),
   model_used: z.string().optional(),
@@ -122,7 +122,7 @@ export const CreateMessageSchema = z.object({
   message_type: z.enum(['user_message', 'bot_response', 'system_message']),
   content: z.string().min(1).max(10000),
   content_type: z.enum(['text', 'image', 'file', 'quick_reply', 'rich_media']).optional().default('text'),
-  response_metadata: z.record(z.any()).optional(),
+  response_metadata: z.record(z.string(), z.any()).optional(),
   token_usage: TokenUsageSchema.optional(),
   processing_time_ms: z.number().min(0).optional(),
   model_used: z.string().optional(),
@@ -138,7 +138,7 @@ export const CreateMessageSchema = z.object({
 
 export const UpdateMessageSchema = z.object({
   content: z.string().min(1).max(10000).optional(),
-  response_metadata: z.record(z.any()).optional(),
+  response_metadata: z.record(z.string(), z.any()).optional(),
   user_feedback: UserFeedbackSchema.optional()
 });
 
@@ -292,7 +292,7 @@ export class MessageModel {
   getTokenCost(): number {
     if (!this.data.token_usage || !this.data.model_used) return 0;
 
-    const costs = MessageModel.TOKEN_COSTS[this.data.model_used];
+    const costs = MessageModel.TOKEN_COSTS[this.data.model_used as keyof typeof MessageModel.TOKEN_COSTS];
     if (!costs) return 0;
 
     const inputCost = (this.data.token_usage.input_tokens / 1000) * costs.input;

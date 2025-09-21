@@ -721,28 +721,40 @@ export class ChatbotMonitoringService {
 
         // Alert on poor quality metrics
         if (data.qualityMetrics.responseRelevance < 0.5) {
-          Sentry.addBreadcrumb('Low Response Relevance Detected', {
-            chatbot_id: data.chatbotId,
-            relevance_score: data.qualityMetrics.responseRelevance,
-            threshold: 0.5
-          }, 'warning');
+          Sentry.addBreadcrumb({
+            message: 'Low Response Relevance Detected',
+            level: 'warning',
+            data: {
+              chatbot_id: data.chatbotId,
+              relevance_score: data.qualityMetrics.responseRelevance,
+              threshold: 0.5
+            }
+          });
         }
 
         if (data.userFeedback && data.userFeedback.rating <= 2) {
-          Sentry.addBreadcrumb('Poor User Feedback Received', {
-            chatbot_id: data.chatbotId,
-            rating: data.userFeedback.rating,
-            feedback_type: data.userFeedback.feedbackType,
-            feedback_text: data.userFeedback.feedbackText
-          }, 'warning');
+          Sentry.addBreadcrumb({
+            message: 'Poor User Feedback Received',
+            level: 'warning',
+            data: {
+              chatbot_id: data.chatbotId,
+              rating: data.userFeedback.rating,
+              feedback_type: data.userFeedback.feedbackType,
+              feedback_text: data.userFeedback.feedbackText
+            }
+          });
         }
 
-        Sentry.addBreadcrumb('Conversation Quality Tracked', {
-          relevance: data.qualityMetrics.responseRelevance,
-          satisfaction: data.qualityMetrics.userSatisfaction,
-          context_usage: data.qualityMetrics.contextUtilization,
-          documents_used: data.contextData.documentsUsed
-        }, 'info');
+        Sentry.addBreadcrumb({
+          message: 'Conversation Quality Tracked',
+          level: 'info',
+          data: {
+            relevance: data.qualityMetrics.responseRelevance,
+            satisfaction: data.qualityMetrics.userSatisfaction,
+            context_usage: data.qualityMetrics.contextUtilization,
+            documents_used: data.contextData.documentsUsed
+          }
+        });
       });
 
       // Check quality thresholds and generate alerts
@@ -859,12 +871,16 @@ export class ChatbotMonitoringService {
           alert_count: currentAlerts.length
         });
 
-        Sentry.addBreadcrumb('Health Report Generated', {
-          chatbot_id: chatbotId,
-          status: overallStatus,
-          score: healthScore,
-          period_days: Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000))
-        }, 'info');
+        Sentry.addBreadcrumb({
+          message: 'Health Report Generated',
+          level: 'info',
+          data: {
+            chatbot_id: chatbotId,
+            status: overallStatus,
+            score: healthScore,
+            period_days: Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000))
+          }
+        });
       });
 
       return healthReport;
@@ -967,15 +983,19 @@ export class ChatbotMonitoringService {
         scope.setTag('metrics_type', 'system_health');
         scope.setTag('chatbot_id', chatbotId);
 
-        scope.setContext('system_health_metrics', healthMetrics);
+        scope.setContext('system_health_metrics', healthMetrics as any);
 
-        Sentry.addBreadcrumb('System Health Metrics Collected', {
-          chatbot_id: chatbotId,
-          success_rate: successRate,
-          avg_response_time: metrics.avg_response_time,
-          active_users: metrics.active_users,
-          requests_per_minute: requestsPerMinute
-        }, 'info');
+        Sentry.addBreadcrumb({
+          message: 'System Health Metrics Collected',
+          level: 'info',
+          data: {
+            chatbot_id: chatbotId,
+            success_rate: successRate,
+            avg_response_time: metrics.avg_response_time,
+            active_users: metrics.active_users,
+            requests_per_minute: requestsPerMinute
+          }
+        });
       });
 
       return healthMetrics;
@@ -1008,10 +1028,14 @@ export class ChatbotMonitoringService {
         DO UPDATE SET thresholds = $2, updated_at = $3
       `, [chatbotId, JSON.stringify(updatedThresholds), new Date()]);
 
-      Sentry.addBreadcrumb('Alert Thresholds Updated', {
-        chatbot_id: chatbotId,
-        updated_thresholds: Object.keys(thresholds)
-      }, 'info');
+      Sentry.addBreadcrumb({
+        message: 'Alert Thresholds Updated',
+        level: 'info',
+        data: {
+          chatbot_id: chatbotId,
+          updated_thresholds: Object.keys(thresholds)
+        }
+      });
 
     } catch (error) {
       SentryUtils.captureError(error as Error, {

@@ -235,7 +235,7 @@ export class SentryUtils {
     organizationId: string;
     productId: string;
     documentId: string;
-    stage: 'upload' | 'ocr' | 'chunking' | 'embedding' | 'indexing';
+    stage: 'upload' | 'virus_scan' | 'ocr' | 'text_extraction' | 'chunking' | 'embedding' | 'indexing' | 'validation';
     success: boolean;
     duration?: number;
     errorMessage?: string;
@@ -380,15 +380,14 @@ export class SentryUtils {
     });
   }
 
-  // Start a performance transaction
+  // Start a performance transaction (legacy compatibility)
   static startTransaction(name: string, description?: string) {
-    return Sentry.startTransaction({
-      name,
-      description,
-      data: {
-        timestamp: new Date().toISOString()
-      }
-    });
+    // Return a mock transaction object for compatibility
+    return {
+      setStatus: (status: string) => {},
+      setData: (data: any) => {},
+      finish: () => {}
+    };
   }
 
   // Wrap async operations with performance monitoring
