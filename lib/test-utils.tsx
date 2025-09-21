@@ -130,7 +130,7 @@ export const expectButtonToBeClickable = (button: HTMLElement) => {
 
 // Accessibility test helpers
 export const checkAccessibility = async (container: HTMLElement) => {
-  const { axe } = await import('@axe-core/playwright')
+  // const { axe } = await import('@axe-core/playwright')
   // Note: This would need axe-core for React Testing Library
   // For now, basic accessibility checks
 
@@ -150,7 +150,7 @@ export const checkAccessibility = async (container: HTMLElement) => {
   // Check for form labels
   const inputs = container.querySelectorAll('input[type="email"], input[type="password"], input[type="text"]')
   inputs.forEach(input => {
-    const hasLabel = input.labels && input.labels.length > 0
+    const hasLabel = (input as HTMLInputElement).labels && (input as HTMLInputElement).labels!.length > 0
     const hasAriaLabel = input.getAttribute('aria-label')
     const hasAriaLabelledby = input.getAttribute('aria-labelledby')
 

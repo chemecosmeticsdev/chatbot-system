@@ -307,7 +307,7 @@ export class FeedbackService {
       // Validate and enhance improvements
       return this.validateAndEnhanceImprovements(improvements, context);
     } catch (error) {
-      throw new FeedbackProcessingError(`Failed to generate improvements: ${error.message}`);
+      throw new FeedbackProcessingError(`Failed to generate improvements: ${(error as Error).message}`);
     }
   }
 
@@ -389,7 +389,7 @@ export class FeedbackService {
 
         } catch (error) {
           await this.client.query('ROLLBACK');
-          throw new FeedbackProcessingError(`Failed to apply improvements: ${error.message}`);
+          throw new FeedbackProcessingError(`Failed to apply improvements: ${(error as Error).message}`);
         }
       },
       {
@@ -705,7 +705,7 @@ export class FeedbackService {
       // Parse structured analysis from LLM response
       return this.parseAnalysisResponse(analysisText);
     } catch (error) {
-      throw new FeedbackProcessingError(`LLM analysis failed: ${error.message}`);
+      throw new FeedbackProcessingError(`LLM analysis failed: ${(error as Error).message}`);
     }
   }
 
@@ -786,7 +786,7 @@ Focus on practical, implementable changes with clear before/after values.`;
 
       return analysis as FeedbackAnalysisResult;
     } catch (error) {
-      throw new FeedbackProcessingError(`Failed to parse analysis response: ${error.message}`);
+      throw new FeedbackProcessingError(`Failed to parse analysis response: ${(error as Error).message}`);
     }
   }
 

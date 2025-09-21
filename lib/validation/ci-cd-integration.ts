@@ -209,10 +209,12 @@ export class CICDPerformanceIntegration {
       const duration = Date.now() - startTime;
 
       SentryUtils.captureError(error as Error, {
-        pipeline_id: pipelineId,
-        commit_hash: commitHash,
-        branch: branch,
-        duration_ms: duration
+        additionalData: {
+          pipeline_id: pipelineId,
+          commit_hash: commitHash,
+          branch: branch,
+          duration_ms: duration
+        }
       });
 
       throw new VectorSearchError(
@@ -511,8 +513,10 @@ export class CICDPerformanceIntegration {
       }
     } catch (error) {
       SentryUtils.captureError(error as Error, {
-        operation: 'load_baseline',
-        baseline_path: this.baselinePath
+        additionalData: {
+          operation: 'load_baseline',
+          baseline_path: this.baselinePath
+        }
       });
     }
     return null;
@@ -523,8 +527,10 @@ export class CICDPerformanceIntegration {
       writeFileSync(this.baselinePath, JSON.stringify(baseline, null, 2));
     } catch (error) {
       SentryUtils.captureError(error as Error, {
-        operation: 'save_baseline',
-        baseline_path: this.baselinePath
+        additionalData: {
+          operation: 'save_baseline',
+          baseline_path: this.baselinePath
+        }
       });
     }
   }
@@ -542,8 +548,10 @@ export class CICDPerformanceIntegration {
 
     } catch (error) {
       SentryUtils.captureError(error as Error, {
-        operation: 'generate_cicd_artifacts',
-        pipeline_id: result.pipeline_id
+        additionalData: {
+          operation: 'generate_cicd_artifacts',
+          pipeline_id: result.pipeline_id
+        }
       });
     }
   }

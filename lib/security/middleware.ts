@@ -23,7 +23,7 @@ export function withSecurityAndRateLimit<T = any>(
 
   return withSentryMonitoring(
     async (req: NextRequest, context?: Record<string, any>): Promise<NextResponse<T>> => {
-      return securityMiddleware(req, async (secureReq): Promise<NextResponse<T>> => {
+      return securityMiddleware(req, async (secureReq) => {
         // Additional authorization check if required
         if (options?.requiredRole) {
           const authResult = await securityAuditor.checkAuthorization(secureReq, options.requiredRole);
@@ -41,7 +41,7 @@ export function withSecurityAndRateLimit<T = any>(
         }
 
         return handler(secureReq, context);
-      });
+      }) as Promise<NextResponse<T>>;
     },
     {
       operationName: options?.operationName

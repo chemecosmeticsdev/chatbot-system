@@ -341,22 +341,22 @@ export class DocumentService {
    */
   async updateProcessingStage(
     id: string,
-    stage: typeof DOCUMENT_PROCESSING_STAGES[number],
+    stage: keyof typeof DOCUMENT_PROCESSING_STAGES,
     organizationId: string,
     metadata?: Record<string, any>
   ): Promise<Document> {
     return withDatabaseMonitoring(
       async () => {
         const updateData: UpdateDocument = {
-          processing_stage: stage,
-          updated_at: new Date()
+          processing_status: stage === 'OCR' ? 'processing' : stage === 'EMBEDDING' ? 'completed' : 'uploaded',
+          metadata
         };
 
         if (metadata) {
           // Merge with existing metadata
           const existingDoc = await this.getById(id, organizationId);
           if (existingDoc) {
-            updateData.extracted_metadata = {
+            updateData.metadata = {
               ...existingDoc.extracted_metadata,
               ...metadata,
               [`${stage}_timestamp`]: new Date().toISOString()
@@ -400,7 +400,7 @@ export class DocumentService {
       }
 
       // Update to processing stage
-      await this.updateProcessingStage(id, 'processing', organizationId, {
+      await this.updateProcessingStage(id, 'OCR', organizationId, {
         ocr_started_at: new Date().toISOString()
       });
 
@@ -409,7 +409,7 @@ export class DocumentService {
 
       if (ocrResult.success && ocrResult.text) {
         // Update to completed stage with extracted text
-        await this.updateProcessingStage(id, 'completed', organizationId, {
+        await this.updateProcessingStage(id, 'EMBEDDING', organizationId, {
           ocr_completed_at: new Date().toISOString(),
           extracted_text_length: ocrResult.text.length,
           ocr_confidence: ocrResult.confidence || 0.95
@@ -431,11 +431,14 @@ export class DocumentService {
 
         return { success: true, text: ocrResult.text };
       } else {
-        // Update to failed stage
-        await this.updateProcessingStage(id, 'failed', organizationId, {
-          ocr_failed_at: new Date().toISOString(),
-          error_message: ocrResult.error || 'OCR processing failed'
-        });
+        // Update processing status to failed
+        await this.update(id, {
+          processing_status: 'failed' as ProcessingStatus,
+          metadata: {
+            ocr_failed_at: new Date().toISOString(),
+            error_message: ocrResult.error || 'OCR processing failed'
+          }
+        }, organizationId);
 
         // Log OCR failure
         SentryUtils.captureDocumentProcessing({
@@ -563,7 +566,7 @@ export class DocumentService {
    */
   async bulkUpdateStage(
     documentIds: string[],
-    stage: typeof DOCUMENT_PROCESSING_STAGES[number],
+    stage: keyof typeof DOCUMENT_PROCESSING_STAGES,
     organizationId: string
   ): Promise<number> {
     return withDatabaseMonitoring(
@@ -575,11 +578,11 @@ export class DocumentService {
         const placeholders = documentIds.map((_, index) => `$${index + 3}`).join(', ');
         const query = `
           UPDATE documents
-          SET processing_stage = $1, updated_at = NOW()
+          SET processing_status = $1, updated_at = NOW()
           WHERE organization_id = $2 AND id IN (${placeholders})
         `;
 
-        const params = [stage, organizationId, ...documentIds];
+        const params = [DOCUMENT_PROCESSING_STAGES[stage], organizationId, ...documentIds];
         const result = await this.client.query(query, params);
 
         // Log bulk update

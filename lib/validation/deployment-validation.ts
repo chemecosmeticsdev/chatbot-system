@@ -596,7 +596,7 @@ export class DeploymentValidator {
         });
 
         // Check if Sentry client is properly initialized
-        const client = Sentry.getCurrentHub().getClient();
+        const client = (Sentry as any).getCurrentHub?.()?.getClient?.();
         results.sentry = {
           success: !!client,
           dsn: client?.getDsn()?.toString().substring(0, 50) + '...',
@@ -885,9 +885,9 @@ export class DeploymentValidator {
       monitoring,
       security,
       performance,
-      recommendations: [...new Set(recommendations)], // Remove duplicates
+      recommendations: Array.from(new Set(recommendations)), // Remove duplicates
       criticalIssues,
-      warnings: [...new Set(warnings)] // Remove duplicates
+      warnings: Array.from(new Set(warnings)) // Remove duplicates
     };
   }
 }
