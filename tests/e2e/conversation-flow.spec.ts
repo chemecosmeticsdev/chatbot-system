@@ -426,7 +426,7 @@ test.describe('Conversation Flow End-to-End Tests', () => {
     // Verify session termination
     currentSession = (await conversationHelper.getConversationHistory(session.id)).session;
     expect(currentSession.status).toBe('terminated');
-    expect(currentSession.user_satisfaction_score).toBe(4);
+    expect((currentSession as any).user_satisfaction_score).toBe(4);
   });
 
   test('should collect and process user feedback', async () => {
@@ -686,13 +686,13 @@ test.describe('Conversation Flow Edge Cases', () => {
     await conversationHelper.sendMessage(session.id, 'Initial message before timeout', 'user_message');
 
     // Simulate session timeout by updating status directly
-    const timeoutResponse = await conversationHelper.page.request.patch(`/api/v1/conversations/${session.id}`, {
+    const timeoutResponse = await (conversationHelper as any).page.request.patch(`/api/v1/conversations/${session.id}`, {
       data: { status: 'expired' }
     });
     expect(timeoutResponse.ok()).toBeTruthy();
 
     // Try to send message to expired session (should fail gracefully)
-    const expiredResponse = await conversationHelper.page.request.post(`/api/v1/conversations/${session.id}/messages`, {
+    const expiredResponse = await (conversationHelper as any).page.request.post(`/api/v1/conversations/${session.id}/messages`, {
       data: {
         message_type: 'user_message',
         content: 'Message to expired session',
@@ -709,7 +709,7 @@ test.describe('Conversation Flow Edge Cases', () => {
     testSessionIds.push(session.id);
 
     // Test empty message
-    const emptyResponse = await conversationHelper.page.request.post(`/api/v1/conversations/${session.id}/messages`, {
+    const emptyResponse = await (conversationHelper as any).page.request.post(`/api/v1/conversations/${session.id}/messages`, {
       data: {
         message_type: 'user_message',
         content: '',
@@ -720,7 +720,7 @@ test.describe('Conversation Flow Edge Cases', () => {
 
     // Test extremely long message
     const longContent = 'A'.repeat(15000); // Assuming max is 10000
-    const longResponse = await conversationHelper.page.request.post(`/api/v1/conversations/${session.id}/messages`, {
+    const longResponse = await (conversationHelper as any).page.request.post(`/api/v1/conversations/${session.id}/messages`, {
       data: {
         message_type: 'user_message',
         content: longContent,
@@ -730,7 +730,7 @@ test.describe('Conversation Flow Edge Cases', () => {
     expect(longResponse.status()).toBe(400);
 
     // Test malformed request
-    const malformedResponse = await conversationHelper.page.request.post(`/api/v1/conversations/${session.id}/messages`, {
+    const malformedResponse = await (conversationHelper as any).page.request.post(`/api/v1/conversations/${session.id}/messages`, {
       data: {
         // Missing required fields
         content_type: 'text'

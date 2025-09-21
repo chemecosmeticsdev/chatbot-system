@@ -160,7 +160,7 @@ describe('PerformanceValidationService', () => {
   describe('runPerformanceBenchmark', () => {
     beforeEach(() => {
       // Mock database statistics
-      (mockPool.query as jest.Mock).mockImplementation(async (query: string) => {
+      (mockPool.query as jest.MockedFunction<any>).mockImplementation(async (query: string) => {
         if (query.includes('COUNT(*)')) {
           return {
             rows: [{ vector_count: '1000', embedding_dimensions: '1536' }]
@@ -549,7 +549,7 @@ describe('PerformanceValidationService', () => {
 
   describe('Error Handling', () => {
     it('should handle database connection errors', async () => {
-      (mockPool.query as jest.Mock).mockRejectedValue(new Error('Database connection failed'));
+      (mockPool.query as jest.MockedFunction<any>).mockRejectedValue(new Error('Database connection failed'));
 
       await expect(
         performanceService.validateSearchPerformance(['test query'])
