@@ -182,10 +182,10 @@ class VectorSearchPerformanceTester {
       for (const doc of batch) {
         // Insert document
         await this.dbClient.query(`
-          INSERT INTO documents (id, name, product_id, content, content_type, created_at, updated_at)
-          VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+          INSERT INTO documents (id, title, product_id, filename, s3_key, file_size, mime_type, document_type, created_at, updated_at)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
           ON CONFLICT (id) DO NOTHING
-        `, [doc.id, `Test Document ${doc.id}`, productId, doc.content, 'text/plain']);
+        `, [doc.id, `Test Document ${doc.id}`, productId, `${doc.id}.txt`, `test/${doc.id}.txt`, doc.content.length, 'text/plain', 'technical']);
 
         // Generate and store embeddings
         const embedding = await this.vectorService.generateEmbedding(doc.content);
