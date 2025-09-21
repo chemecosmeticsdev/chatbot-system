@@ -34,8 +34,9 @@ const requiredEnvVars: (keyof Config)[] = [
   'LLAMAINDEX_API_KEY'
 ];
 
-export function validateEnvironment(): { isValid: boolean; missing: string[] } {
+export function validateEnvironment(): { isValid: boolean; missing: string[]; warnings: string[] } {
   const missing: string[] = [];
+  const warnings: string[] = [];
 
   for (const envVar of requiredEnvVars) {
     const value = process.env[envVar];
@@ -44,14 +45,32 @@ export function validateEnvironment(): { isValid: boolean; missing: string[] } {
     }
   }
 
+  // Specific validations based on validation report issues
+  const stackSecretKey = process.env.STACK_SECRET_SERVER_KEY;
+  if (stackSecretKey && stackSecretKey.length < 64) {
+    warnings.push(`STACK_SECRET_SERVER_KEY should be at least 64 characters (current: ${stackSecretKey.length})`);
+  }
+
+  const databaseUrl = process.env.DATABASE_URL;
+  if (databaseUrl && databaseUrl.includes('sslmode=require') && !databaseUrl.includes('ssl=true')) {
+    warnings.push('DATABASE_URL uses sslmode=require format, consider using ssl=true parameter format for better compatibility');
+  }
+
   return {
     isValid: missing.length === 0,
-    missing
+    missing,
+    warnings
   };
 }
 
 export function getConfig(): Config {
-  const { isValid, missing } = validateEnvironment();
+  const { isValid, missing, warnings } = validateEnvironment();
+
+  // Log warnings but don't block execution
+  if (warnings.length > 0) {
+    console.warn('⚠️ Configuration warnings:');
+    warnings.forEach(warning => console.warn(`   - ${warning}`));
+  }
 
   if (!isValid) {
     console.error(`❌ Missing required environment variables: ${missing.join(', ')}`);
@@ -79,7 +98,12 @@ export function getConfig(): Config {
 
 export function getConfigSafe(): Partial<Config> {
   // Non-blocking version that never throws - safe for SSR
-  const { missing } = validateEnvironment();
+  const { missing, warnings } = validateEnvironment();
+
+  if (warnings.length > 0) {
+    console.warn('⚠️ Configuration warnings:');
+    warnings.forEach(warning => console.warn(`   - ${warning}`));
+  }
 
   if (missing.length > 0) {
     console.warn(`⚠️ Some environment variables are missing: ${missing.join(', ')}`);
@@ -106,5 +130,59 @@ export function getClientConfig() {
     NEXT_PUBLIC_STACK_PROJECT_ID: process.env.NEXT_PUBLIC_STACK_PROJECT_ID,
     NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY,
   };
+}
+
+// Development-friendly configuration that allows missing variables
+export function getConfigForDevelopment(): Partial<Config> {
+  const { warnings } = validateEnvironment();
+
+  if (warnings.length > 0) {
+    console.warn('⚠️ Configuration warnings (development mode):');
+    warnings.forEach(warning => console.warn(`   - ${warning}`));
+  }
+
+  // Return partial config with defaults for development
+  return {
+    NEXT_PUBLIC_STACK_PROJECT_ID: process.env.NEXT_PUBLIC_STACK_PROJECT_ID || 'dev-project-id',
+    NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY || 'dev-publishable-key',
+    STACK_SECRET_SERVER_KEY: process.env.STACK_SECRET_SERVER_KEY || 'dev-secret-server-key-that-is-exactly-64-characters-long-enough',
+    DATABASE_URL: process.env.DATABASE_URL || 'postgresql://dev:dev@localhost:5432/dev_chatbot',
+    BAWS_ACCESS_KEY_ID: process.env.BAWS_ACCESS_KEY_ID || 'dev-access-key',
+    BAWS_SECRET_ACCESS_KEY: process.env.BAWS_SECRET_ACCESS_KEY || 'dev-secret-access-key',
+    DEFAULT_REGION: process.env.DEFAULT_REGION || 'ap-southeast-1',
+    BEDROCK_REGION: process.env.BEDROCK_REGION || 'us-east-1',
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME || 'dev-chatbot-bucket',
+    MISTRAL_API_KEY: process.env.MISTRAL_API_KEY || 'dev-mistral-key',
+    LLAMAINDEX_API_KEY: process.env.LLAMAINDEX_API_KEY || 'dev-llamaindex-key',
+  };
+}
+
+// Environment check utilities
+export function isProduction(): boolean {
+  return process.env.NODE_ENV === 'production';
+}
+
+export function isDevelopment(): boolean {
+  return process.env.NODE_ENV === 'development';
+}
+
+export function isTest(): boolean {
+  return process.env.NODE_ENV === 'test';
+}
+
+// Safe config getter that adapts to environment
+export function getConfigAdaptive(): Partial<Config> {
+  if (isTest()) {
+    // In test environment, use test configurations
+    return getConfigSafe();
+  }
+
+  if (isDevelopment()) {
+    // In development, be more lenient
+    return getConfigForDevelopment();
+  }
+
+  // In production, use strict validation
+  return getConfig();
 }
 

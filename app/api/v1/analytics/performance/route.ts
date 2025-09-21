@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'pg';
-import { getConfig } from '@/lib/config';
+import { getConfigSafe } from '@/lib/config';
 import { withChatbotMonitoring } from '@/lib/monitoring/api-wrapper';
 
 /**

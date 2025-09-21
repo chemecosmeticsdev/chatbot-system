@@ -13,10 +13,10 @@ import { securityMonitor } from '@/lib/security/monitoring';
 
 async function handler(req: NextRequest): Promise<NextResponse> {
   const startTime = Date.now();
+  const { searchParams } = req.nextUrl;
+  const testType = searchParams.get('test') || 'all';
 
   try {
-    const { searchParams } = req.nextUrl;
-    const testType = searchParams.get('test') || 'all';
 
     const results: any = {
       timestamp: new Date().toISOString(),

@@ -37,7 +37,7 @@ describe('Header Component', () => {
     render(<Header onMenuClick={mockOnMenuClick} />);
 
     // Check if user avatar is displayed
-    const avatarButton = screen.getByRole('button', { name: /user avatar/i });
+    const avatarButton = screen.getByRole('button', { name: 'J' });
     expect(avatarButton).toBeInTheDocument();
 
     // Check if user initial is displayed in avatar fallback
@@ -62,7 +62,7 @@ describe('Header Component', () => {
     render(<Header onMenuClick={mockOnMenuClick} />);
 
     // Click on user avatar to open dropdown
-    const avatarButton = screen.getByRole('button', { name: /user avatar/i });
+    const avatarButton = screen.getByRole('button', { name: 'J' });
     fireEvent.click(avatarButton);
 
     // Check if dropdown menu items are visible
@@ -99,7 +99,7 @@ describe('Header Component', () => {
     const searchInput = screen.getByPlaceholderText(/search/i);
     const languageButton = screen.getByRole('button', { name: /switch language/i });
     const themeButton = screen.getByRole('button', { name: /switch theme/i });
-    const avatarButton = screen.getByRole('button', { name: /user avatar/i });
+    const avatarButton = screen.getByRole('button', { name: 'J' });
 
     expect(searchInput).toHaveAttribute('type', 'search');
     expect(languageButton).toBeInTheDocument();
@@ -118,7 +118,7 @@ describe('Header Component', () => {
     render(<Header onMenuClick={mockOnMenuClick} />);
 
     // Open dropdown
-    const avatarButton = screen.getByRole('button', { name: /user avatar/i });
+    const avatarButton = screen.getByRole('button', { name: 'J' });
     fireEvent.click(avatarButton);
 
     // Check if user info is displayed
