@@ -26,12 +26,12 @@ interface ConversationWithMessages extends ConversationSession {
 }
 
 interface ConversationListFilters {
-  chatbotId?: string;
+  chatbot_instance_id?: string;
   status?: ConversationStatus;
   platform?: ConversationPlatform;
-  userIdentifier?: string;
-  dateFrom?: Date;
-  dateTo?: Date;
+  user_identifier?: string;
+  date_from?: Date;
+  date_to?: Date;
   limit?: number;
   offset?: number;
 }
@@ -131,7 +131,7 @@ export class ConversationService {
         const existingResult = await this.client.query(existingSessionQuery, [
           validatedData.user_identifier,
           validatedData.platform,
-          validatedData.chatbot_id
+          validatedData.chatbot_instance_id
         ]);
 
         if (existingResult.rows.length > 0) {
@@ -153,11 +153,11 @@ export class ConversationService {
         `;
 
         const values = [
-          validatedData.chatbot_id,
+          validatedData.chatbot_instance_id,
           validatedData.user_identifier,
           validatedData.platform,
           'active',
-          JSON.stringify(validatedData.metadata || {})
+          JSON.stringify(validatedData.session_metadata || {})
         ];
 
         const result = await this.client.query(query, values);
@@ -170,7 +170,7 @@ export class ConversationService {
 
         // Log successful session creation
         SentryUtils.captureConversation({
-          chatbotId: session.chatbot_id,
+          chatbotId: session.chatbot_instance_id,
           sessionId: session.id,
           messageId: 'session_start',
           messageType: 'system_message',
@@ -188,7 +188,7 @@ export class ConversationService {
         table: 'conversation_sessions',
         organizationId,
         additionalData: {
-          chatbot_id: data.chatbot_id,
+          chatbot_id: data.chatbot_instance_id,
           platform: data.platform
         }
       }
@@ -241,9 +241,9 @@ export class ConversationService {
         let paramIndex = 2;
 
         // Apply filters
-        if (filters.chatbot_id) {
+        if (filters.chatbot_instance_id) {
           whereConditions.push(`cs.chatbot_id = $${paramIndex}`);
-          queryParams.push(filters.chatbot_id);
+          queryParams.push(filters.chatbot_instance_id);
           paramIndex++;
         }
 
@@ -318,13 +318,13 @@ export class ConversationService {
         });
 
         return {
-          conversations,
-          pagination: {
-            page,
-            limit,
-            total,
-            pages: Math.ceil(total / limit)
-          }
+          conversations: conversations.map(conv => ({
+            ...conv,
+            messages: [], // Will be loaded separately if needed
+            messageCount: conv.message_count
+          })),
+          total,
+          hasMore: (page * limit) < total
         };
       },
       {
@@ -377,11 +377,11 @@ export class ConversationService {
           let suggestedFollowups: string[] = [];
           let contextSources: MessageResponse['context_sources'] = [];
 
-          if (validatedData.role === 'user') {
+          if (validatedData.message_type === 'user_message') {
             // Get context from vector search
             const searchResults = await this.vectorService.similaritySearch(
               validatedData.content,
-              session.chatbot_id,
+              session.chatbot_instance_id,
               sessionId
             );
 
@@ -399,10 +399,10 @@ export class ConversationService {
 
           // Log successful message processing
           SentryUtils.captureConversation({
-            chatbotId: session.chatbot_id,
+            chatbotId: session.chatbot_instance_id,
             sessionId: sessionId,
             messageId: message.id,
-            messageType: validatedData.role === 'user' ? 'user_message' : 'bot_response',
+            messageType: validatedData.message_type,
             success: true,
             processingTime,
             metadata: {
@@ -424,7 +424,7 @@ export class ConversationService {
           organizationId,
           additionalData: {
             session_id: sessionId,
-            role: messageData.role,
+            message_type: messageData.message_type,
             content_length: messageData.content.length
           }
         }
@@ -437,7 +437,7 @@ export class ConversationService {
         chatbotId: 'unknown',
         sessionId: sessionId,
         messageId: 'unknown',
-        messageType: messageData.role === 'user' ? 'user_message' : 'bot_response',
+        messageType: messageData.message_type,
         success: false,
         processingTime,
         errorMessage: (error as Error).message
@@ -460,10 +460,10 @@ export class ConversationService {
 
     const values = [
       sessionId,
-      data.role,
+      data.message_type,
       data.content,
       JSON.stringify(data.attachments || []),
-      JSON.stringify(data.metadata || {})
+      JSON.stringify(data.response_metadata || {})
     ];
 
     const result = await this.client.query(query, values);
@@ -512,7 +512,8 @@ export class ConversationService {
 
         return {
           ...session,
-          messages
+          messages,
+          messageCount: messages.length
         };
       },
       {
@@ -539,16 +540,15 @@ export class ConversationService {
     return withDatabaseMonitoring(
       async () => {
         const updateData: UpdateConversationSession = {
-          status,
-          updated_at: new Date()
+          status
         };
 
         if (metadata) {
           // Get existing session to merge metadata
           const existingSession = await this.getById(sessionId, organizationId);
           if (existingSession) {
-            updateData.metadata = {
-              ...existingSession.metadata,
+            updateData.session_metadata = {
+              ...existingSession.session_metadata,
               ...metadata,
               [`${status}_at`]: new Date().toISOString()
             };
@@ -756,7 +756,7 @@ export class ConversationService {
    * Check session limits (messages, duration, etc.)
    */
   private async checkSessionLimits(sessionId: string, platform: string): Promise<void> {
-    const limits = SESSION_LIMITS[platform] || SESSION_LIMITS.web;
+    const limits = SESSION_LIMITS;
 
     // Check message count limit
     const messageCountQuery = `
@@ -803,8 +803,8 @@ export class ConversationService {
           throw new ConversationError(`Session not found: ${sessionId}`);
         }
 
-        const userMessages = conversation.messages.filter(m => m.role === 'user');
-        const botMessages = conversation.messages.filter(m => m.role === 'assistant');
+        const userMessages = conversation.messages.filter(m => m.message_type === 'user_message');
+        const botMessages = conversation.messages.filter(m => m.message_type === 'bot_response');
 
         const duration = conversation.updated_at
           ? Math.round((new Date(conversation.updated_at).getTime() - new Date(conversation.created_at).getTime()) / (1000 * 60))
@@ -815,7 +815,7 @@ export class ConversationService {
           session_id: sessionId,
           message_count: conversation.messages.length,
           duration_minutes: duration,
-          resolution_status: conversation.status === 'completed' ? 'resolved' : 'unresolved',
+          resolution_status: conversation.status === 'terminated' ? 'resolved' : 'unresolved',
           satisfaction_score: undefined, // Would be calculated from feedback
           key_topics: ['general inquiry', 'support'], // Would be extracted via NLP
           summary: `User conversation with ${userMessages.length} questions and ${botMessages.length} responses over ${duration} minutes.`
