@@ -24,7 +24,7 @@ describe('PerformanceValidationService', () => {
   let performanceService: PerformanceValidationService;
   let mockPool: jest.Mocked<Pool>;
   let mockVectorService: jest.Mocked<VectorSearchService>;
-  let mockOptimizationService: jest.Mocked<VectorOptimizationService>;
+  let mockOptimizationService: any;
 
   beforeEach(() => {
     // Setup mock pool
@@ -43,10 +43,16 @@ describe('PerformanceValidationService', () => {
     } as any;
 
     mockOptimizationService = {
-      optimizeIndexes: jest.fn(),
-      updateStatistics: jest.fn(),
-      optimizeMemoryUsage: jest.fn()
-    } as any;
+      analyzeIndexPerformance: jest.fn().mockResolvedValue([]),
+      optimizeVectorIndexes: jest.fn().mockResolvedValue([]),
+      runMaintenanceRoutines: jest.fn().mockResolvedValue({ success: true }),
+      getHealthCheck: jest.fn().mockResolvedValue({ status: 'healthy' }),
+      startPerformanceMonitoring: jest.fn(),
+      stopPerformanceMonitoring: jest.fn(),
+      getPerformanceHistory: jest.fn().mockReturnValue([]),
+      optimizeQuery: jest.fn().mockResolvedValue(''),
+      batchOptimization: jest.fn().mockResolvedValue([])
+    };
 
     // Create service instance
     performanceService = new PerformanceValidationService(mockPool);
@@ -101,6 +107,7 @@ describe('PerformanceValidationService', () => {
           chunk_index: 0,
           content: 'test content',
           similarity: 0.9,
+          similarity_score: 0.9,
           metadata: {}
         }];
       });
@@ -144,9 +151,9 @@ describe('PerformanceValidationService', () => {
       );
 
       // Optimization should be triggered
-      expect(mockOptimizationService.optimizeIndexes).toHaveBeenCalled();
-      expect(mockOptimizationService.updateStatistics).toHaveBeenCalled();
-      expect(mockOptimizationService.optimizeMemoryUsage).toHaveBeenCalled();
+      expect(mockOptimizationService.analyzeIndexPerformance).toHaveBeenCalled();
+      expect(mockOptimizationService.optimizeVectorIndexes).toHaveBeenCalled();
+      expect(mockOptimizationService.runMaintenanceRoutines).toHaveBeenCalled();
     });
   });
 
@@ -181,6 +188,7 @@ describe('PerformanceValidationService', () => {
           chunk_index: 0,
           content: 'benchmark content',
           similarity: 0.9,
+          similarity_score: 0.9,
           metadata: {}
         }];
       });
@@ -211,7 +219,7 @@ describe('PerformanceValidationService', () => {
       // First benchmark - good performance
       mockVectorService.similaritySearch.mockImplementationOnce(async () => {
         await new Promise(resolve => setTimeout(resolve, 100));
-        return [{ id: '1', document_id: 'doc1', chunk_index: 0, content: 'content', similarity: 0.9, metadata: {} }];
+        return [{ id: '1', document_id: 'doc1', chunk_index: 0, content: 'content', similarity: 0.9, similarity_score: 0.9, metadata: {} }];
       });
 
       const firstBenchmarks = await performanceService.runPerformanceBenchmark(['small']);
@@ -219,7 +227,7 @@ describe('PerformanceValidationService', () => {
       // Second benchmark - degraded performance
       mockVectorService.similaritySearch.mockImplementation(async () => {
         await new Promise(resolve => setTimeout(resolve, 250));
-        return [{ id: '1', document_id: 'doc1', chunk_index: 0, content: 'content', similarity: 0.9, metadata: {} }];
+        return [{ id: '1', document_id: 'doc1', chunk_index: 0, content: 'content', similarity: 0.9, similarity_score: 0.9, metadata: {} }];
       });
 
       const secondBenchmarks = await performanceService.runPerformanceBenchmark(['small']);
@@ -489,9 +497,9 @@ describe('PerformanceValidationService', () => {
       const optimizationTriggered = await performanceService.optimizeIfNeeded();
 
       expect(optimizationTriggered).toBe(true);
-      expect(mockOptimizationService.optimizeIndexes).toHaveBeenCalled();
-      expect(mockOptimizationService.updateStatistics).toHaveBeenCalled();
-      expect(mockOptimizationService.optimizeMemoryUsage).toHaveBeenCalled();
+      expect(mockOptimizationService.analyzeIndexPerformance).toHaveBeenCalled();
+      expect(mockOptimizationService.optimizeVectorIndexes).toHaveBeenCalled();
+      expect(mockOptimizationService.runMaintenanceRoutines).toHaveBeenCalled();
     });
 
     it('should not trigger optimization when performance is good', async () => {
@@ -512,12 +520,12 @@ describe('PerformanceValidationService', () => {
       const optimizationTriggered = await performanceService.optimizeIfNeeded();
 
       expect(optimizationTriggered).toBe(false);
-      expect(mockOptimizationService.optimizeIndexes).not.toHaveBeenCalled();
+      expect(mockOptimizationService.optimizeVectorIndexes).not.toHaveBeenCalled();
     });
 
     it('should handle optimization failures gracefully', async () => {
       // Mock optimization failure
-      mockOptimizationService.optimizeIndexes.mockRejectedValue(new Error('Optimization failed'));
+      mockOptimizationService.optimizeVectorIndexes.mockRejectedValue(new Error('Optimization failed'));
 
       // Add poor results to trigger optimization
       const poorResults = [{
@@ -557,7 +565,7 @@ describe('PerformanceValidationService', () => {
     });
 
     it('should handle optimization service errors', async () => {
-      mockOptimizationService.optimizeIndexes.mockRejectedValue(new Error('Optimization failed'));
+      mockOptimizationService.optimizeVectorIndexes.mockRejectedValue(new Error('Optimization failed'));
 
       // Create conditions that would trigger optimization
       const poorResults = [{
