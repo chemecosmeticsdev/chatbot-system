@@ -267,14 +267,14 @@ test.describe('Thai Language Support Integration', () => {
       await input.blur();
 
       // Check validation state
-      const validationMessage = await input.evaluate(el => el.validationMessage);
+      const validationMessage = await input.evaluate(el => (el as HTMLInputElement).validationMessage);
       expect(validationMessage).toBeTruthy();
 
       // Test with longer Thai text (should pass validation)
       await input.fill(THAI_TEST_DATA.text.medium);
       await input.blur();
 
-      const isValid = await input.evaluate(el => el.checkValidity());
+      const isValid = await input.evaluate(el => (el as HTMLInputElement).checkValidity());
       expect(isValid).toBeTruthy();
     });
 
@@ -614,7 +614,7 @@ test.describe('Thai Language Support Integration', () => {
       // Check that Thai fonts are actually loaded
       const fontFaces = await page.evaluate(() => {
         const fonts = [];
-        for (const font of document.fonts) {
+        for (const font of Array.from(document.fonts)) {
           fonts.push(font.family);
         }
         return fonts;

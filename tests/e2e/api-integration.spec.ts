@@ -89,7 +89,9 @@ test.describe('API Integration Tests', () => {
 
   test('should validate API response times', async ({ page, browserName }) => {
     // Skip performance tests on slower browsers in CI
-    test.skip(browserName === 'webkit' && process.env.CI, 'Skipping performance test on WebKit in CI');
+    if (browserName === 'webkit' && process.env.CI) {
+      test.skip();
+    }
 
     const startTime = Date.now();
     const healthResponse = await page.request.get('/api/health');

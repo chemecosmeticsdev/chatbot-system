@@ -238,7 +238,7 @@ test.describe('Accessibility Tests', () => {
     for (let i = 0; i < dismissibleCount; i++) {
       const button = dismissibleAlerts.nth(i)
       const ariaLabel = await button.getAttribute('aria-label')
-      expect(ariaLabel).toContain('dismiss', { ignoreCase: true })
+      expect(ariaLabel?.toLowerCase()).toContain('dismiss')
     }
   })
 
@@ -262,7 +262,7 @@ test.describe('Accessibility Tests', () => {
 
       // Use axe to check contrast for this specific element
       const elementResults = await new AxeBuilder({ page })
-        .include(element)
+        .include(await element.getAttribute('data-testid') || 'body')
         .withTags(['wcag2aa'])
         .withRules(['color-contrast'])
         .analyze()
