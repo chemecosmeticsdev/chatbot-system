@@ -212,8 +212,10 @@ export class PerformanceValidationService {
       SentryUtils.captureError(error as Error, {
         chatbotId,
         sessionId,
-        duration_ms: duration,
-        test_queries_count: testQueries.length
+        additionalData: {
+          duration_ms: duration,
+          test_queries_count: testQueries.length
+        }
       });
 
       throw new VectorSearchError(
@@ -355,8 +357,10 @@ export class PerformanceValidationService {
 
     } catch (error) {
       SentryUtils.captureError(error as Error, {
-        load_test_config: config,
-        results_count: results.length
+        additionalData: {
+          load_test_config: config,
+          results_count: results.length
+        }
       });
 
       throw new VectorSearchError(
@@ -439,9 +443,11 @@ export class PerformanceValidationService {
 
     } catch (error) {
       SentryUtils.captureError(error as Error, {
-        period_days: periodDays,
-        start_date: startDate,
-        end_date: endDate
+        additionalData: {
+          period_days: periodDays,
+          start_date: startDate,
+          end_date: endDate
+        }
       });
 
       throw new VectorSearchError(
@@ -470,7 +476,9 @@ export class PerformanceValidationService {
         await this.performMonitoringCheck();
       } catch (error) {
         SentryUtils.captureError(error as Error, {
-          monitoring_check: true
+          additionalData: {
+            monitoring_check: true
+          }
         });
       }
     }, intervalSeconds * 1000);
@@ -524,9 +532,8 @@ export class PerformanceValidationService {
         });
 
         // Trigger various optimization strategies
-        await this.optimizationService.optimizeIndexes();
-        await this.optimizationService.updateStatistics();
-        await this.optimizationService.optimizeMemoryUsage();
+        await this.optimizationService.optimizeVectorIndexes();
+        await this.optimizationService.runMaintenanceRoutines();
 
         return true;
       }
@@ -826,13 +833,15 @@ export class PerformanceValidationService {
       });
 
       // Trigger optimization service
-      await this.optimizationService.optimizeIndexes();
-      await this.optimizationService.updateStatistics();
+      await this.optimizationService.optimizeVectorIndexes();
+      await this.optimizationService.runMaintenanceRoutines();
 
     } catch (error) {
       SentryUtils.captureError(error as Error, {
-        optimization_trigger: triggerType,
-        metadata
+        additionalData: {
+          optimization_trigger: triggerType,
+          metadata
+        }
       });
     }
   }

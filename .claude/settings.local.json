@@ -54,7 +54,8 @@
       "mcp__shadcn__view_items_in_registries",
       "mcp__shadcn__get_item_examples_from_registries",
       "Bash(npm test:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(cut:*)"
     ],
     "deny": [],
     "ask": []
