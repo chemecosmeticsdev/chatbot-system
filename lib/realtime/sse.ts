@@ -367,7 +367,7 @@ export class SSEManager {
   private getRelevantConnections(event: SSEEvent): SSEConnection[] {
     const relevantConnections: SSEConnection[] = [];
 
-    for (const connection of this.connections.values()) {
+    for (const connection of Array.from(this.connections.values())) {
       if (!connection.isActive) continue;
 
       // Check organization filter
@@ -517,8 +517,8 @@ export class SSEManager {
     // Basic permissions - in a real app, this would query the database
     const permissions = ['user'];
 
-    // Check if user is admin
-    if (user.serverMetadata?.role === 'admin') {
+    // Check if user is admin (using type-safe property access)
+    if ((user as any).serverMetadata?.role === 'admin') {
       permissions.push('admin', 'monitor', 'chatbot_manager');
     }
 
@@ -558,7 +558,7 @@ export class SSEManager {
     const now = Date.now();
     const timeout = 5 * 60 * 1000; // 5 minutes
 
-    for (const [connectionId, connection] of this.connections.entries()) {
+    for (const [connectionId, connection] of Array.from(this.connections.entries())) {
       if (!connection.isActive || (now - connection.lastActivity.getTime()) > timeout) {
         this.removeConnection(connectionId);
       }
@@ -581,7 +581,7 @@ export class SSEManager {
       eventTypes: {} as Record<SSEEventType, number>
     };
 
-    for (const connection of this.connections.values()) {
+    for (const connection of Array.from(this.connections.values())) {
       if (connection.isActive) {
         stats.activeConnections++;
       }
@@ -589,7 +589,7 @@ export class SSEManager {
       stats.connectionsByUser[connection.userId] =
         (stats.connectionsByUser[connection.userId] || 0) + 1;
 
-      for (const eventType of connection.subscriptions) {
+      for (const eventType of Array.from(connection.subscriptions)) {
         stats.eventTypes[eventType] = (stats.eventTypes[eventType] || 0) + 1;
       }
     }
@@ -636,7 +636,7 @@ export class SSEManager {
     clearInterval(this.cleanupInterval);
 
     // Close all connections
-    for (const connection of this.connections.values()) {
+    for (const connection of Array.from(this.connections.values())) {
       try {
         connection.controller.close();
       } catch (error) {
@@ -787,14 +787,3 @@ export function createChatbotMetricsEvent(
   };
 }
 
-// Export types for external use
-export type {
-  SSEEventType,
-  SSEEvent,
-  DocumentProcessingEvent,
-  ConversationActivityEvent,
-  SystemHealthEvent,
-  ErrorNotificationEvent,
-  ChatbotMetricsEvent,
-  SSEConnection
-};

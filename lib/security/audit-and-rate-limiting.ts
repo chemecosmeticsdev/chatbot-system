@@ -62,13 +62,13 @@ class RateLimitStore {
   // Clean up expired entries
   private cleanup() {
     const now = Date.now();
-    for (const [key, value] of this.store.entries()) {
+    for (const [key, value] of Array.from(this.store.entries())) {
       if (now > value.resetTime) {
         this.store.delete(key);
       }
     }
     // Clean up old violations (keep for 24 hours)
-    for (const [key, value] of this.violationStore.entries()) {
+    for (const [key, value] of Array.from(this.violationStore.entries())) {
       if (now - value.lastViolation > 24 * 60 * 60 * 1000) {
         this.violationStore.delete(key);
       }

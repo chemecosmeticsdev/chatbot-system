@@ -416,10 +416,3 @@ export function SystemHealthMonitor() {
   );
 }
 
-// Export all components
-export {
-  StatusIndicator,
-  EventList,
-  DocumentProcessingMonitor,
-  SystemHealthMonitor
-};

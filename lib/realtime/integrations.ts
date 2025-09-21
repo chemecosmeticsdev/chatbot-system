@@ -371,7 +371,8 @@ export class SystemHealthSSE {
       organizationId
     );
 
-    event.data.metadata = { model };
+    // Add model info to the message instead of metadata
+    event.data.message = `${model} API response time: ${responseTime}ms (model: ${model})`;
 
     await sseManager.broadcastEvent(event);
 
@@ -656,10 +657,5 @@ export function sseMiddleware(eventType: string) {
   };
 }
 
-// Export all integration classes (DocumentProcessingSSE already exported above)
-export {
-  ConversationSSE,
-  SystemHealthSSE,
-  ErrorMonitoringSSE,
-  ChatbotMetricsSSE
-};
+// All classes are already exported with their declarations above
+// No need for additional export block

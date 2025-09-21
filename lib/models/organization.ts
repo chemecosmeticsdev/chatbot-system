@@ -78,7 +78,7 @@ export class OrganizationModel {
   private data: IOrganization;
 
   constructor(data: IOrganizationData) {
-    this.data = OrganizationSchema.parse(this.normalizeData(data));
+    this.data = this.normalizeData(data);
   }
 
   private normalizeData(data: IOrganizationData): IOrganization {
@@ -87,7 +87,7 @@ export class OrganizationModel {
       name: data.name,
       slug: data.slug,
       settings: data.settings ?? {},
-      subscription_tier: data.subscription_tier ?? 'basic',
+      subscription_tier: (data.subscription_tier ?? 'basic') as 'basic' | 'professional' | 'enterprise',
       created_at: new Date(data.created_at),
       updated_at: new Date(data.updated_at)
     };

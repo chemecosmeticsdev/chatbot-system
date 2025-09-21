@@ -152,7 +152,7 @@ export class ChatbotInstanceModel {
   private data: IChatbotInstance;
 
   constructor(data: IChatbotInstanceData) {
-    this.data = ChatbotInstanceSchema.parse(ChatbotInstanceModel.normalizeData(data));
+    this.data = ChatbotInstanceModel.normalizeData(data);
   }
 
   private static normalizeData(data: IChatbotInstanceData): IChatbotInstance {
@@ -161,7 +161,7 @@ export class ChatbotInstanceModel {
       organization_id: data.organization_id,
       name: data.name,
       description: data.description,
-      status: data.status ?? 'draft',
+      status: (data.status ?? 'draft') as 'draft' | 'active' | 'inactive' | 'archived',
       llm_provider: data.llm_provider,
       llm_model: data.llm_model,
       system_prompt: data.system_prompt,

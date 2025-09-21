@@ -103,7 +103,7 @@ export class ConversationSessionModel {
   private data: IConversationSession;
 
   constructor(data: IConversationSessionData) {
-    this.data = ConversationSessionSchema.parse(this.normalizeData(data));
+    this.data = this.normalizeData(data);
   }
 
   private normalizeData(data: IConversationSessionData): IConversationSession {
@@ -112,7 +112,7 @@ export class ConversationSessionModel {
       chatbot_instance_id: data.chatbot_instance_id,
       platform: data.platform,
       user_identifier: data.user_identifier,
-      status: data.status ?? 'active',
+      status: (data.status ?? 'active') as 'active' | 'inactive' | 'expired' | 'terminated',
       start_time: new Date(data.start_time),
       end_time: data.end_time ? new Date(data.end_time) : undefined,
       message_count: data.message_count ?? 0,
