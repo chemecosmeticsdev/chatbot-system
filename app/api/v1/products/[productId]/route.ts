@@ -47,7 +47,7 @@ function successResponse(data: any, status: number = 200) {
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
   const client = createDatabaseClient();
 
@@ -55,7 +55,8 @@ export async function GET(
     await client.connect();
     const productService = new ProductService(client);
     const organizationId = getOrganizationId(request);
-    const productId = params.productId;
+    const resolvedParams = await params;
+    const productId = resolvedParams.productId;
 
     // Validate UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -85,7 +86,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
   const client = createDatabaseClient();
 
@@ -93,7 +94,8 @@ export async function PUT(
     await client.connect();
     const productService = new ProductService(client);
     const organizationId = getOrganizationId(request);
-    const productId = params.productId;
+    const resolvedParams = await params;
+    const productId = resolvedParams.productId;
 
     // Validate UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -139,7 +141,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: Promise<{ productId: string }> }
 ) {
   const client = createDatabaseClient();
 
@@ -147,7 +149,8 @@ export async function DELETE(
     await client.connect();
     const productService = new ProductService(client);
     const organizationId = getOrganizationId(request);
-    const productId = params.productId;
+    const resolvedParams = await params;
+    const productId = resolvedParams.productId;
 
     // Validate UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'pg';
-import { getConfigSafe } from '@/lib/config';
+import { getConfig } from '@/lib/config';
 
 export async function GET() {
   try {
     // Test database connection
-    const config = getConfigSafe();
+    const config = getConfig();
     const client = new Client({
       connectionString: config.DATABASE_URL,
       ssl: { rejectUnauthorized: false }

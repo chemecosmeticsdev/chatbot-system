@@ -11,13 +11,13 @@ export interface ApiContext {
 
 // Wrapper for API routes with automatic Sentry monitoring
 export function withSentryMonitoring<T = any>(
-  handler: (req: NextRequest, context?: Record<string, any>) => Promise<NextResponse<T>>,
+  handler: (req: NextRequest, context?: any) => Promise<NextResponse<any>>,
   options?: {
     operationName?: string;
     extractContext?: (req: NextRequest) => ApiContext;
   }
 ) {
-  return async (req: NextRequest, context?: Record<string, any>): Promise<NextResponse<T>> => {
+  return async (req: NextRequest, context?: any): Promise<NextResponse<any>> => {
     const startTime = Date.now();
     const operationName = options?.operationName || `${req.method} ${req.nextUrl.pathname}`;
 
@@ -147,7 +147,7 @@ export function extractChatbotContext(req: NextRequest): ApiContext {
 
 // Specialized wrapper for chatbot API routes
 export function withChatbotMonitoring<T = any>(
-  handler: (req: NextRequest, context?: Record<string, any>) => Promise<NextResponse<T>>,
+  handler: (req: NextRequest, context?: any) => Promise<NextResponse<any>>,
   operationName?: string
 ) {
   return withSentryMonitoring(handler, {
@@ -158,7 +158,7 @@ export function withChatbotMonitoring<T = any>(
 
 // Specialized wrapper for vector search operations
 export function withVectorSearchMonitoring<T = any>(
-  handler: (req: NextRequest, context?: Record<string, any>) => Promise<NextResponse<T>>,
+  handler: (req: NextRequest, context?: any) => Promise<NextResponse<any>>,
   operationName?: string
 ) {
   return withSentryMonitoring(handler, {

@@ -132,7 +132,7 @@ export class DeploymentValidator {
 
       // Additional environment validation
       const warnings: string[] = [];
-      const config = getConfigSafe();
+      const config = getConfig();
 
       // Check for development values in production
       if (this.config.environment === 'production') {
@@ -338,7 +338,7 @@ export class DeploymentValidator {
     try {
       console.log('☁️ Validating AWS services...');
 
-      const config = getConfigSafe();
+      const config = getConfig();
       const awsConfig = {
         region: config.DEFAULT_REGION,
         credentials: {

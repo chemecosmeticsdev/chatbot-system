@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'pg';
 import { ChatbotService } from '@/lib/chatbot/service';
-import { getConfigSafe } from '@/lib/config';
+import { getConfig } from '@/lib/config';
 import { withChatbotMonitoring } from '@/lib/monitoring/api-wrapper';
 
 /**
@@ -13,7 +13,7 @@ import { withChatbotMonitoring } from '@/lib/monitoring/api-wrapper';
 
 // Initialize database client
 function createDatabaseClient(): Client {
-  const config = getConfigSafe();
+  const config = getConfig();
   return new Client({
     connectionString: config.DATABASE_URL,
     ssl: { rejectUnauthorized: false }

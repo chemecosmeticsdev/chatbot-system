@@ -13,7 +13,7 @@ import { withChatbotMonitoring } from '@/lib/monitoring/api-wrapper';
 
 // Initialize database client
 function createDatabaseClient(): Client {
-  const config = getConfigSafe();
+  const config = getConfig();
   return new Client({
     connectionString: config.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
@@ -48,7 +48,7 @@ function successResponse(data: any, status: number = 200) {
  */
 async function handleGET(
   request: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
   const client = createDatabaseClient();
 
@@ -56,7 +56,8 @@ async function handleGET(
     await client.connect();
     const conversationService = new ConversationService(client);
     const organizationId = getOrganizationId(request);
-    const sessionId = params.sessionId;
+    const resolvedParams = await params;
+    const sessionId = resolvedParams.sessionId;
 
     // Validate UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -107,7 +108,7 @@ async function handleGET(
  */
 async function handlePUT(
   request: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
   const client = createDatabaseClient();
 
@@ -115,7 +116,8 @@ async function handlePUT(
     await client.connect();
     const conversationService = new ConversationService(client);
     const organizationId = getOrganizationId(request);
-    const sessionId = params.sessionId;
+    const resolvedParams = await params;
+    const sessionId = resolvedParams.sessionId;
 
     // Validate UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -176,7 +178,7 @@ async function handlePUT(
  */
 async function handleDELETE(
   request: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
   const client = createDatabaseClient();
 
@@ -184,7 +186,8 @@ async function handleDELETE(
     await client.connect();
     const conversationService = new ConversationService(client);
     const organizationId = getOrganizationId(request);
-    const sessionId = params.sessionId;
+    const resolvedParams = await params;
+    const sessionId = resolvedParams.sessionId;
 
     // Validate UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

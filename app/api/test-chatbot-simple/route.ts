@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'pg';
-import { getConfigSafe } from '@/lib/config';
+import { getConfig } from '@/lib/config';
 
 function createDatabaseClient(): Client {
-  const config = getConfigSafe();
+  const config = getConfig();
   return new Client({
     connectionString: config.DATABASE_URL,
     ssl: { rejectUnauthorized: false }

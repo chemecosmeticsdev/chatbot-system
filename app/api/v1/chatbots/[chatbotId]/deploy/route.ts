@@ -13,7 +13,7 @@ import { withChatbotMonitoring } from '@/lib/monitoring/api-wrapper';
 
 // Initialize database client
 function createDatabaseClient(): Client {
-  const config = getConfigSafe();
+  const config = getConfig();
   return new Client({
     connectionString: config.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
@@ -48,7 +48,7 @@ function successResponse(data: any, status: number = 200) {
  */
 async function handlePOST(
   request: NextRequest,
-  { params }: { params: { chatbotId: string } }
+  { params }: { params: Promise<{ chatbotId: string }> }
 ) {
   const client = createDatabaseClient();
 
@@ -56,7 +56,8 @@ async function handlePOST(
     await client.connect();
     const chatbotService = new ChatbotService(client);
     const organizationId = getOrganizationId(request);
-    const chatbotId = params.chatbotId;
+    const resolvedParams = await params;
+    const chatbotId = resolvedParams.chatbotId;
 
     // Validate UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -96,14 +97,7 @@ async function handlePOST(
     const deployment = await chatbotService.deploy(
       chatbotId,
       requestData.environment,
-      organizationId,
-      {
-        deployment_notes: requestData.deployment_notes || '',
-        auto_scale: requestData.auto_scale !== false, // default true
-        health_check_enabled: requestData.health_check_enabled !== false, // default true
-        rollback_on_failure: requestData.rollback_on_failure !== false, // default true
-        deployment_timeout: requestData.deployment_timeout || 300 // 5 minutes default
-      }
+      organizationId
     );
 
     return successResponse({

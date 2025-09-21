@@ -1,11 +1,11 @@
 import { StackServerApp } from "@stackframe/stack";
-import { getConfigSafe } from "./lib/config";
+import { getConfig } from "./lib/config";
 
 // Initialize Stack Auth conditionally
 let stackServerApp: StackServerApp | null = null;
 
 try {
-  const config = getConfigSafe();
+  const config = getConfig();
 
   if (config.NEXT_PUBLIC_STACK_PROJECT_ID && config.STACK_SECRET_SERVER_KEY) {
     stackServerApp = new StackServerApp({
