@@ -46,7 +46,11 @@
       "mcp__neon__list_projects",
       "mcp__neon__get_database_tables",
       "mcp__neon__describe_table_schema",
-      "mcp__neon__run_sql"
+      "mcp__neon__run_sql",
+      "mcp__shadcn__get_project_registries",
+      "mcp__shadcn__search_items_in_registries",
+      "mcp__shadcn__get_add_command_for_items",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

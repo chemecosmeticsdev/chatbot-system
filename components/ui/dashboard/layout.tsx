@@ -1,6 +1,8 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
+import { useUser } from '@stackframe/stack';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Sidebar } from './sidebar';
 import { Header } from './header';
@@ -16,9 +18,35 @@ interface DashboardLayoutProps {
  *
  * Provides the core layout structure for the chatbot management dashboard
  * with responsive sidebar, header, and main content area.
+ * Requires authentication - redirects to sign-in if user is not authenticated.
  */
 export function DashboardLayout({ children, className }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const user = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user === null) {
+      router.push('/handler/sign-in');
+    }
+  }, [user, router]);
+
+  // Show loading state while checking authentication
+  if (user === undefined) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <p className="text-sm text-muted-foreground">Authenticating...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect to sign-in if not authenticated
+  if (!user) {
+    return null;
+  }
 
   return (
     <ChatbotErrorBoundary
