@@ -242,8 +242,8 @@ export class VectorSearchService {
   ): Promise<VectorSearchResult[]> {
     return withDatabaseMonitoring(
       async () => {
-        let whereConditions = ['1=1']; // Base condition
-        let queryParams: any[] = [JSON.stringify(queryEmbedding)];
+        const whereConditions = ['1=1']; // Base condition
+        const queryParams: any[] = [JSON.stringify(queryEmbedding)];
         let paramIndex = 2;
 
         // Apply chatbot-specific filtering (through products)
@@ -396,8 +396,8 @@ export class VectorSearchService {
   ): Promise<VectorSearchResult[]> {
     return withDatabaseMonitoring(
       async () => {
-        let whereConditions = ['1=1'];
-        let queryParams: any[] = [query];
+        const whereConditions = ['1=1'];
+        const queryParams: any[] = [query];
         let paramIndex = 2;
 
         // Apply chatbot-specific filtering

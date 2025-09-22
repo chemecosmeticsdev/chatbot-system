@@ -965,7 +965,7 @@ export class LineIntegrationService {
     }, integration.chatbot_id);
 
     let messageContent = '';
-    let attachments: any[] = [];
+    const attachments: any[] = [];
 
     switch (message.type) {
       case 'text':

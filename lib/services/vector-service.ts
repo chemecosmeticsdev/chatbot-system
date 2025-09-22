@@ -8,6 +8,7 @@
 import { Client } from 'pg';
 import { getBedrockClient } from '@/lib/aws';
 import { v4 as uuidv4 } from 'uuid';
+import { InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
 
 export interface DocumentChunk {
   id: string;
@@ -194,7 +195,6 @@ export class VectorService {
           })
         };
 
-        const { InvokeModelCommand } = await import('@aws-sdk/client-bedrock-runtime');
         const command = new InvokeModelCommand(input);
         const response = await bedrock.send(command);
 
@@ -296,7 +296,11 @@ export class VectorService {
     limit: number = 10,
     threshold: number = 0.7,
     organizationId?: string
-  ): Promise<Array<DocumentChunk & { similarity: number }>> {
+  ): Promise<Array<DocumentChunk & {
+    similarity: number;
+    document_title?: string;
+    filename?: string;
+  }>> {
     try {
       // Generate embedding for query
       const bedrock = getBedrockClient();
@@ -311,7 +315,6 @@ export class VectorService {
         })
       };
 
-      const { InvokeModelCommand } = await import('@aws-sdk/client-bedrock-runtime');
       const command = new InvokeModelCommand(input);
       const response = await bedrock.send(command);
 

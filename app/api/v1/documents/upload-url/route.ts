@@ -4,6 +4,8 @@ import { getConfig } from '@/lib/config';
 import { stackServerApp } from '@/stack';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 /**
  * S3 Presigned URL API
@@ -123,9 +125,6 @@ export async function POST(request: NextRequest) {
     const s3Client = getS3Client();
 
     // Generate presigned URL for PUT operation
-    const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
-    const { PutObjectCommand } = await import('@aws-sdk/client-s3');
-
     const putCommand = new PutObjectCommand({
       Bucket: config.S3_BUCKET_NAME,
       Key: s3Key,
