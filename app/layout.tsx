@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
-import { StackProvider, StackTheme } from "@stackframe/stack";
-import { stackServerApp } from "../stack";
-import { HybridAuthProvider } from "@/lib/auth/hybrid-auth-provider";
+import { AuthProvider } from "@/lib/auth/hybrid-auth-provider";
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -17,20 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {stackServerApp ? (
-          <StackProvider app={stackServerApp as any}>
-            <StackTheme>
-              <HybridAuthProvider>
-                {children}
-              </HybridAuthProvider>
-            </StackTheme>
-          </StackProvider>
-        ) : (
-          // Fallback when Stack Auth is not available
-          <HybridAuthProvider>
-            {children}
-          </HybridAuthProvider>
-        )}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )

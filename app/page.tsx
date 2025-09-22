@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Bot, MessageSquare, Zap, Shield, Globe, BarChart3, RefreshCw, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useUniversalUser, useHybridAuth } from '@/lib/auth/hybrid-auth-provider';
+import { useUser } from '@/lib/auth/hybrid-auth-provider';
 
 function LoadingScreen() {
   return (
@@ -22,40 +22,8 @@ function LoadingScreen() {
 }
 
 function LandingPage() {
-  const { authMode, networkError, retryStackAuth } = useHybridAuth();
-
-  const getSignInLink = () => {
-    return authMode === 'stack' ? '/handler/sign-in' : '/auth/sign-in';
-  };
-
-  const getSignUpLink = () => {
-    return authMode === 'stack' ? '/handler/sign-up' : '/auth/sign-up';
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      {/* Network Status Alert */}
-      {networkError && (
-        <div className="bg-yellow-50 border-b border-yellow-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <Alert className="border-yellow-300 bg-yellow-50">
-              <AlertCircle className="h-4 w-4 text-yellow-600" />
-              <AlertDescription className="text-yellow-800 flex items-center justify-between">
-                <span>{networkError}</span>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={retryStackAuth}
-                  className="ml-4 border-yellow-300 text-yellow-800 hover:bg-yellow-100"
-                >
-                  <RefreshCw className="h-3 w-3 mr-1" />
-                  Retry
-                </Button>
-              </AlertDescription>
-            </Alert>
-          </div>
-        </div>
-      )}
 
       {/* Header */}
       <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm">
@@ -66,12 +34,12 @@ function LandingPage() {
               <h1 className="text-2xl font-bold text-gray-900">ChatBot Manager</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href={getSignInLink()}>
+              <Link href="/handler/sign-in">
                 <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
                   Sign In
                 </Button>
               </Link>
-              <Link href={getSignUpLink()}>
+              <Link href="/handler/sign-up">
                 <Button className="bg-primary hover:bg-primary/90">
                   Get Started
                 </Button>
@@ -228,7 +196,7 @@ function LandingPage() {
 }
 
 export default function Home() {
-  const user = useUniversalUser();
+  const user = useUser();
   const router = useRouter();
 
   useEffect(() => {

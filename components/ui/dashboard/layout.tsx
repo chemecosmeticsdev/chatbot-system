@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useState, useEffect } from 'react';
-import { useUniversalUser, useHybridAuth } from '@/lib/auth/hybrid-auth-provider';
+import { useUser } from '@/lib/auth/hybrid-auth-provider';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Sidebar } from './sidebar';
@@ -22,16 +22,14 @@ interface DashboardLayoutProps {
  */
 export function DashboardLayout({ children, className }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = useUniversalUser();
-  const { authMode } = useHybridAuth();
+  const user = useUser();
   const router = useRouter();
 
   useEffect(() => {
     if (user === null) {
-      const signInUrl = authMode === 'stack' ? '/handler/sign-in' : '/auth/sign-in';
-      router.push(signInUrl);
+      router.push('/handler/sign-in');
     }
-  }, [user, router, authMode]);
+  }, [user, router]);
 
   // Show loading state while checking authentication
   if (user === undefined) {

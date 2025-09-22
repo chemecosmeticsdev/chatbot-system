@@ -644,4 +644,22 @@ npm run setup-env    # Environment validation
 git push origin main # Trigger deployment
 ```
 
+### AWS Amplify Build & Deployment
+For detailed build error troubleshooting and deployment best practices, refer to:
+**📋 [BUILD_DEPLOYMENT_GUIDE.md](./BUILD_DEPLOYMENT_GUIDE.md)**
+
+This guide includes:
+- Common build errors and solutions
+- AWS SDK dependency management
+- TypeScript type safety practices
+- Pre-deployment checklist
+- Amplify-specific configuration
+- Debug strategies for failed builds
+
+**IMPORTANT**: Always run the pre-deployment checklist before pushing to production branches:
+```bash
+# Complete pre-deployment validation
+npm ci && npm run type-check && npm run lint && npm run build
+```
+
 This configuration ensures Claude Code can efficiently work with the starter project and scale it into a full-featured application.

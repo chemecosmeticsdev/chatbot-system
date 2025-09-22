@@ -16,10 +16,10 @@ import {
   Settings,
   PlayCircle
 } from 'lucide-react';
-import { useUniversalUser } from '@/lib/auth/hybrid-auth-provider';
+import { useUser } from '@/lib/auth/hybrid-auth-provider';
 
 export default function DashboardPage() {
-  const user = useUniversalUser({ or: 'redirect' });
+  const user = useUser({ or: 'redirect' });
   return (
     <div className="space-y-8 p-6">
       {/* Header */}
