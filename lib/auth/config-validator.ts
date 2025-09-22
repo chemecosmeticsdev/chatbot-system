@@ -69,12 +69,13 @@ export function validateStackAuthConfig(): AuthConfigValidation {
   const isClient = typeof window !== 'undefined';
   const isBuild = process.env.NODE_ENV === 'production' && !process.env.VERCEL && !process.env.NETLIFY;
 
-  // Required variables check
+  // Required variables check - context-aware
   if (!authEnv.projectId) {
     missing.push('NEXT_PUBLIC_STACK_PROJECT_ID');
   }
 
-  if (!authEnv.secretKey) {
+  // Only check server variables in server context
+  if (isServer && !authEnv.secretKey) {
     missing.push('STACK_SECRET_SERVER_KEY');
   }
 
@@ -135,6 +136,7 @@ export function validateStackAuthConfig(): AuthConfigValidation {
 
 /**
  * Get Stack Auth configuration status with detailed diagnostics
+ * Automatically detects client vs server context and uses appropriate validation
  */
 export function getStackAuthStatus(): {
   status: 'configured' | 'partial' | 'missing';
@@ -143,6 +145,26 @@ export function getStackAuthStatus(): {
 } {
   const validation = validateStackAuthConfig();
 
+  // For client-side context, use client-safe validation
+  if (validation.context.isClient) {
+    const clientValidation = validateClientStackAuth();
+
+    if (clientValidation.isValid) {
+      return {
+        status: 'configured',
+        message: 'Stack Auth client configuration is complete',
+        validation
+      };
+    }
+
+    return {
+      status: 'partial',
+      message: `Stack Auth client configuration incomplete. Missing: ${clientValidation.missing.join(', ')}`,
+      validation
+    };
+  }
+
+  // For server-side context, use full validation
   if (validation.isValid) {
     return {
       status: 'configured',
